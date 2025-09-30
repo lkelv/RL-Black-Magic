@@ -1,15 +1,17 @@
 src/index.css
 @import "tailwindcss";
 
-/* * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/** {*/
+/*  margin: 0;*/
+/*  padding: 0;*/
+/*  box-sizing: border-box;*/
+/*}*/
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-} */
+/*body {*/
+/*  margin: 0;*/
+/*  min-width: 320px;*/
+/*  min-height: 100vh;*/
+/*  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;*/
+/*}*/
+html, body, #root { min-height: 100%; }
+
