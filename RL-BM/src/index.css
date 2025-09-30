@@ -1,4 +1,4 @@
-/* src/index.css */
+src/index.css
 @import "tailwindcss";
 
 /** {*/
@@ -14,3 +14,4 @@
 /*  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;*/
 /*}*/
 html, body, #root { min-height: 100%; }
+
