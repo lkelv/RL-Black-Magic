@@ -19,50 +19,49 @@ function Home() {
     };
 
     return (
-        <div className="bg-[#202830] min-h-screen">
-            {/* Hero Section */}
-            <section className="py-20 px-8">
-                <div className="max-w-5xl mx-auto text-center">
+        <div className="bg-[#202830] min-h-screen flex flex-col items-center">
+        {/* Hero Section */}
+            <section className="py-20 px-8 w-full flex items-center justify-center min-h-[80vh]">
+                <div className="max-w-5xl w-full flex flex-col items-center text-center">
                     <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white leading-tight">
-                        RL BLACK MAGIC PROGRAM
+                    RL BLACK MAGIC PROGRAM
                     </h1>
                     <p className="text-xl mb-12 text-white">
-                        Turn 5-minute questions into 1-minute solutions with RL Black Magic.
+                    Turn 5-minute questions into 1-minute solutions with RL Black Magic.
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20">
-                        <a 
-                            href="/contact-us" 
-                            className="bg-[#f4a52e] hover:bg-[#e09420] text-[#202830] font-bold py-3 px-8 rounded-full transition-colors text-base inline-block"
-                        >
-                            Contact Us
-                        </a>
-                        <a 
-                            href="/activate" 
-                            className="bg-[#74be9c] hover:bg-[#62a888] text-[#202830] font-bold py-3 px-8 rounded-full transition-colors text-base inline-block"
-                        >
-                            Activate Now
-                        </a>
-                    </div>
-                </div>
-            </section>
-            
-            {/* Supercharge Section */}
-            <section className="py-8 px-8 mb-16">
-                <div className="max-w-5xl mx-auto">
-                    <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#f4a52e] text-center">
-                            Supercharge Your CAS. Maximise Your Marks.
-                        </h2>
-                        <p className="text-white text-base md:text-lg leading-relaxed text-center max-w-4xl mx-auto">
-                            The RL Black Magic Program is a trusted upgrade for the CAS calculator that helps students in Methods and 
-                            Specialist Maths. Designed by expert tutors and used by high-achieving students, it cuts down time spent on 
-                            repetitive tasks so your child can focus on solving problems, not fighting the calculator.
-                        </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+                    <a 
+                        href="/contact-us" 
+                        className="bg-[#f4a52e] hover:bg-[#e09420] text-[#202830] font-bold py-3 px-8 rounded-full transition-colors text-base inline-block"
+                    >
+                        Contact Us
+                    </a>
+                    <a 
+                        href="/activate" 
+                        className="bg-[#74be9c] hover:bg-[#62a888] text-[#202830] font-bold py-3 px-8 rounded-full transition-colors text-base inline-block"
+                    >
+                        Activate Now
+                    </a>
                     </div>
                 </div>
             </section>
 
-       
+            {/* Supercharge Section */}
+            <section className="py-8 px-8 w-full flex items-center justify-center">
+                <div className="max-w-5xl w-full flex flex-col items-center">
+                    <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12 w-full">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#f4a52e] text-center">
+                        Supercharge Your CAS. Maximise Your Marks.
+                    </h2>
+                    <p className="text-white text-base md:text-lg leading-relaxed text-center">
+                        The RL Black Magic Program is a trusted upgrade for the CAS calculator that helps students in Methods and 
+                        Specialist Maths. Designed by expert tutors and used by high-achieving students, it cuts down time spent on 
+                        repetitive tasks so your child can focus on solving problems, not fighting the calculator.
+                    </p>
+                    </div>
+                </div>
+            </section>
+                    
 
             {/* Why Black Magic Section */}
             <section className="py-20 px-8">
