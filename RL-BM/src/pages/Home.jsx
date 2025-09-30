@@ -1,5 +1,8 @@
 // src/components/Home.jsx
 import React, { useState } from 'react';
+import student_image from "../assets/studentconcentratedcalculator.jpg";
+import ricky_image from "../assets/rickyteaching.jpg";
+
 
 function Home() {
     const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -69,13 +72,14 @@ function Home() {
                     <h2 className="text-4xl md:text-5xl font-bold mb-16 text-center text-white">Why Black Magic?</h2>
                     <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
                         <div className="flex justify-center items-center">
-                            <div className="bg-[#2d3642] rounded-xl p-8 w-full max-w-md h-[400px] flex items-center justify-center">
-                                <div className="text-center text-gray-400">
-                                    <p className="text-lg font-semibold">Calculator Image</p>
-                                    <p className="text-sm mt-2">(Add image here)</p>
-                                </div>
-                            </div>
-                        </div>
+
+                                <img
+                                    src={student_image}
+                                    alt="Student with Calculator"
+                                    className="w-100 h-100 object-cover rounded-xl"  // h-10 = ~40px tall; width auto keeps aspect ratio
+                                />
+
+                           </div>
                         <div className="text-white space-y-6 flex flex-col justify-center">
                             <p className="text-base leading-relaxed">
                                 In high-stakes timed exams like VCE Methods and Specialist Maths, every 
@@ -142,12 +146,13 @@ function Home() {
                                 </div>
                             </div>
                             <div className="flex justify-center items-center">
-                                <div className="bg-[#202830] rounded-xl p-8 w-full max-w-md h-[400px] flex items-center justify-center">
-                                    <div className="text-center text-gray-400">
-                                        <p className="text-lg font-semibold">Students Studying</p>
-                                        <p className="text-sm mt-2">(Add image here)</p>
-                                    </div>
-                                </div>
+
+                                <img
+                                    src={ricky_image}
+                                    alt="Student with Calculator"
+                                    className="w-100 h-100 object-cover rounded-xl"  // h-10 = ~40px tall; width auto keeps aspect ratio
+                                />
+
                             </div>
                         </div>
                     </div>
