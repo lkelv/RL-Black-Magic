@@ -10,14 +10,14 @@ function Hero() {
         <p className="text-xl mb-8 text-gray-300">
           Turn 5-minute questions into 1-minute solutions with RL Black Magic.
         </p>
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-4 flex-wrap">
           <Link to="/contact">
-            <button className="bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold py-3 px-8 rounded-full transition transform hover:scale-105">
+            <button className="bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105">
               Contact Us
             </button>
           </Link>
           <Link to="/activate">
-            <button className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-full transition transform hover:scale-105">
+            <button className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105">
               Activate Now
             </button>
           </Link>

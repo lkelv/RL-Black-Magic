@@ -7,40 +7,32 @@ function Footer() {
         <div className="grid md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-xl font-bold mb-4 text-emerald-400">Our Services</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="hover:text-yellow-400 transition">
-                  Programs K-12 Academic Coaching
-                </a>
+            <ul className="space-y-2 text-sm text-gray-300">
+              <li className="hover:text-yellow-400 transition-colors cursor-pointer">
+                Programs K-12 Academic Coaching
               </li>
-              <li>
-                <a href="#" className="hover:text-yellow-400 transition">
-                  CAS Calculator Booklet-Exclusive in Australia
-                </a>
+              <li className="hover:text-yellow-400 transition-colors cursor-pointer">
+                CAS Calculator Booklet-Exclusive in Australia
               </li>
-              <li>
-                <a href="#" className="hover:text-yellow-400 transition">
-                  Medpro-Australian Medical School Application
-                </a>
+              <li className="hover:text-yellow-400 transition-colors cursor-pointer">
+                Medpro-Australian Medical School Application
               </li>
-              <li>
-                <a href="#" className="hover:text-yellow-400 transition">
-                  Overseas Study-US/UK/EU Universities Application
-                </a>
+              <li className="hover:text-yellow-400 transition-colors cursor-pointer">
+                Overseas Study-US/UK/EU Universities Application
               </li>
             </ul>
           </div>
           
           <div>
             <h3 className="text-xl font-bold mb-4 text-emerald-400">Contact Us</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                <a href="mailto:enquiry@rleducation.com" className="hover:text-yellow-400 transition">
+                <a href="mailto:enquiry@rleducation.com" className="hover:text-yellow-400 transition-colors">
                   enquiry@rleducation.com
                 </a>
               </li>
               <li>
-                <a href="tel:0399732966" className="hover:text-yellow-400 transition">
+                <a href="tel:0399732966" className="hover:text-yellow-400 transition-colors">
                   (03) 99732966
                 </a>
               </li>
@@ -51,14 +43,14 @@ function Footer() {
           
           <div>
             <h3 className="text-xl font-bold mb-4 text-emerald-400">About Us</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                <Link to="/mentors" className="hover:text-yellow-400 transition">
+                <Link to="/mentors" className="hover:text-yellow-400 transition-colors">
                   Meet Our Mentors
                 </Link>
               </li>
               <li>
-                <Link to="/results" className="hover:text-yellow-400 transition">
+                <Link to="/results" className="hover:text-yellow-400 transition-colors">
                   Student Results
                 </Link>
               </li>
