@@ -1,12 +1,17 @@
 // src/components/Header.jsx
 import React from 'react';
+import logo from '../assets/RL-logo-with-text.png';
 
 function Header() {
     return (
         <header className="bg-[#2c3f51] px-8 py-4">
             <div className="max-w-7xl mx-auto flex justify-between items-center">
                 <div className="text-white font-bold text-xl">
-                    LOGO HERE
+                    <img
+                        src={logo}
+                        alt="Company Logo"
+                        className="h-11 w-auto"  // h-10 = ~40px tall; width auto keeps aspect ratio
+                    />
                 </div>
                 <nav>
                     <ul className="flex gap-8 text-white">
