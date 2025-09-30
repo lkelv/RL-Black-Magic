@@ -27,14 +27,6 @@ function ActivateMethods() {
                     <p className="text-lg text-gray-300 mb-6">
                         Activate your premium learning experience
                     </p>
-                    <a 
-                        href="/installation-guide" 
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block bg-[#74be9c] hover:bg-[#62a888] text-[#202830] font-semibold py-2 px-6 rounded-full transition-colors text-sm"
-                    >
-                        Can't find your product key?
-                    </a>
                 </div>
 
                 {/* Activation Container */}
@@ -56,8 +48,20 @@ function ActivateMethods() {
                             className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
                         />
                         <p className="text-sm text-gray-300 mt-2 text-center">
-                            Enter the 14-character key found in your RL CAS book
+
+
+                            <a 
+                            href="/installation-guide" 
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >
+
+                            Can't find it? <u>Click here!</u>
+
+                        </a>
+
                         </p>
+
                     </div>
 
                     {/* Activate Button */}
@@ -81,15 +85,15 @@ function ActivateMethods() {
                             <span className="text-[#74be9c] text-xl">🔑</span>
                             <span className="text-white">Lifetime access</span>
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 md:ml-8">
                             <span className="text-[#74be9c] text-xl">✓</span>
-                            <span className="text-white">Premium Content</span>
+                            <span className="text-white"> Premium Content</span>
                         </div>
                         <div className="flex items-center gap-3">
                             <span className="text-[#74be9c] text-xl">⚡</span>
                             <span className="text-white">Instant activation</span>
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 md:ml-8">
                             <span className="text-[#74be9c] text-xl">👥</span>
                             <span className="text-white">Guaranteed support</span>
                         </div>
