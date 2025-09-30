@@ -1,6 +1,8 @@
 // src/pages/Activate.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
+import methodsBook from '../assets/methods-book.png';
+import specBook from '../assets/spec-book.png';
 
 function Activate() {
     return (
@@ -27,7 +29,7 @@ function Activate() {
                         
                         {/* Placeholder for book image */}
                         <div className="bg-[#1a1a1a] w-48 h-64 mb-8 rounded flex items-center justify-center">
-                            <span className="text-gray-500 text-center px-4">Book Image</span>
+                            <img src={methodsBook} alt="Maths Methods Book" className="max-h-full max-w-full rounded" />
                         </div>
                         
                         <Link 
@@ -46,7 +48,7 @@ function Activate() {
                         
                         {/* Placeholder for book image */}
                         <div className="bg-[#1a1a1a] w-48 h-64 mb-8 rounded flex items-center justify-center">
-                            <span className="text-gray-500 text-center px-4">Book Image</span>
+                            <img src={specBook} alt="Maths Methods Book" className="max-h-full max-w-full rounded" />
                         </div>
                         
                         <Link 
@@ -63,11 +65,20 @@ function Activate() {
                             MM and SM 3&4
                         </h2>
                         
-                        {/* Placeholder for book images */}
-                        <div className="bg-[#1a1a1a] w-48 h-64 mb-8 rounded flex items-center justify-center">
-                            <span className="text-gray-500 text-center px-4">Book Images</span>
+                        <div className="relative w-48 h-64 mb-8 flex items-center justify-center">
+                            <img
+                                src={specBook}
+                                alt="Specialist Maths Book"
+                                className="absolute left-1/2 bottom-0 w-40 h-56 rounded shadow-lg z-0"
+                                style={{ transform: 'translateX(-50%) rotate(12deg)', transformOrigin: 'bottom left' }}
+                            />
+                            <img
+                                src={methodsBook}
+                                alt="Maths Methods Book"
+                                className="absolute left-1/2 bottom-0 w-40 h-56 rounded shadow-xl z-10"
+                                style={{ transform: 'translateX(-50%) rotate(-16deg)', transformOrigin: 'bottom left' }}
+                            />
                         </div>
-                        
                         <Link 
                             to="/activate/both"
                             className="bg-[#74be9c] hover:bg-[#62a888] text-[#202830] font-bold py-3 px-12 rounded-full transition-colors w-full text-center"
