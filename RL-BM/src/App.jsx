@@ -6,7 +6,6 @@ import Activate from './pages/Activate';
 import InstallationGuide from './pages/InstallationGuide';
 import ContactUs from './pages/ContactUs';
 
-
 function App() {
   return (
     <Router>
