@@ -12,6 +12,8 @@ import ActivateBoth from './pages/ActivateBoth';
 import InstallationGuide from './pages/InstallationGuide';
 import ContactUs from './pages/ContactUs';
 import './App.css';
+import CasID from "./pages/CasID.jsx";
+import InstallationComplete from "./pages/InstallationComplete.jsx";
 
 function App() {
     return (
@@ -25,6 +27,8 @@ function App() {
                         <Route path="/activate/methods" element={<ActivateMethods />} />
                         <Route path="/activate/specialist" element={<ActivateSpecialist />} />
                         <Route path="/activate/both" element={<ActivateBoth />} />
+                        <Route path="/activate/both/cas-id" element={<CasID />} />
+                        <Route path="/activate/installation-complete" element={<InstallationComplete />} />
                         <Route path="/installation-guide" element={<InstallationGuide />} />
                         <Route path="/contact-us" element={<ContactUs />} />
                     </Routes>

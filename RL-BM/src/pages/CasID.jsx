@@ -1,16 +1,20 @@
+// src/pages/CasID.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function ActivateBoth() {
-    const [productKeyMethods, setProductKeyMethods] = useState('');
-    const [productKeySpecialist, setProductKeySpecialist] = useState('');
+function CasID() {
+    const [casId, setCasId] = useState('');
+    const [confirmCasId, setConfirmCasId] = useState('');
     const navigate = useNavigate();
 
-    const handleActivate = () => {
-        if (productKeyMethods.trim() && productKeySpecialist.trim()) {
-            navigate('/activate/both/cas-id');
+    const handleVerify = () => {
+        if (casId.trim() && confirmCasId.trim() && casId === confirmCasId) {
+            alert('CAS ID verified successfully!');
+            navigate('/activate/installation-complete'); // Optional route for post-verification
+        } else if (casId !== confirmCasId) {
+            alert('CAS IDs do not match. Please re-enter.');
         } else {
-            alert('Please enter valid product keys for both subjects');
+            alert('Please enter valid CAS IDs.');
         }
     };
 
@@ -20,86 +24,88 @@ function ActivateBoth() {
                 {/* Title Section */}
                 <div className="text-center mb-8">
                     <h1 className="text-3xl md:text-4xl font-bold mb-3">
-                        Maths Methods and Specialist Maths
+                        CAS ID Verification
                     </h1>
                     <p className="text-lg text-gray-300 mb-6">
-                        Activate your premium learning experience
+                        Verify your CAS ID to get an activation code
                     </p>
                 </div>
 
-                {/* Activation Container */}
+                {/* Main Input Container */}
                 <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12">
                     <h2 className="text-2xl md:text-3xl font-bold mb-8 text-[#f4a52e] text-center">
-                        Enter your Product Keys
+                        Enter your CAS ID
                     </h2>
 
-                    {/* Product Key Input */}
+                    {/* CAS ID Inputs */}
                     <div className="mb-6 space-y-8">
                         <div>
                             <label className="block text-white font-semibold mb-4">
-                                Product Key for Maths Methods
+                                CAS ID
                             </label>
                             <input
                                 type="text"
-                                value={productKeyMethods}
-                                onChange={(e) => setProductKeyMethods(e.target.value)}
-                                placeholder="RL-XXX-XXX-XXX"
+                                value={casId}
+                                onChange={(e) => setCasId(e.target.value)}
+                                placeholder="CAS ID"
                                 className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
                             />
                         </div>
 
                         <div>
                             <label className="block text-white font-semibold mb-4">
-                                Product Key for Specialist Maths
+                                Confirm your CAS ID
                             </label>
                             <input
                                 type="text"
-                                value={productKeySpecialist}
-                                onChange={(e) => setProductKeySpecialist(e.target.value)}
-                                placeholder="RL-XXX-XXX-XXX"
+                                value={confirmCasId}
+                                onChange={(e) => setConfirmCasId(e.target.value)}
+                                placeholder="CAS ID"
                                 className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
                             />
                         </div>
 
                         <p className="text-sm text-gray-300 text-center">
+                            Enter the unique identifier found in your CAS calculator. Not sure how?{' '}
                             <a
-                                href="/installation-guide"
+                                href="/find-cas-id"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                className="underline text-[#74be9c]"
                             >
-                                Can't find it? <u>Click here!</u>
+                                Click here!
                             </a>
                         </p>
                     </div>
 
-                    {/* Activate Button */}
+                    {/* Verify Button */}
                     <button
-                        onClick={handleActivate}
+                        onClick={handleVerify}
                         className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6"
                     >
-                        Download
+                        Verify CAS ID
                     </button>
 
                     {/* Warning Box */}
                     <div className="border-2 border-[#74be9c] rounded-lg p-4 mb-8 text-center">
                         <p className="text-gray-300">
-                            Your product key will be used once activated
+                            A code will be given to you once the CAS ID is entered.
                         </p>
                     </div>
 
                     {/* Features Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="flex items-center gap-3">
-                            <span className="text-[#74be9c] text-xl">🔑</span>
-                            <span className="text-white">Lifetime access</span>
+                            <span className="text-[#74be9c] text-xl">🔎</span>
+                            <span className="text-white">Instant verification</span>
                         </div>
                         <div className="flex items-center gap-3 md:ml-8">
                             <span className="text-[#74be9c] text-xl">✓</span>
                             <span className="text-white">Premium Content</span>
                         </div>
                         <div className="flex items-center gap-3">
-                            <span className="text-[#74be9c] text-xl">⚡</span>
-                            <span className="text-white">Instant activation</span>
+                            <span className="text-[#74be9c] text-xl">💻</span>
+                            <span className="text-white">Full Black Magic access</span>
                         </div>
                         <div className="flex items-center gap-3 md:ml-8">
                             <span className="text-[#74be9c] text-xl">👥</span>
@@ -112,4 +118,4 @@ function ActivateBoth() {
     );
 }
 
-export default ActivateBoth;
+export default CasID;
