@@ -23,7 +23,7 @@ function Home() {
         return () => clearInterval(interval);
     }, [testimonials.length]);
 
-    // Intersection Observer for scroll animations
+    // Intersection Observer for scroll animations - animation change
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
