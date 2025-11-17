@@ -14,6 +14,22 @@ function Popup({ type = 'success', message, onClose, duration = 3000 }) {
     }
   }, [duration, onClose]);
 
+  // Handle ESC key press
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
+
+  
   const bgColor = type === 'success' ? 'bg-[#2d5047]' : 'bg-[#3d2020]';
   const borderColor = type === 'success' ? 'border-[#74be9c]' : 'border-[#e85d5d]';
   const Icon = type === 'success' ? CheckCircle2 : XCircle;
@@ -21,8 +37,8 @@ function Popup({ type = 'success', message, onClose, duration = 3000 }) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
-      {/* Backdrop with blur */}
-      <div className="absolute inset-0 bg-black bg-opacity-10 backdrop-blur-md" />
+      {/* Backdrop - no blur, no black background */}
+      <div className="absolute inset-0 backdrop-blur-sm"  onClick={onClose} />
 
       {/* Popup Content */}
       <div className={`relative ${bgColor} border-2 ${borderColor} rounded-2xl p-8 w-96 max-w-[90%] shadow-[0_20px_60px_rgba(0,0,0,0.6)] animate-fade-in`}>
