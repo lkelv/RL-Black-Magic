@@ -1,5 +1,6 @@
 // src/components/Header.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 import logo from '../assets/RL-logo-with-text.png';
 
 function Header() {
@@ -7,11 +8,13 @@ function Header() {
         <header className="bg-[#2c3f51] px-8 py-4">
             <div className="max-w-7xl mx-auto flex justify-between items-center">
                 <div className="text-white font-bold text-xl">
-                    <img
-                        src={logo}
-                        alt="Company Logo"
-                        className="h-11 w-auto"  // h-10 = ~40px tall; width auto keeps aspect ratio
-                    />
+                    <Link to="/" className="cursor-pointer">
+                        <img
+                            src={logo}
+                            alt="Company Logo"
+                            className="h-11 w-auto hover:opacity-80 transition-opacity"  // h-10 = ~40px tall; width auto keeps aspect ratio
+                        />
+                    </Link>
                 </div>
                 <nav>
                     <ul className="flex gap-8 text-white">
