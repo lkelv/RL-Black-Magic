@@ -1,5 +1,5 @@
 // src/pages/CasID.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { validateCasId, generatePassword } from '../utils/productKeys';
 import Popup from '../components/Popup';
@@ -13,6 +13,13 @@ function CasID() {
 
     // Get product info from navigation state
     const { productType, productKey, productKeyMethods, productKeySpecialist } = location.state || {};
+
+    // Security: Redirect if user tries to access this page directly without validation
+    useEffect(() => {
+        if (!productType) {
+            navigate('/activate', { replace: true });
+        }
+    }, [productType, navigate]);
 
     const handleVerify = () => {
         // Basic validation

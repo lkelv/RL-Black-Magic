@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle2, Copy } from 'lucide-react';
 
 function InstallationComplete() {
     const location = useLocation();
-    const { password: generatedPassword } = location.state || {};
+    const navigate = useNavigate();
+    const { password: generatedPassword, casId } = location.state || {};
+
+    // Security: Redirect if user tries to access this page directly without completing verification
+    useEffect(() => {
+        if (!generatedPassword || !casId) {
+            navigate('/activate', { replace: true });
+        }
+    }, [generatedPassword, casId, navigate]);
 
     // Use generated password or placeholder
     const password = generatedPassword || 'XXXXXXXX';
