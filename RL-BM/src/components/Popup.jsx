@@ -21,8 +21,8 @@ function Popup({ type = 'success', message, onClose, duration = 3000 }) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
-      {/* Backdrop with blur */}
-      <div className="absolute inset-0 bg-black bg-opacity-10 backdrop-blur-md" />
+      {/* Backdrop with blur - very light for page visibility */}
+      <div className="absolute inset-0 backdrop-blur-md" />
 
       {/* Popup Content */}
       <div className={`relative ${bgColor} border-2 ${borderColor} rounded-2xl p-8 w-96 max-w-[90%] shadow-[0_20px_60px_rgba(0,0,0,0.6)] animate-fade-in`}>
