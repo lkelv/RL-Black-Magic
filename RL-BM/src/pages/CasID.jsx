@@ -58,7 +58,7 @@ function CasID() {
     };
 
     return (
-        <div className="bg-[#202830] min-h-screen text-white py-12 px-8">
+        <div className="bg-[#202830] text-white py-12 px-8">
             <div className="max-w-3xl mx-auto">
                 {/* Title Section */}
                 <div className="text-center mb-8">

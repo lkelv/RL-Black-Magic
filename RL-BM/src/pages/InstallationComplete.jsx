@@ -18,9 +18,9 @@ function InstallationComplete() {
     };
 
     return (
-        <div className="bg-[#202830] min-h-screen text-white py-16 px-8 flex flex-col items-center">
+        <div className="bg-[#202830] text-white py-12 px-8 flex flex-col items-center">
             {/* Check Icon */}
-            <CheckCircle2 className="text-[#74be9c] w-28 h-28 mb-6 animate-fade-in" />
+            <CheckCircle2 className="text-[#74be9c] w-24 h-24 mb-4 animate-fade-in" />
 
             {/* Title */}
             <h1 className="text-3xl md:text-4xl font-bold mb-2 text-center animate-fade-in-down">
