@@ -50,19 +50,19 @@ html, body, #root { min-height: 100%; }
 
 @keyframes pulse-glow {
     0%, 100% {
-        box-shadow: 0 0 20px rgba(244, 165, 46, 0.5);
+        box-shadow: 0 0 10px rgba(244, 165, 46, 0.3);
     }
     50% {
-        box-shadow: 0 0 35px rgba(244, 165, 46, 0.8);
+        box-shadow: 0 0 20px rgba(244, 165, 46, 0.5);
     }
 }
 
 @keyframes pulse-glow-green {
     0%, 100% {
-        box-shadow: 0 0 20px rgba(116, 190, 156, 0.5);
+        box-shadow: 0 0 10px rgba(116, 190, 156, 0.3);
     }
     50% {
-        box-shadow: 0 0 35px rgba(116, 190, 156, 0.8);
+        box-shadow: 0 0 20px rgba(116, 190, 156, 0.5);
     }
 }
 
@@ -78,6 +78,15 @@ html, body, #root { min-height: 100%; }
     100% {
         background-position: 0% 50%;
         background-size: 200% 200%;
+    }
+}
+
+@keyframes gradient-shift-continuous {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
     }
 }
 
@@ -105,5 +114,9 @@ html, body, #root { min-height: 100%; }
 
 .animate-gradient-shift {
     animation: gradient-shift 8s ease infinite;
+}
+
+.animate-gradient-shift-continuous {
+    animation: gradient-shift-continuous 3s linear infinite;
 }
 

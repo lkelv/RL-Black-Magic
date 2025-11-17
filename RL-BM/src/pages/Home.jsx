@@ -55,13 +55,17 @@ function Home() {
         <div className="bg-[#202830] min-h-screen flex flex-col items-center">
         {/* Hero Section */}
             <section className="py-20 px-8 w-full flex items-center justify-center min-h-[80vh] relative overflow-hidden">
-                {/* Animated gradient background */}
-                <div className="absolute inset-0 opacity-30">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#74be9c] via-[#202830] to-[#f4a52e] animate-gradient-shift"></div>
-                </div>
-
                 <div className="max-w-5xl w-full flex flex-col items-center text-center relative z-10">
-                    <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white leading-tight animate-fade-in-down">
+                    <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight animate-gradient-shift-continuous" style={{
+                        color: '#74be9c',
+                        backgroundImage: 'linear-gradient(90deg, #74be9c, #f4a52e, #74be9c, #f4a52e, #74be9c)',
+                        backgroundSize: '200% 100%',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                        display: 'inline-block',
+                        animationDuration: '8s'
+                    }}>
                     RL BLACK MAGIC PROGRAM
                     </h1>
                     <p className="text-xl mb-12 text-white animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
@@ -70,13 +74,14 @@ function Home() {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 animate-fade-in" style={{ animationDelay: '0.4s' }}>
                     <a
                         href="/contact-us"
-                        className="bg-[#f4a52e] hover:bg-[#e09420] text-[#202830] font-bold py-3 px-8 rounded-full transition-all duration-300 text-base inline-block hover:scale-110 hover:shadow-2xl animate-pulse-glow"
+                        className="bg-[#f4a52e] hover:bg-[#e09420] text-[#202830] font-bold py-3 px-8 rounded-full transition-all duration-500 text-base inline-block hover:scale-110 hover:shadow-2xl animate-pulse-glow"
+                        style={{ animationDelay: '0.3s' }}
                     >
                         Contact Us
                     </a>
                     <a
                         href="/activate"
-                        className="bg-[#74be9c] hover:bg-[#62a888] text-[#202830] font-bold py-3 px-8 rounded-full transition-all duration-300 text-base inline-block hover:scale-110 hover:shadow-2xl animate-pulse-glow-green"
+                        className="bg-[#74be9c] hover:bg-[#62a888] text-[#202830] font-bold py-3 px-8 rounded-full transition-all duration-500 text-base inline-block hover:scale-110 hover:shadow-2xl animate-pulse-glow-green"
                         style={{ animationDelay: '0.3s' }}
                     >
                         Activate Now
