@@ -21,12 +21,6 @@ function Popup({ type = 'success', message, onClose, duration = 3000 }) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 px-4 pointer-events-none">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black bg-opacity-20 pointer-events-auto"
-        onClick={onClose}
-      />
-
       {/* Popup Content */}
       <div className={`relative ${bgColor} border-2 ${borderColor} rounded-xl p-5 w-80 max-w-[90%] shadow-2xl animate-fade-in pointer-events-auto`}>
         {/* Close Button */}
