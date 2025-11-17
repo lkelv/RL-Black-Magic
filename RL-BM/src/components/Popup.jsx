@@ -20,24 +20,27 @@ function Popup({ type = 'success', message, onClose, duration = 3000 }) {
   const iconColor = type === 'success' ? 'text-[#74be9c]' : 'text-[#e85d5d]';
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 px-4 pointer-events-none">
+    <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
+      {/* Backdrop with blur */}
+      <div className="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm" />
+
       {/* Popup Content */}
-      <div className={`relative ${bgColor} border-2 ${borderColor} rounded-xl p-5 w-80 max-w-[90%] shadow-2xl animate-fade-in pointer-events-auto`}>
+      <div className={`relative ${bgColor} border-2 ${borderColor} rounded-2xl p-8 w-96 max-w-[90%] shadow-2xl animate-fade-in`}>
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-gray-400 hover:text-white transition"
+          className="absolute top-3 right-3 text-gray-400 hover:text-white transition"
         >
-          <X className="w-4 h-4" />
+          <X className="w-5 h-5" />
         </button>
 
         {/* Icon */}
-        <div className="flex justify-center mb-2">
-          <Icon className={`${iconColor} w-10 h-10`} />
+        <div className="flex justify-center mb-4">
+          <Icon className={`${iconColor} w-16 h-16`} />
         </div>
 
         {/* Message */}
-        <p className="text-white text-center text-sm">
+        <p className="text-white text-center text-base leading-relaxed">
           {message}
         </p>
       </div>
