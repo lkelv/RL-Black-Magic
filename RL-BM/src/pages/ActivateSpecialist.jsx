@@ -1,18 +1,35 @@
 // src/pages/ActivateSpecialist.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { validateProductKey, markProductKeyAsUsed } from '../utils/productKeys';
+import Popup from '../components/Popup';
 
 function ActivateSpecialist() {
     const [productKey, setProductKey] = useState('');
+    const [popup, setPopup] = useState(null);
     const navigate = useNavigate();
 
     const handleActivate = () => {
-        // Placeholder validation - you'll implement actual validation later
-        if (productKey.trim()) {
-            // Redirect to CAS ID page when valid
-            navigate('/activate/specialist/cas-id');
+        if (!productKey.trim()) {
+            setPopup({ type: 'error', message: 'Please enter a valid product key' });
+            return;
+        }
+
+        const validation = validateProductKey(productKey, 'specialist');
+
+        if (validation.valid) {
+            markProductKeyAsUsed(productKey);
+            setPopup({
+                type: 'success',
+                message: 'Product key validated! Redirecting to CAS ID verification...'
+            });
+
+            // Navigate after showing popup briefly
+            setTimeout(() => {
+                navigate('/cas-id', { state: { productType: 'specialist', productKey } });
+            }, 2000);
         } else {
-            alert('Please enter a valid product key');
+            setPopup({ type: 'error', message: validation.message });
         }
     };
 
@@ -32,7 +49,7 @@ function ActivateSpecialist() {
                 {/* Activation Container */}
                 <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12">
                     <h2 className="text-2xl md:text-3xl font-bold mb-8 text-[#f4a52e] text-center">
-                        Enter your Product Key
+                        1. Enter your Product Key
                     </h2>
 
                     {/* Product Key Input */}
@@ -69,7 +86,7 @@ function ActivateSpecialist() {
                         onClick={handleActivate}
                         className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6"
                     >
-                        Download
+                        Activate
                     </button>
 
                     {/* Warning Box */}
@@ -100,6 +117,15 @@ function ActivateSpecialist() {
                     </div>
                 </div>
             </div>
+
+            {/* Popup */}
+            {popup && (
+                <Popup
+                    type={popup.type}
+                    message={popup.message}
+                    onClose={() => setPopup(null)}
+                />
+            )}
         </div>
     );
 }
