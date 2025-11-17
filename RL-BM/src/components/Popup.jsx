@@ -20,30 +20,30 @@ function Popup({ type = 'success', message, onClose, duration = 3000 }) {
   const iconColor = type === 'success' ? 'text-[#74be9c]' : 'text-[#e85d5d]';
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
+    <div className="fixed inset-0 flex items-center justify-center z-50 px-4 pointer-events-none">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black bg-opacity-30"
+        className="absolute inset-0 bg-black bg-opacity-20 pointer-events-auto"
         onClick={onClose}
       />
 
       {/* Popup Content */}
-      <div className={`relative ${bgColor} border-2 ${borderColor} rounded-xl p-6 max-w-sm w-full shadow-2xl animate-fade-in`}>
+      <div className={`relative ${bgColor} border-2 ${borderColor} rounded-xl p-5 w-80 max-w-[90%] shadow-2xl animate-fade-in pointer-events-auto`}>
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-400 hover:text-white transition"
+          className="absolute top-2 right-2 text-gray-400 hover:text-white transition"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
 
         {/* Icon */}
-        <div className="flex justify-center mb-3">
-          <Icon className={`${iconColor} w-12 h-12`} />
+        <div className="flex justify-center mb-2">
+          <Icon className={`${iconColor} w-10 h-10`} />
         </div>
 
         {/* Message */}
-        <p className="text-white text-center text-base">
+        <p className="text-white text-center text-sm">
           {message}
         </p>
       </div>
