@@ -9,6 +9,14 @@ function ActivateMethods() {
     const [popup, setPopup] = useState(null);
     const navigate = useNavigate();
 
+    const formatProductKey = (value) => {
+        // Remove all non-alphanumeric characters
+        const cleaned = value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+        // Add dash every 3 characters
+        const formatted = cleaned.match(/.{1,3}/g)?.join('-') || '';
+        return formatted.slice(0, 11); // Max length: XXX-XXX-XXX (11 chars)
+    };
+
     const handleActivate = () => {
         if (!productKey.trim()) {
             setPopup({ type: 'error', message: 'Please enter a valid product key' });
@@ -57,11 +65,11 @@ function ActivateMethods() {
                         <label className="block text-white font-semibold mb-3">
                             Product Key
                         </label>
-                        <input 
+                        <input
                             type="text"
                             value={productKey}
-                            onChange={(e) => setProductKey(e.target.value)}
-                            placeholder="RL-XXX-XXX-XXX"
+                            onChange={(e) => setProductKey(formatProductKey(e.target.value))}
+                            placeholder="XXX-XXX-XXX"
                             className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
                         />
                         <p className="text-sm text-gray-300 mt-2 text-center">

@@ -3,14 +3,14 @@
 // Dictionary of valid product keys
 export const VALID_PRODUCT_KEYS = {
   // Maths Methods Keys
-  'RL-MM1-ABC-001': { type: 'methods', used: false },
-  'RL-MM1-ABC-002': { type: 'methods', used: false },
-  'RL-MM1-ABC-003': { type: 'methods', used: false },
+  'MMM-MMM-MM1': { type: 'methods', used: false },
+  'MMM-MMM-MM2': { type: 'methods', used: false },
+  'MMM-MMM-MM3': { type: 'methods', used: false },
 
   // Specialist Maths Keys
-  'RL-SM1-DEF-001': { type: 'specialist', used: false },
-  'RL-SM1-DEF-002': { type: 'specialist', used: false },
-  'RL-SM1-DEF-003': { type: 'specialist', used: false },
+  'SSS-SSS-SS1': { type: 'specialist', used: false },
+  'SSS-SSS-SS2': { type: 'specialist', used: false },
+  'SSS-SSS-SS3': { type: 'specialist', used: false },
 };
 
 // Dictionary to store CAS IDs and their generated passwords
