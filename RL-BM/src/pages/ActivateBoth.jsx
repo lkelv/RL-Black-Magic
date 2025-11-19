@@ -1,21 +1,57 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { validateProductKey, markProductKeyAsUsed } from '../utils/productKeys';
+import Popup from '../components/Popup';
 
 function ActivateBoth() {
     const [productKeyMethods, setProductKeyMethods] = useState('');
     const [productKeySpecialist, setProductKeySpecialist] = useState('');
+    const [popup, setPopup] = useState(null);
     const navigate = useNavigate();
 
     const handleActivate = () => {
-        if (productKeyMethods.trim() && productKeySpecialist.trim()) {
-            navigate('/activate/both/cas-id');
-        } else {
-            alert('Please enter valid product keys for both subjects');
+        if (!productKeyMethods.trim() || !productKeySpecialist.trim()) {
+            setPopup({ type: 'error', message: 'Please enter valid product keys for both subjects' });
+            return;
         }
+
+        // Validate both keys
+        const validationMethods = validateProductKey(productKeyMethods, 'methods');
+        const validationSpecialist = validateProductKey(productKeySpecialist, 'specialist');
+
+        if (!validationMethods.valid) {
+            setPopup({ type: 'error', message: `Methods key: ${validationMethods.message}` });
+            return;
+        }
+
+        if (!validationSpecialist.valid) {
+            setPopup({ type: 'error', message: `Specialist key: ${validationSpecialist.message}` });
+            return;
+        }
+
+        // Both keys valid
+        markProductKeyAsUsed(productKeyMethods);
+        markProductKeyAsUsed(productKeySpecialist);
+
+        setPopup({
+            type: 'success',
+            message: 'Both product keys validated! Redirecting to CAS ID verification...'
+        });
+
+        // Navigate after showing popup briefly
+        setTimeout(() => {
+            navigate('/cas-id', {
+                state: {
+                    productType: 'both',
+                    productKeyMethods,
+                    productKeySpecialist
+                }
+            });
+        }, 2000);
     };
 
     return (
-        <div className="bg-[#202830] min-h-screen text-white py-12 px-8">
+        <div className="bg-[#202830] text-white py-12 px-8">
             <div className="max-w-3xl mx-auto">
                 {/* Title Section */}
                 <div className="text-center mb-8">
@@ -30,7 +66,7 @@ function ActivateBoth() {
                 {/* Activation Container */}
                 <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12">
                     <h2 className="text-2xl md:text-3xl font-bold mb-8 text-[#f4a52e] text-center">
-                        Enter your Product Keys
+                        1. Enter your Product Keys
                     </h2>
 
                     {/* Product Key Input */}
@@ -77,13 +113,13 @@ function ActivateBoth() {
                         onClick={handleActivate}
                         className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6"
                     >
-                        Download
+                        Activate
                     </button>
 
                     {/* Warning Box */}
                     <div className="border-2 border-[#74be9c] rounded-lg p-4 mb-8 text-center">
                         <p className="text-gray-300">
-                            Your product key will be used once activated
+                            Your product keys will be used once activated
                         </p>
                     </div>
 
@@ -108,6 +144,15 @@ function ActivateBoth() {
                     </div>
                 </div>
             </div>
+
+            {/* Popup */}
+            {popup && (
+                <Popup
+                    type={popup.type}
+                    message={popup.message}
+                    onClose={() => setPopup(null)}
+                />
+            )}
         </div>
     );
 }

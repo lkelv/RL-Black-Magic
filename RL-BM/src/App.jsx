@@ -4,16 +4,16 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-
 import Activate from './pages/Activate';
 import ActivateMethods from './pages/ActivateMethods';
 import ActivateSpecialist from './pages/ActivateSpecialist';
 import ActivateBoth from './pages/ActivateBoth';
-import InstallationGuide from './pages/InstallationGuide';
-import ContactUs from './pages/ContactUs';
-import './App.css';
 import CasID from "./pages/CasID.jsx";
 import InstallationComplete from "./pages/InstallationComplete.jsx";
+import InstallationGuide from './pages/InstallationGuide';
+import FindCasID from './pages/FindCasID';
+import ContactUs from './pages/ContactUs';
+import './App.css';
 
 function App() {
     return (
@@ -27,9 +27,10 @@ function App() {
                         <Route path="/activate/methods" element={<ActivateMethods />} />
                         <Route path="/activate/specialist" element={<ActivateSpecialist />} />
                         <Route path="/activate/both" element={<ActivateBoth />} />
-                        <Route path="/activate/both/cas-id" element={<CasID />} />
-                        <Route path="/activate/installation-complete" element={<InstallationComplete />} />
+                        <Route path="/cas-id" element={<CasID />} />
+                        <Route path="/installation-complete" element={<InstallationComplete />} />
                         <Route path="/installation-guide" element={<InstallationGuide />} />
+                        <Route path="/find-cas-id" element={<FindCasID />} />
                         <Route path="/contact-us" element={<ContactUs />} />
                     </Routes>
                 </main>

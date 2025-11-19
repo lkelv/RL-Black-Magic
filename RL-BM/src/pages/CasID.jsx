@@ -1,25 +1,71 @@
 // src/pages/CasID.jsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { validateCasId, generatePassword } from '../utils/productKeys';
+import Popup from '../components/Popup';
 
 function CasID() {
     const [casId, setCasId] = useState('');
     const [confirmCasId, setConfirmCasId] = useState('');
+    const [popup, setPopup] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Get product info from navigation state
+    const { productType, productKey, productKeyMethods, productKeySpecialist } = location.state || {};
+
+    // Security: Redirect if user tries to access this page directly without validation
+    useEffect(() => {
+        if (!productType) {
+            navigate('/activate', { replace: true });
+        }
+    }, [productType, navigate]);
 
     const handleVerify = () => {
-        if (casId.trim() && confirmCasId.trim() && casId === confirmCasId) {
-            alert('CAS ID verified successfully!');
-            navigate('/activate/installation-complete'); // Optional route for post-verification
-        } else if (casId !== confirmCasId) {
-            alert('CAS IDs do not match. Please re-enter.');
-        } else {
-            alert('Please enter valid CAS IDs.');
+        // Basic validation
+        if (!casId.trim() || !confirmCasId.trim()) {
+            setPopup({ type: 'error', message: 'Please enter valid CAS IDs.' });
+            return;
         }
+
+        if (casId !== confirmCasId) {
+            setPopup({ type: 'error', message: 'CAS IDs do not match. Please re-enter.' });
+            return;
+        }
+
+        // Validate CAS ID format
+        const validation = validateCasId(casId);
+
+        if (!validation.valid) {
+            setPopup({ type: 'error', message: validation.message });
+            return;
+        }
+
+        // Generate password for this CAS ID
+        const password = generatePassword(casId);
+
+        setPopup({
+            type: 'success',
+            message: 'CAS ID verified successfully! Generating your activation code...'
+        });
+
+        // Navigate to installation complete page with password
+        setTimeout(() => {
+            navigate('/installation-complete', {
+                state: {
+                    password,
+                    casId,
+                    productType,
+                    productKey,
+                    productKeyMethods,
+                    productKeySpecialist
+                }
+            });
+        }, 2000);
     };
 
     return (
-        <div className="bg-[#202830] min-h-screen text-white py-12 px-8">
+        <div className="bg-[#202830] text-white py-12 px-8">
             <div className="max-w-3xl mx-auto">
                 {/* Title Section */}
                 <div className="text-center mb-8">
@@ -47,7 +93,7 @@ function CasID() {
                                 type="text"
                                 value={casId}
                                 onChange={(e) => setCasId(e.target.value)}
-                                placeholder="CAS ID"
+                                placeholder="Enter CAS ID"
                                 className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
                             />
                         </div>
@@ -60,7 +106,7 @@ function CasID() {
                                 type="text"
                                 value={confirmCasId}
                                 onChange={(e) => setConfirmCasId(e.target.value)}
-                                placeholder="CAS ID"
+                                placeholder="Re-enter CAS ID"
                                 className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
                             />
                         </div>
@@ -89,7 +135,7 @@ function CasID() {
                     {/* Warning Box */}
                     <div className="border-2 border-[#74be9c] rounded-lg p-4 mb-8 text-center">
                         <p className="text-gray-300">
-                            A code will be given to you once the CAS ID is entered.
+                            An activation code will be generated once the CAS ID is verified
                         </p>
                     </div>
 
@@ -114,6 +160,15 @@ function CasID() {
                     </div>
                 </div>
             </div>
+
+            {/* Popup */}
+            {popup && (
+                <Popup
+                    type={popup.type}
+                    message={popup.message}
+                    onClose={() => setPopup(null)}
+                />
+            )}
         </div>
     );
 }

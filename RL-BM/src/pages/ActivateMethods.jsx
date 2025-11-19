@@ -1,23 +1,48 @@
 // src/pages/ActivateMethods.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { validateProductKey, markProductKeyAsUsed } from '../utils/productKeys';
+import Popup from '../components/Popup';
 
 function ActivateMethods() {
     const [productKey, setProductKey] = useState('');
+    const [popup, setPopup] = useState(null);
     const navigate = useNavigate();
 
+    const formatProductKey = (value) => {
+        // Remove all non-alphanumeric characters
+        const cleaned = value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+        // Add dash every 3 characters
+        const formatted = cleaned.match(/.{1,3}/g)?.join('-') || '';
+        return formatted.slice(0, 11); // Max length: XXX-XXX-XXX (11 chars)
+    };
+
     const handleActivate = () => {
-        // Placeholder validation - you'll implement actual validation later
-        if (productKey.trim()) {
-            // Redirect to CAS ID page when valid
-            navigate('/activate/methods/cas-id');
+        if (!productKey.trim()) {
+            setPopup({ type: 'error', message: 'Please enter a valid product key' });
+            return;
+        }
+
+        const validation = validateProductKey(productKey, 'methods');
+
+        if (validation.valid) {
+            markProductKeyAsUsed(productKey);
+            setPopup({
+                type: 'success',
+                message: 'Product key validated! Redirecting to CAS ID verification...'
+            });
+
+            // Navigate after showing popup briefly
+            setTimeout(() => {
+                navigate('/cas-id', { state: { productType: 'methods', productKey } });
+            }, 2000);
         } else {
-            alert('Please enter a valid product key');
+            setPopup({ type: 'error', message: validation.message });
         }
     };
 
     return (
-        <div className="bg-[#202830] min-h-screen text-white py-12 px-8">
+        <div className="bg-[#202830] text-white py-12 px-8">
             <div className="max-w-3xl mx-auto">
                 {/* Title Section */}
                 <div className="text-center mb-8">
@@ -32,7 +57,7 @@ function ActivateMethods() {
                 {/* Activation Container */}
                 <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12">
                     <h2 className="text-2xl md:text-3xl font-bold mb-8 text-[#f4a52e] text-center">
-                        Enter your Product Key
+                        1. Enter your Product Key
                     </h2>
 
                     {/* Product Key Input */}
@@ -40,11 +65,11 @@ function ActivateMethods() {
                         <label className="block text-white font-semibold mb-3">
                             Product Key
                         </label>
-                        <input 
+                        <input
                             type="text"
                             value={productKey}
-                            onChange={(e) => setProductKey(e.target.value)}
-                            placeholder="RL-XXX-XXX-XXX"
+                            onChange={(e) => setProductKey(formatProductKey(e.target.value))}
+                            placeholder="XXX-XXX-XXX"
                             className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
                         />
                         <p className="text-sm text-gray-300 mt-2 text-center">
@@ -65,11 +90,11 @@ function ActivateMethods() {
                     </div>
 
                     {/* Activate Button */}
-                    <button 
+                    <button
                         onClick={handleActivate}
                         className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6"
                     >
-                        Download
+                        Activate
                     </button>
 
                     {/* Warning Box */}
@@ -100,6 +125,15 @@ function ActivateMethods() {
                     </div>
                 </div>
             </div>
+
+            {/* Popup */}
+            {popup && (
+                <Popup
+                    type={popup.type}
+                    message={popup.message}
+                    onClose={() => setPopup(null)}
+                />
+            )}
         </div>
     );
 }

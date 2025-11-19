@@ -128,7 +128,7 @@ function Home() {
                                 <img
                                     src={student_image}
                                     alt="Student with Calculator"
-                                    className="w-100 h-100 object-cover rounded-xl hover:scale-110 transition-transform duration-700 hover:rotate-2"
+                                    className="w-100 h-100 object-cover rounded-xl"
                                 />
                            </div>
                         <div className="text-white space-y-6 flex flex-col justify-center">
@@ -205,8 +205,8 @@ function Home() {
                             <div className="flex justify-center items-center overflow-hidden rounded-xl">
                                 <img
                                     src={ricky_image}
-                                    alt="Student with Calculator"
-                                    className="w-100 h-100 object-cover rounded-xl hover:scale-110 transition-transform duration-700 hover:-rotate-2"
+                                    alt="Ricky teaching class"
+                                    className="w-100 h-100 object-cover rounded-xl"
                                 />
                             </div>
                         </div>
