@@ -52,7 +52,10 @@ const importCsv = async () => {
     };
 
     for (const line of dataLines) {
-      const key = line.split(',')[0].trim();
+      const parts = line.split(',').map(s => s.trim());
+      const key = parts[0];
+      const usedStr = parts[1] || 'False';
+      const isUsed = usedStr.toLowerCase() === 'true';
 
       if (!key) {
         console.warn(`Skipping invalid line: ${line}`);
@@ -65,7 +68,17 @@ const importCsv = async () => {
         const existing = await ProductKey.findOne({ key: key.toUpperCase() });
 
         if (existing) {
-          console.log(`Key already exists: ${key}`);
+          // Update used status if it changed
+          if (existing.used !== isUsed) {
+            existing.used = isUsed;
+            if (isUsed && !existing.usedAt) {
+              existing.usedAt = new Date();
+            }
+            await existing.save();
+            console.log(`Updated: ${key} (used: ${isUsed})`);
+          } else {
+            console.log(`Key already exists: ${key}`);
+          }
           skipped++;
           continue;
         }
@@ -73,11 +86,12 @@ const importCsv = async () => {
         // Create new product key (type is calculated from key)
         await ProductKey.create({
           key: key.toUpperCase(),
-          used: false
+          used: isUsed,
+          usedAt: isUsed ? new Date() : null
         });
 
         const keyType = getProductTypeFromKey(key);
-        console.log(`Imported: ${key} (type: ${keyType})`);
+        console.log(`Imported: ${key} (type: ${keyType}, used: ${isUsed})`);
         imported++;
       } catch (err) {
         console.error(`Error importing ${key}: ${err.message}`);
