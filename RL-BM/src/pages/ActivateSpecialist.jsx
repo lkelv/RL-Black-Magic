@@ -30,7 +30,7 @@ function ActivateSpecialist() {
             return formatted.slice(0, 11);
         }
     };
-
+    
     const handleActivate = () => {
         if (!productKey.trim()) {
             setPopup({ type: 'error', message: 'Please enter a valid product key' });
