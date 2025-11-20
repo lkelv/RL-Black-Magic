@@ -1,8 +1,12 @@
-const express = require('express');
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import ProductKey from '../models/ProductKey.js';
+
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
-const ProductKey = require('../models/ProductKey');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Helper function to update the CSV file with current database state
 const updateCsvFile = async () => {
@@ -200,4 +204,4 @@ router.get('/stats', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

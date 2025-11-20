@@ -1,8 +1,14 @@
-require('dotenv').config({ path: '../.env' });
-const fs = require('fs');
-const path = require('path');
-const mongoose = require('mongoose');
-const ProductKey = require('../models/ProductKey');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+import fs from 'fs';
+import mongoose from 'mongoose';
+import ProductKey from '../models/ProductKey.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const MONGODB_URI = process.env.MONGODB_URI;
 

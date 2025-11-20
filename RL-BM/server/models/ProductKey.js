@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const productKeySchema = new mongoose.Schema({
   key: {
@@ -24,8 +24,7 @@ const productKeySchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for faster queries
-productKeySchema.index({ key: 1 });
+// Index for faster queries (key already has unique: true which creates an index)
 productKeySchema.index({ used: 1 });
 
-module.exports = mongoose.model('ProductKey', productKeySchema);
+export default mongoose.model('ProductKey', productKeySchema);
