@@ -6,19 +6,54 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 // Dictionary to store CAS IDs and their generated passwords
 export const CAS_ID_STORAGE = {};
 
+// Function to determine product type from key based on ASCII sum
+// 0 = methods, 1 = specialist, 2 = both
+export const getProductTypeFromKey = (key) => {
+  // Remove dashes and get just the characters
+  const cleanKey = key.replace(/-/g, '').toUpperCase();
+
+  // Sum all ASCII values
+  let asciiSum = 0;
+  for (let i = 0; i < cleanKey.length; i++) {
+    asciiSum += cleanKey.charCodeAt(i);
+  }
+
+  // Determine type based on modulo 3
+  const remainder = asciiSum % 3;
+
+  if (remainder === 0) {
+    return 'methods';
+  } else if (remainder === 1) {
+    return 'specialist';
+  } else {
+    return 'both';
+  }
+};
+
 // Function to validate product key via API
 export const validateProductKey = async (key, expectedType) => {
   try {
+    // Automatically determine the type from the key
+    const keyType = getProductTypeFromKey(key);
+
+    // Check if the key type matches the expected type
+    if (expectedType && keyType !== expectedType) {
+      return {
+        valid: false,
+        message: `This product key is for ${keyType}, not ${expectedType}.`
+      };
+    }
+
     const response = await fetch(`${API_BASE_URL}/product-keys/validate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ key, expectedType }),
+      body: JSON.stringify({ key, expectedType: keyType }),
     });
 
     const data = await response.json();
-    return data;
+    return { ...data, type: keyType };
   } catch (error) {
     console.error('Error validating product key:', error);
     return {

@@ -38,10 +38,23 @@ const importCsv = async () => {
     let skipped = 0;
     let errors = 0;
 
-    for (const line of dataLines) {
-      const [key, type] = line.split(',').map(s => s.trim());
+    // Helper function to get type from key
+    const getProductTypeFromKey = (key) => {
+      const cleanKey = key.replace(/-/g, '').toUpperCase();
+      let asciiSum = 0;
+      for (let i = 0; i < cleanKey.length; i++) {
+        asciiSum += cleanKey.charCodeAt(i);
+      }
+      const remainder = asciiSum % 3;
+      if (remainder === 0) return 'methods';
+      else if (remainder === 1) return 'specialist';
+      else return 'both';
+    };
 
-      if (!key || !type) {
+    for (const line of dataLines) {
+      const key = line.split(',')[0].trim();
+
+      if (!key) {
         console.warn(`Skipping invalid line: ${line}`);
         skipped++;
         continue;
@@ -57,14 +70,14 @@ const importCsv = async () => {
           continue;
         }
 
-        // Create new product key
+        // Create new product key (type is calculated from key)
         await ProductKey.create({
           key: key.toUpperCase(),
-          type: type.toLowerCase(),
           used: false
         });
 
-        console.log(`Imported: ${key} (${type})`);
+        const keyType = getProductTypeFromKey(key);
+        console.log(`Imported: ${key} (type: ${keyType})`);
         imported++;
       } catch (err) {
         console.error(`Error importing ${key}: ${err.message}`);

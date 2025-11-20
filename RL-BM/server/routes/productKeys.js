@@ -2,6 +2,30 @@ const express = require('express');
 const router = express.Router();
 const ProductKey = require('../models/ProductKey');
 
+// Function to determine product type from key based on ASCII sum
+// 0 = methods, 1 = specialist, 2 = both
+const getProductTypeFromKey = (key) => {
+  // Remove dashes and get just the characters
+  const cleanKey = key.replace(/-/g, '').toUpperCase();
+
+  // Sum all ASCII values
+  let asciiSum = 0;
+  for (let i = 0; i < cleanKey.length; i++) {
+    asciiSum += cleanKey.charCodeAt(i);
+  }
+
+  // Determine type based on modulo 3
+  const remainder = asciiSum % 3;
+
+  if (remainder === 0) {
+    return 'methods';
+  } else if (remainder === 1) {
+    return 'specialist';
+  } else {
+    return 'both';
+  }
+};
+
 // Validate a product key
 router.post('/validate', async (req, res) => {
   try {
@@ -30,17 +54,20 @@ router.post('/validate', async (req, res) => {
       });
     }
 
-    if (expectedType && productKey.type !== expectedType) {
+    // Calculate the type from the key
+    const keyType = getProductTypeFromKey(key);
+
+    if (expectedType && keyType !== expectedType) {
       return res.json({
         valid: false,
-        message: `This product key is for ${productKey.type}, not ${expectedType}.`
+        message: `This product key is for ${keyType}, not ${expectedType}.`
       });
     }
 
     return res.json({
       valid: true,
       message: 'Product key validated successfully!',
-      type: productKey.type
+      type: keyType
     });
   } catch (error) {
     console.error('Validation error:', error);
@@ -117,18 +144,28 @@ router.get('/all', async (req, res) => {
 // Get stats
 router.get('/stats', async (req, res) => {
   try {
-    const total = await ProductKey.countDocuments();
-    const used = await ProductKey.countDocuments({ used: true });
-    const available = await ProductKey.countDocuments({ used: false });
-    const methodsAvailable = await ProductKey.countDocuments({ type: 'methods', used: false });
-    const specialistAvailable = await ProductKey.countDocuments({ type: 'specialist', used: false });
+    const allKeys = await ProductKey.find({ used: false }).select('key');
+    const usedKeys = await ProductKey.find({ used: true }).select('key');
+
+    let methodsAvailable = 0;
+    let specialistAvailable = 0;
+    let bothAvailable = 0;
+
+    // Calculate types dynamically from keys
+    allKeys.forEach(pk => {
+      const keyType = getProductTypeFromKey(pk.key);
+      if (keyType === 'methods') methodsAvailable++;
+      else if (keyType === 'specialist') specialistAvailable++;
+      else bothAvailable++;
+    });
 
     return res.json({
-      total,
-      used,
-      available,
+      total: allKeys.length + usedKeys.length,
+      used: usedKeys.length,
+      available: allKeys.length,
       methodsAvailable,
-      specialistAvailable
+      specialistAvailable,
+      bothAvailable
     });
   } catch (error) {
     console.error('Stats error:', error);

@@ -8,12 +8,6 @@ const productKeySchema = new mongoose.Schema({
     uppercase: true,
     trim: true
   },
-  type: {
-    type: String,
-    required: true,
-    enum: ['methods', 'specialist'],
-    lowercase: true
-  },
   used: {
     type: Boolean,
     default: false
@@ -32,6 +26,6 @@ const productKeySchema = new mongoose.Schema({
 
 // Index for faster queries
 productKeySchema.index({ key: 1 });
-productKeySchema.index({ type: 1, used: 1 });
+productKeySchema.index({ used: 1 });
 
 module.exports = mongoose.model('ProductKey', productKeySchema);
