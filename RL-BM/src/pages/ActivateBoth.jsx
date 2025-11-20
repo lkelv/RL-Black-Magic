@@ -9,6 +9,16 @@ function ActivateBoth() {
     const [popup, setPopup] = useState(null);
     const navigate = useNavigate();
 
+
+    const formatProductKey = (value) => {
+        // Remove all non-alphanumeric characters
+        const cleaned = value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+        // Add dash every 3 characters
+        const formatted = cleaned.match(/.{1,3}/g)?.join('-') || '';
+        return formatted.slice(0, 11); // Max length: XXX-XXX-XXX (11 chars)
+    };
+
+
     const handleActivate = () => {
         if (!productKeyMethods.trim() || !productKeySpecialist.trim()) {
             setPopup({ type: 'error', message: 'Please enter valid product keys for both subjects' });
@@ -35,12 +45,12 @@ function ActivateBoth() {
 
         setPopup({
             type: 'success',
-            message: 'Both product keys validated! Redirecting to CAS ID verification...'
+            message: 'Both product keys validated! Redirecting to download...'
         });
 
         // Navigate after showing popup briefly
         setTimeout(() => {
-            navigate('/cas-id', {
+            navigate('/file-download/both', {
                 state: {
                     productType: 'both',
                     productKeyMethods,
@@ -78,8 +88,8 @@ function ActivateBoth() {
                             <input
                                 type="text"
                                 value={productKeyMethods}
-                                onChange={(e) => setProductKeyMethods(e.target.value)}
-                                placeholder="RL-XXX-XXX-XXX"
+                                onChange={(e) => setProductKeyMethods(formatProductKey(e.target.value))}
+                                placeholder="XXX-XXX-XXX"
                                 className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
                             />
                         </div>
@@ -91,8 +101,8 @@ function ActivateBoth() {
                             <input
                                 type="text"
                                 value={productKeySpecialist}
-                                onChange={(e) => setProductKeySpecialist(e.target.value)}
-                                placeholder="RL-XXX-XXX-XXX"
+                                onChange={(e) => setProductKeySpecialist(formatProductKey(e.target.value))}
+                                placeholder="XXX-XXX-XXX"
                                 className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
                             />
                         </div>

@@ -29,12 +29,12 @@ function ActivateMethods() {
             markProductKeyAsUsed(productKey);
             setPopup({
                 type: 'success',
-                message: 'Product key validated! Redirecting to CAS ID verification...'
+                message: 'Product key validated! Redirecting to download...'
             });
 
             // Navigate after showing popup briefly
             setTimeout(() => {
-                navigate('/cas-id', { state: { productType: 'methods', productKey } });
+                navigate('/file-download/methods', { state: { productType: 'methods', productKey } });
             }, 2000);
         } else {
             setPopup({ type: 'error', message: validation.message });

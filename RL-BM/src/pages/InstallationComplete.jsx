@@ -14,6 +14,36 @@ function InstallationComplete() {
         }
     }, [generatedPassword, casId, navigate]);
 
+    // Handle page refresh/close - show browser's native confirmation
+    useEffect(() => {
+        // Push initial state so popstate can be triggered
+        window.history.pushState(null, '', window.location.href);
+
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = 'Are you sure you want to leave? This will require you to re-enter your activation details.';
+        };
+
+        const handlePopState = () => {
+            const confirmLeave = window.confirm(
+                'Are you sure you want to go back? This will require you to re-enter your product key.'
+            );
+            if (!confirmLeave) {
+                // Remove listener before navigating to prevent loop
+                window.removeEventListener('popstate', handlePopState);
+                window.history.back();
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        window.addEventListener('popstate', handlePopState);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            window.removeEventListener('popstate', handlePopState);
+        };
+    }, []);
+
     // Use generated password or placeholder
     const password = generatedPassword || 'XXXXXXXX';
 
@@ -27,8 +57,8 @@ function InstallationComplete() {
 
     return (
         <div className="bg-[#202830] text-white py-12 px-8 flex flex-col items-center">
-            {/* Check Icon */}
-            <CheckCircle2 className="text-[#74be9c] w-24 h-24 mb-4 animate-fade-in" />
+                {/* Check Icon */}
+                <CheckCircle2 className="text-[#74be9c] w-24 h-24 mb-4 animate-fade-in" />
 
             {/* Title */}
             <h1 className="text-3xl md:text-4xl font-bold mb-2 text-center animate-fade-in-down">
