@@ -21,6 +21,38 @@ function CasID() {
         }
     }, [productType, navigate]);
 
+    // Handle page refresh/close - show browser's native confirmation
+    useEffect(() => {
+        // Push initial state so popstate can be triggered
+        window.history.pushState(null, '', window.location.href);
+
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = 'Are you sure you want to leave? This will require you to re-enter your CAS ID.';
+        };
+
+        const handlePopState = () => {
+            const confirmLeave = window.confirm(
+                'Are you sure you want to go back? This will require you to re-enter your product key.'
+            );
+            if (!confirmLeave) {
+                // Remove listener before navigating to prevent loop
+                window.removeEventListener('popstate', handlePopState);
+                window.history.back();
+            }
+        };
+
+        
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        window.addEventListener('popstate', handlePopState);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            window.removeEventListener('popstate', handlePopState);
+        };
+    }, []);
+
     const handleVerify = () => {
         // Basic validation
         if (!casId.trim() || !confirmCasId.trim()) {

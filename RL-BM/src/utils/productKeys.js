@@ -37,10 +37,11 @@ export const validateProductKey = (key, expectedType) => {
 
 // Function to mark product key as used
 export const markProductKeyAsUsed = (key) => {
+  // const upperKey = key.toUpperCase();
+  // if (VALID_PRODUCT_KEYS[upperKey]) {
+  //   VALID_PRODUCT_KEYS[upperKey].used = true;
+  // }
   const upperKey = key.toUpperCase();
-  if (VALID_PRODUCT_KEYS[upperKey]) {
-    VALID_PRODUCT_KEYS[upperKey].used = true;
-  }
 };
 
 // Function to generate a random password
