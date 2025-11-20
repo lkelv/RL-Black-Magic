@@ -48,7 +48,7 @@ function ActivateSpecialist() {
 
             // Navigate after showing popup briefly
             setTimeout(() => {
-                navigate('/file-download/specialist', { state: { productType: 'specialist', productKey } });
+                navigate('/file-download', { state: { productType: 'specialist', productKey } });
             }, 2000);
         } else {
             setPopup({ type: 'error', message: validation.message });

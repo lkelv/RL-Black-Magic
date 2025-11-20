@@ -64,7 +64,7 @@ function ActivateBoth() {
 
         // Navigate after showing popup briefly
         setTimeout(() => {
-            navigate('/file-download/both', {
+            navigate('/file-download', {
                 state: {
                     productType: 'both',
                     productKeyMethods,
