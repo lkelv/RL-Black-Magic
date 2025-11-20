@@ -1,6 +1,27 @@
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
+const path = require('path');
 const ProductKey = require('../models/ProductKey');
+
+// Helper function to update the CSV file with current database state
+const updateCsvFile = async () => {
+  try {
+    const productKeys = await ProductKey.find().sort({ key: 1 });
+
+    let csvContent = 'key,used\n';
+    productKeys.forEach(pk => {
+      const usedValue = pk.used ? 'True' : 'False';
+      csvContent += `${pk.key},${usedValue}\n`;
+    });
+
+    const csvPath = path.join(__dirname, '../../product_keys.csv');
+    fs.writeFileSync(csvPath, csvContent);
+    console.log('CSV file updated successfully');
+  } catch (error) {
+    console.error('Error updating CSV file:', error);
+  }
+};
 
 // Function to determine product type from key based on ASCII sum
 // 0 = methods, 1 = specialist, 2 = both
@@ -113,6 +134,9 @@ router.post('/use', async (req, res) => {
       productKey.casId = casId;
     }
     await productKey.save();
+
+    // Update CSV file to reflect the change
+    await updateCsvFile();
 
     return res.json({
       success: true,
