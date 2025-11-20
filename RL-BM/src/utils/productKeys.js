@@ -1,47 +1,53 @@
 // src/utils/productKeys.js
 
-// Dictionary of valid product keys
-export const VALID_PRODUCT_KEYS = {
-  // Maths Methods Keys
-  'MMM-MMM-MM1': { type: 'methods', used: false },
-  'MMM-MMM-MM2': { type: 'methods', used: false },
-  'MMM-MMM-MM3': { type: 'methods', used: false },
-
-  // Specialist Maths Keys
-  'SSS-SSS-SS1': { type: 'specialist', used: false },
-  'SSS-SSS-SS2': { type: 'specialist', used: false },
-  'SSS-SSS-SS3': { type: 'specialist', used: false },
-};
+// API base URL - change this to your production URL when deploying
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // Dictionary to store CAS IDs and their generated passwords
 export const CAS_ID_STORAGE = {};
 
-// Function to validate product key
-export const validateProductKey = (key, expectedType) => {
-  const productKey = VALID_PRODUCT_KEYS[key.toUpperCase()];
+// Function to validate product key via API
+export const validateProductKey = async (key, expectedType) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/product-keys/validate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ key, expectedType }),
+    });
 
-  if (!productKey) {
-    return { valid: false, message: 'Invalid product key. Please check and try again.' };
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error validating product key:', error);
+    return {
+      valid: false,
+      message: 'Unable to connect to server. Please try again later.'
+    };
   }
-
-  if (productKey.used) {
-    return { valid: false, message: 'This product key has already been used.' };
-  }
-
-  if (productKey.type !== expectedType) {
-    return { valid: false, message: `This product key is for ${productKey.type}, not ${expectedType}.` };
-  }
-
-  return { valid: true, message: 'Product key validated successfully!' };
 };
 
-// Function to mark product key as used
-export const markProductKeyAsUsed = (key) => {
-  // const upperKey = key.toUpperCase();
-  // if (VALID_PRODUCT_KEYS[upperKey]) {
-  //   VALID_PRODUCT_KEYS[upperKey].used = true;
-  // }
-  const upperKey = key.toUpperCase();
+// Function to mark product key as used via API
+export const markProductKeyAsUsed = async (key, casId = null) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/product-keys/use`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ key, casId }),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error marking product key as used:', error);
+    return {
+      success: false,
+      message: 'Unable to connect to server. Please try again later.'
+    };
+  }
 };
 
 // Function to generate a random password

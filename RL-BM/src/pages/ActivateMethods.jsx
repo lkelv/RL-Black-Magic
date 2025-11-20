@@ -31,16 +31,16 @@ function ActivateMethods() {
         }
     };
 
-    const handleActivate = () => {
+    const handleActivate = async () => {
         if (!productKey.trim()) {
             setPopup({ type: 'error', message: 'Please enter a valid product key' });
             return;
         }
 
-        const validation = validateProductKey(productKey, 'methods');
+        const validation = await validateProductKey(productKey, 'methods');
 
         if (validation.valid) {
-            markProductKeyAsUsed(productKey);
+            await markProductKeyAsUsed(productKey);
             setPopup({
                 type: 'success',
                 message: 'Product key validated! Redirecting to download...'
