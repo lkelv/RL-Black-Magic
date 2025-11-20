@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="326b954d-e91c-4877-8aec-61a15920c540" name="Changes" comment="Fixed Specialist and Both, added CAS page, and installation completion page">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/utils/keyGenerator.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/utils/productKey.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/utils/productKeys.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/utils/test.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/utils/test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/utils/testKeysWork.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RL-BM/src/components/Footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/src/components/Footer.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RL-BM/src/pages/ContactUs.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/src/pages/ContactUs.jsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="newworkingbranch" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2ywDseFnjRQyEkytO24lFIeNXq1" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;JavaScript Debug.test.html.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.CasID.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.keyGenerator.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.testKeysWork.js.executor&quot;: &quot;Run&quot;,
+    &quot;Python.productKey.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;productkeyactivationpagebranch&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Yeeheng/Documents/GitHub/RL-Black-Magic/RL-BM/src/pages&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Yeeheng\Documents\GitHub\RL-Black-Magic\RL-BM\src\pages" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Yeeheng\Documents\GitHub\RL-Black-Magic\RL-BM\src\assets" />
+      <recent name="C:\Users\Yeeheng\Documents\GitHub\RL-Black-Magic\RL-BM\src\pages" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.25659.43" />
+        <option value="bundled-python-sdk-181015f7ab06-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.25659.43" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="326b954d-e91c-4877-8aec-61a15920c540" name="Changes" comment="" />
+      <created>1750736954250</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1750736954250</updated>
+      <workItem from="1750736956706" duration="967000" />
+      <workItem from="1750737997346" duration="3046000" />
+      <workItem from="1756541831882" duration="109000" />
+      <workItem from="1759190282890" duration="2828000" />
+      <workItem from="1759194200323" duration="15623000" />
+      <workItem from="1759229375019" duration="1325000" />
+      <workItem from="1759491604684" duration="31000" />
+      <workItem from="1761981330923" duration="1009000" />
+      <workItem from="1762053759131" duration="5485000" />
+      <workItem from="1762562025398" duration="2709000" />
+      <workItem from="1763592570801" duration="9350000" />
+      <workItem from="1763606813095" duration="1891000" />
+      <workItem from="1763608974979" duration="4894000" />
+      <workItem from="1763613972123" duration="3155000" />
+    </task>
+    <task id="LOCAL-00001" summary="installed tailwind">
+      <option name="closed" value="true" />
+      <created>1750737574482</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1750737574484</updated>
+    </task>
+    <task id="LOCAL-00002" summary="working margin">
+      <option name="closed" value="true" />
+      <created>1759196759667</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1759196759667</updated>
+    </task>
+    <task id="LOCAL-00003" summary="moved homepage to pages file">
+      <option name="closed" value="true" />
+      <created>1759197163465</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1759197163465</updated>
+    </task>
+    <task id="LOCAL-00004" summary="added images">
+      <option name="closed" value="true" />
+      <created>1759206932582</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1759206932582</updated>
+    </task>
+    <task id="LOCAL-00005" summary="added images">
+      <option name="closed" value="true" />
+      <created>1759207583006</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1759207583008</updated>
+    </task>
+    <task id="LOCAL-00006" summary="installation guide page">
+      <option name="closed" value="true" />
+      <created>1759229405452</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1759229405452</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Added Specialist and Both activation pages, probably need to update both pages spacing">
+      <option name="closed" value="true" />
+      <created>1761982265557</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1761982265558</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Fixed Specialist and Both, added CAS page, and installation completion page">
+      <option name="closed" value="true" />
+      <created>1762056663225</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1762056663225</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.py" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="installed tailwind" />
+    <MESSAGE value="working margin" />
+    <MESSAGE value="moved homepage to pages file" />
+    <MESSAGE value="added images" />
+    <MESSAGE value="installation guide page" />
+    <MESSAGE value="Added Specialist and Both activation pages, probably need to update both pages spacing" />
+    <MESSAGE value="Fixed Specialist and Both, added CAS page, and installation completion page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed Specialist and Both, added CAS page, and installation completion page" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/RL_Black_Magic$productKey.coverage" NAME="productKey Coverage Results" MODIFIED="1763616992866" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/RL-BM/src/utils" />
+  </component>
+</project>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<input id="last6" placeholder="Last 6 digits of CAS ID">
+<select id="course">
+    <option value="M">Methods</option>
+    <option value="S">Spesh</option>
+    <option value="B">Both</option>
+</select>
+<button onclick="generatePassword()">Generate Password</button>
+<div id="result"></div>
+
+<script>
+    // (paste the JS from section 1 above here)
+
+    function generatePassword() {
+        const last6Input = document.getElementById("last6").value.trim();
+        const course = document.getElementById("course").value; // "M", "S" or "B"
+
+        // Basic validation
+        if (!/^\d{6}$/.test(last6Input)) {
+            document.getElementById("result").textContent =
+                "Please enter exactly 6 digits.";
+            return;
+        }
+
+        const pw = dhPasswordFromLast6(Number(last6Input), course);
+        document.getElementById("result").textContent =
+            "Password for this CAS: " + pw;
+    }
+</script>
+</body>
+</html>
