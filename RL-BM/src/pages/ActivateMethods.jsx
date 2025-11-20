@@ -48,7 +48,7 @@ function ActivateMethods() {
 
             // Navigate after showing popup briefly
             setTimeout(() => {
-                navigate('/file-download/methods', { state: { productType: 'methods', productKey } });
+                navigate('/file-download', { state: { productType: 'methods', productKey } });
             }, 2000);
         } else {
             setPopup({ type: 'error', message: validation.message });

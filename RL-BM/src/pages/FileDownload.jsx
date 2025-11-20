@@ -1,18 +1,40 @@
-// src/pages/FileDownloadMethods.jsx
+// src/pages/FileDownload.jsx
 import React, { useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-function FileDownloadMethods() {
+// Configuration for each product type
+const productConfig = {
+    methods: {
+        title: 'Methods',
+        fileName: 'rlBM26.tns',
+        filePath: '/files/BMmm34.tns'
+    },
+    specialist: {
+        title: 'Specialist',
+        fileName: 'rlBM26.tns',
+        filePath: '/files/rlBMsm34.tns'
+    },
+    both: {
+        title: 'Methods & Specialist',
+        fileName: 'rlBM26.tns',
+        filePath: '/files/rlBMmmsm34.tns'
+    }
+};
+
+function FileDownload() {
     const navigate = useNavigate();
     const location = useLocation();
     const hasDownloaded = useRef(false);
 
     // Get product info from navigation state
-    const { productType, productKey } = location.state || {};
+    const { productType, productKey, productKeyMethods, productKeySpecialist } = location.state || {};
+
+    // Get config for current product type
+    const config = productConfig[productType];
 
     // Security: Redirect if user tries to access this page directly without validation
     useEffect(() => {
-        if (!productType || productType !== 'methods') {
+        if (!productType || !productConfig[productType]) {
             navigate('/activate', { replace: true });
         }
     }, [productType, navigate]);
@@ -38,9 +60,6 @@ function FileDownloadMethods() {
             }
         };
 
-
-        
-
         window.addEventListener('beforeunload', handleBeforeUnload);
         window.addEventListener('popstate', handlePopState);
 
@@ -52,35 +71,39 @@ function FileDownloadMethods() {
 
     // Auto-download the file when the page loads
     useEffect(() => {
-        if (productType === 'methods' && !hasDownloaded.current) {
+        if (config && !hasDownloaded.current) {
             hasDownloaded.current = true;
             // Trigger the download
             const downloadLink = document.createElement('a');
-            downloadLink.href = '/files/BMmm34.tns'; // Update this path to your actual file
-            downloadLink.download = 'BMmm34.tns';
+            downloadLink.href = config.filePath;
+            downloadLink.download = config.fileName;
             document.body.appendChild(downloadLink);
             downloadLink.click();
             document.body.removeChild(downloadLink);
         }
-    }, [productType]);
+    }, [config]);
 
     const handleManualDownload = () => {
+        if (!config) return;
         const downloadLink = document.createElement('a');
-        downloadLink.href = '/files/BMmm34.tns'; // Update this path to your actual file
-        downloadLink.download = 'BMmm34.tns';
+        downloadLink.href = config.filePath;
+        downloadLink.download = config.fileName;
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
     };
 
     const handleContinue = () => {
-        navigate('/cas-id', {
-            state: {
-                productType,
-                productKey
-            }
-        });
+        // Pass appropriate state based on product type
+        const state = productType === 'both'
+            ? { productType, productKeyMethods, productKeySpecialist }
+            : { productType, productKey };
+
+        navigate('/cas-id', { state });
     };
+
+    // Don't render if no valid config
+    if (!config) return null;
 
     return (
         <div className="bg-[#202830] text-white py-12 px-8">
@@ -88,7 +111,7 @@ function FileDownloadMethods() {
                 {/* Title Section */}
                 <div className="text-center mb-8">
                     <h1 className="text-3xl md:text-4xl font-bold mb-3">
-                        Download Black Magic - Methods
+                        Download Black Magic - {config.title}
                     </h1>
                     <p className="text-lg text-gray-300 mb-6">
                         Your download should start automatically
@@ -132,7 +155,7 @@ function FileDownloadMethods() {
                                     nspireconnect.ti.com/nsc/file-transfer
                                 </a>
                             </li>
-                            <li>Click "Select Files" and choose the downloaded BMmm34.tns file</li>
+                            <li>Click "Select Files" and choose the downloaded {config.fileName} file</li>
                             <li>Select your calculator from the device list</li>
                             <li>Click "Transfer" to send the file to your calculator</li>
                         </ol>
@@ -171,4 +194,4 @@ function FileDownloadMethods() {
     );
 }
 
-export default FileDownloadMethods;
+export default FileDownload;
