@@ -1,4 +1,4 @@
-// src/utils/productKeys.js
+// src/utils/pktry.js
 // ========================================================
 // FIXED VERSION - Product Key Validation System
 // ========================================================

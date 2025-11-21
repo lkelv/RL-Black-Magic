@@ -9,7 +9,7 @@ import {
     validateMathRules,
     validateProductKey,
     backtrackValidationKey
-} from "./productKeys.js";
+} from "./pktry.js";
 
 /**
  * Test a single product key with detailed output
