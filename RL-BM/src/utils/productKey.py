@@ -9,6 +9,7 @@ import random
 import string
 from typing import List, Dict, Tuple
 import hashlib
+import pandas as pd
 
 # Configuration
 KEY_LENGTH = 9
@@ -319,7 +320,10 @@ if __name__ == "__main__":
         elif classifier == 2:
             mmsm.append(productkey)
 
-    print(mm)
+    # print(mm)
+    df = pd.DataFrame(mmsm)
+    df.to_csv('mmsm.csv', index=False, encoding='utf-8')
+    # print("csved")
     # print("--")
     # print(sm)
     # print("--")
