@@ -2,6 +2,7 @@
 
 // API base URL - change this to your production URL when deploying
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+console.log('API_BASE_URL:', API_BASE_URL, 'Environment:', import.meta.env.VITE_API_URL);
 
 // Dictionary to store CAS IDs and their generated passwords
 export const CAS_ID_STORAGE = {};
@@ -35,15 +36,18 @@ export const validateProductKey = async (key, expectedType) => {
   try {
     // Automatically determine the type from the key
     const keyType = getProductTypeFromKey(key);
+    console.log('Validating key:', key, 'Expected:', expectedType, 'Calculated type:', keyType);
 
     // Check if the key type matches the expected type
     if (expectedType && keyType !== expectedType) {
+      console.log('Type mismatch - returning error');
       return {
         valid: false,
         message: `This product key is for ${keyType}, not ${expectedType}.`
       };
     }
 
+    console.log('Making API call to:', `${API_BASE_URL}/product-keys/validate`);
     const response = await fetch(`${API_BASE_URL}/product-keys/validate`, {
       method: 'POST',
       headers: {
@@ -53,6 +57,7 @@ export const validateProductKey = async (key, expectedType) => {
     });
 
     const data = await response.json();
+    console.log('API response:', data);
     return { ...data, type: keyType };
   } catch (error) {
     console.error('Error validating product key:', error);

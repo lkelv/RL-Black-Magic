@@ -37,19 +37,24 @@ function ActivateSpecialist() {
             return;
         }
 
+        console.log('Starting validation...');
         const validation = await validateProductKey(productKey, 'specialist');
+        console.log('Validation result:', validation);
 
         if (validation.valid) {
+            console.log('Marking key as used...');
             await markProductKeyAsUsed(productKey);
-            setPopup({
-                type: 'success',
-                message: 'Product key validated! Redirecting to download...'
-            });
+            console.log('Key marked as used');
 
-            // Navigate after showing popup briefly
-            setTimeout(() => {
-                navigate('/file-download/specialist', { state: { productType: 'specialist', productKey } });
-            }, 2000);
+            // Navigate immediately with the product key
+            console.log('Navigating with state:', { productType: 'specialist', productKey });
+            navigate('/file-download/specialist', {
+                state: {
+                    productType: 'specialist',
+                    productKey: productKey
+                },
+                replace: false
+            });
         } else {
             setPopup({ type: 'error', message: validation.message });
         }

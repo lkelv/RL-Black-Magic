@@ -26,8 +26,11 @@ function ActivateBoth() {
         }
 
         // Validate both keys
+        console.log('Starting validation for both keys...');
         const validationMethods = await validateProductKey(productKeyMethods, 'methods');
         const validationSpecialist = await validateProductKey(productKeySpecialist, 'specialist');
+        console.log('Methods validation:', validationMethods);
+        console.log('Specialist validation:', validationSpecialist);
 
         if (!validationMethods.valid) {
             setPopup({ type: 'error', message: `Methods key: ${validationMethods.message}` });
@@ -40,24 +43,21 @@ function ActivateBoth() {
         }
 
         // Both keys valid
+        console.log('Marking both keys as used...');
         await markProductKeyAsUsed(productKeyMethods);
         await markProductKeyAsUsed(productKeySpecialist);
+        console.log('Both keys marked as used');
 
-        setPopup({
-            type: 'success',
-            message: 'Both product keys validated! Redirecting to download...'
+        // Navigate immediately with both product keys
+        console.log('Navigating with state:', { productType: 'both', productKeyMethods, productKeySpecialist });
+        navigate('/file-download/both', {
+            state: {
+                productType: 'both',
+                productKeyMethods: productKeyMethods,
+                productKeySpecialist: productKeySpecialist
+            },
+            replace: false
         });
-
-        // Navigate after showing popup briefly
-        setTimeout(() => {
-            navigate('/file-download/both', {
-                state: {
-                    productType: 'both',
-                    productKeyMethods,
-                    productKeySpecialist
-                }
-            });
-        }, 2000);
     };
 
     return (

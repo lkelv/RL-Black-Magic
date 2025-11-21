@@ -27,13 +27,13 @@ function Activate() {
                         <h2 className="text-2xl font-bold mb-8 text-[#f4a52e] text-center">
                             Maths Methods 3&4
                         </h2>
-                        
+
                         {/* Placeholder for book image */}
                         <div className="bg-[#1a1a1a] w-48 h-64 mb-8 rounded flex items-center justify-center">
                             <img src={methodsBook} alt="Maths Methods Book" className="max-h-full max-w-full rounded" />
                         </div>
-                        
-                        <Link 
+
+                        <Link
                             to="/activate/methods"
                             className="bg-[#74be9c] hover:bg-[#62a888] text-[#202830] font-bold py-3 px-12 rounded-full transition-colors w-full text-center"
                         >
@@ -46,13 +46,13 @@ function Activate() {
                         <h2 className="text-2xl font-bold mb-8 text-[#f4a52e] text-center">
                             Specialist Maths 3&4
                         </h2>
-                        
+
                         {/* Placeholder for book image */}
                         <div className="bg-[#1a1a1a] w-48 h-64 mb-8 rounded flex items-center justify-center">
                             <img src={specBook} alt="Maths Methods Book" className="max-h-full max-w-full rounded" />
                         </div>
-                        
-                        <Link 
+
+                        <Link
                             to="/activate/specialist"
                             className="bg-[#74be9c] hover:bg-[#62a888] text-[#202830] font-bold py-3 px-12 rounded-full transition-colors w-full text-center"
                         >
@@ -65,11 +65,11 @@ function Activate() {
                         <h2 className="text-2xl font-bold mb-8 text-[#f4a52e] text-center">
                             MM and SM 3&4
                         </h2>
-                        
+
                         <div className="relative w-48 h-64 mb-8 flex items-center justify-center">
                             <img src={MMSMbook} alt="Maths Methods Book" className="max-h-full max-w-full rounded scale-175" />
                         </div>
-                        <Link 
+                        <Link
                             to="/activate/both"
                             className="bg-[#74be9c] hover:bg-[#62a888] text-[#202830] font-bold py-3 px-12 rounded-full transition-colors w-full text-center"
                         >

@@ -10,10 +10,19 @@ function FileDownloadMethods() {
     // Get product info from navigation state
     const { productType, productKey } = location.state || {};
 
+    console.log('FileDownloadMethods loaded');
+    console.log('Location state:', location.state);
+    console.log('Product type:', productType);
+    console.log('Product key:', productKey);
+
     // Security: Redirect if user tries to access this page directly without validation
     useEffect(() => {
+        console.log('Security check - productType:', productType);
         if (!productType || productType !== 'methods') {
+            console.log('Redirecting back to /activate because productType is invalid');
             navigate('/activate', { replace: true });
+        } else {
+            console.log('Security check passed!');
         }
     }, [productType, navigate]);
 
