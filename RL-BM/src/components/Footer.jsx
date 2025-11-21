@@ -18,10 +18,11 @@ function Footer() {
                 <div>
                     <h3 className="text-xl font-bold mb-4 text-white">Contact Us</h3>
                     <ul className="space-y-2">
-                        <li>enquiry@rleducation.com</li>
+                        <li>blackmagic@rleducation.com.au</li>
                         <li>(03) 99732966</li>
-                        <li className="mt-4">Level 12 Suite 1, 190 Queen St, Melbourne VIC 3000</li>
-                        <li>Level 2, Unit 12, 532 Station Street, Box Hill VIC 3128</li>
+                        <li><strong>Box Hill Campus:</strong> Level 2, Unit 12, 532 Station Street, Box Hill VIC 3128</li>
+                        <li className="mt-4"><strong>City Campus:</strong> Level 12 Suite 1, 190 Queen St, Melbourne VIC 3000</li>
+
                     </ul>
                 </div>
                 
