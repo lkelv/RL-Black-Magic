@@ -100,54 +100,6 @@ def generate_product_key_from_seed(seed: int) -> Tuple[str, float, float]:
 
     return product_key, i, y_value
 
-#
-# def generate_random_product_key() -> Dict[str, any]:
-#     """
-#     Generate a random product key
-#
-#     Returns:
-#         Dictionary containing key information
-#     """
-#     # Generate random seed
-#     seed = random.randint(0, 1000000)
-#
-#     product_key, intermediate, final_value = generate_product_key_from_seed(seed)
-#
-#     return {
-#         'product_key': product_key,
-#         'seed': seed,
-#         'intermediate_value': intermediate,
-#         'final_value': final_value
-#     }
-
-#
-# def generate_product_key_from_string(input_string: str) -> Dict[str, any]:
-#     """
-#     Generate a deterministic product key from a string (like company name, email, etc.)
-#
-#     Args:
-#         input_string: Input string to generate key from
-#
-#     Returns:
-#         Dictionary containing key information
-#     """
-#     # Create hash from string
-#     hash_obj = hashlib.sha256(input_string.encode())
-#     hash_int = int(hash_obj.hexdigest(), 16)
-#
-#     # Use hash as seed
-#     seed = hash_int % 1000000
-#
-#     product_key, intermediate, final_value = generate_product_key_from_seed(seed)
-#
-#     return {
-#         'product_key': product_key,
-#         'input_string': input_string,
-#         'seed': seed,
-#         'intermediate_value': intermediate,
-#         'final_value': final_value
-#     }
-
 
 def generate_multiple_keys(count: int, start_seed: int = 0) -> List[Dict[str, any]]:
     """
@@ -198,7 +150,7 @@ def format_product_key(key: str, format_style: str = 'dash') -> str:
         Formatted key string
     """
     if format_style == 'dash' and len(key) == 9:
-        return f"{key[0:3]}-{key[3:6]}-{key[6:9]}"
+        return f"{key[0:3]}-{key[3:6]}-{key[6:9]},{False}"
     return key
 
 
@@ -293,7 +245,7 @@ def main():
 
 
 if __name__ == "__main__":
-    # main()
+    main()
     productkeylist = np.genfromtxt("generated_keys60000.txt",delimiter='\t',skip_header=3,skip_footer=2,dtype=str)
     # print(productkeylist)
 
@@ -319,12 +271,14 @@ if __name__ == "__main__":
         elif classifier == 2:
             mmsm.append(productkey)
 
-    # print(mm)
-    df = pd.DataFrame(mmsm)
-    df.to_csv('mmsm.csv', index=False, encoding='utf-8')
-    # print("csved")
-    # print("--")
-    # print(sm)
-    # print("--")
-    # print(mmsm)
+    print(mm)
+    print(sm)
+    print(mmsm)
+    dfmm = pd.DataFrame(mm)
+    dfmm.to_csv('mm.csv', index=False, encoding='utf-8')
+    dfsm = pd.DataFrame(sm)
+    dfsm.to_csv('sm.csv', index=False, encoding='utf-8')
+    dfmmsm = pd.DataFrame(mmsm)
+    dfmmsm.to_csv('mmsm.csv', index=False, encoding='utf-8')
+
 
