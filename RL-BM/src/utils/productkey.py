@@ -260,7 +260,7 @@ if __name__ == "__main__":
         for i in productkey:
             sumord += ord(i)
 
-        classifier = np.mod(sumord,3)
+        classifier = np.mod(sumord,2)
 
         if classifier == 0:
             mm.append(productkey)
@@ -268,17 +268,17 @@ if __name__ == "__main__":
         elif classifier == 1:
             sm.append(productkey)
 
-        elif classifier == 2:
-            mmsm.append(productkey)
+        # elif classifier == 2:
+        #     mmsm.append(productkey)
 
     print(mm)
     print(sm)
-    print(mmsm)
+    # print(mmsm)
     dfmm = pd.DataFrame(mm)
-    dfmm.to_csv('mm.csv', index=False, encoding='utf-8')
+    dfmm.to_csv('mm_2.csv', index=False, encoding='utf-8')
     dfsm = pd.DataFrame(sm)
-    dfsm.to_csv('sm.csv', index=False, encoding='utf-8')
-    dfmmsm = pd.DataFrame(mmsm)
-    dfmmsm.to_csv('mmsm.csv', index=False, encoding='utf-8')
+    dfsm.to_csv('sm_2.csv', index=False, encoding='utf-8')
+    # dfmmsm = pd.DataFrame(mmsm)
+    # dfmmsm.to_csv('mmsm.csv', index=False, encoding='utf-8')
 
 
