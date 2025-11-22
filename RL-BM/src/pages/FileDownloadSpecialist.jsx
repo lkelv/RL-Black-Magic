@@ -17,48 +17,22 @@ function FileDownloadSpecialist() {
         }
     }, [productType, navigate]);
 
-    // Handle page refresh/close and browser back button
-    useEffect(() => {
-        // Push initial state so popstate can be triggered
-        window.history.pushState(null, '', window.location.href);
-
-        const handleBeforeUnload = (e) => {
-            e.preventDefault();
-            e.returnValue = 'Are you sure you want to leave? This will require you to re-enter your product key.';
-        };
-
-        const handlePopState = () => {
-            const confirmLeave = window.confirm(
-                'Are you sure you want to go back? This will require you to re-enter your product key.'
-            );
-            if (!confirmLeave) {
-                // Remove listener before navigating to prevent loop
-                window.removeEventListener('popstate', handlePopState);
-                window.history.back();
-            }
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-        window.addEventListener('popstate', handlePopState);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-            window.removeEventListener('popstate', handlePopState);
-        };
-    }, []);
-
     // Auto-download the file when the page loads
     useEffect(() => {
-        if (productType === 'specialist' && !hasDownloaded.current) {
-            hasDownloaded.current = true;
-            // Trigger the download
-            const downloadLink = document.createElement('a');
-            downloadLink.href = '/files/rlBMsm34.tns'; // Update this path to your actual file
-            downloadLink.download = 'rlBMsm34.tns';
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
+        if (productType !== 'specialist' || hasDownloaded.current) {
+            return;
         }
+
+        // Mark as downloaded BEFORE triggering to prevent double downloads
+        hasDownloaded.current = true;
+
+        // Trigger the download
+        const downloadLink = document.createElement('a');
+        downloadLink.href = '/files/rlBMsm34.tns'; // Update this path to your actual file
+        downloadLink.download = 'rlBMsm34.tns';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
     }, [productType]);
 
     const handleManualDownload = () => {

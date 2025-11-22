@@ -28,7 +28,7 @@ const updateCsvFile = async () => {
 };
 
 // Function to determine product type from key based on ASCII sum
-// 0 = methods, 1 = specialist, 2 = both
+// 0 = methods (divisible by 2), 1 = specialist (not divisible by 2)
 const getProductTypeFromKey = (key) => {
   // Remove dashes and get just the characters
   const cleanKey = key.replace(/-/g, '').toUpperCase();
@@ -39,15 +39,13 @@ const getProductTypeFromKey = (key) => {
     asciiSum += cleanKey.charCodeAt(i);
   }
 
-  // Determine type based on modulo 3
-  const remainder = asciiSum % 3;
+  // Determine type based on modulo 2
+  const remainder = asciiSum % 2;
 
   if (remainder === 0) {
     return 'methods';
-  } else if (remainder === 1) {
-    return 'specialist';
   } else {
-    return 'both';
+    return 'specialist';
   }
 };
 
@@ -177,14 +175,12 @@ router.get('/stats', async (req, res) => {
 
     let methodsAvailable = 0;
     let specialistAvailable = 0;
-    let bothAvailable = 0;
 
     // Calculate types dynamically from keys
     allKeys.forEach(pk => {
       const keyType = getProductTypeFromKey(pk.key);
       if (keyType === 'methods') methodsAvailable++;
       else if (keyType === 'specialist') specialistAvailable++;
-      else bothAvailable++;
     });
 
     return res.json({
@@ -192,8 +188,7 @@ router.get('/stats', async (req, res) => {
       used: usedKeys.length,
       available: allKeys.length,
       methodsAvailable,
-      specialistAvailable,
-      bothAvailable
+      specialistAvailable
     });
   } catch (error) {
     console.error('Stats error:', error);

@@ -8,7 +8,7 @@ console.log('API_BASE_URL:', API_BASE_URL, 'Environment:', import.meta.env.VITE_
 export const CAS_ID_STORAGE = {};
 
 // Function to determine product type from key based on ASCII sum
-// 0 = methods, 1 = specialist, 2 = both
+// 0 = methods (divisible by 2), 1 = specialist (not divisible by 2)
 export const getProductTypeFromKey = (key) => {
   // Remove dashes and get just the characters
   const cleanKey = key.replace(/-/g, '').toUpperCase();
@@ -19,15 +19,13 @@ export const getProductTypeFromKey = (key) => {
     asciiSum += cleanKey.charCodeAt(i);
   }
 
-  // Determine type based on modulo 3
-  const remainder = asciiSum % 3;
+  // Determine type based on modulo 2
+  const remainder = asciiSum % 2;
 
   if (remainder === 0) {
     return 'methods';
-  } else if (remainder === 1) {
-    return 'specialist';
   } else {
-    return 'both';
+    return 'specialist';
   }
 };
 
