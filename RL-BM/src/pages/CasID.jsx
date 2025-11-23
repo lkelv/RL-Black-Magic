@@ -83,7 +83,7 @@ function CasID() {
 
                     <button
                         onClick={handleVerify}
-                        className="w-full mt-8 py-3 bg-gradient-to-r from-[#62a888] to-[#74be9c] rounded-lg text-[#202830] font-bold"
+                        className="w-full mt-8 py-3 bg-gradient-to-r from-[#62a888] to-[#74be9c] rounded-lg text-[#202830] font-bold cursor-pointer"
                     >
                         Verify CAS ID
                     </button>

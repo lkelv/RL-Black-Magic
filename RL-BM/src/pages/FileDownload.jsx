@@ -164,7 +164,7 @@ function FileDownload() {
                     {/* Continue Button */}
                     <button
                         onClick={handleContinue}
-                        className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6"
+                        className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6 cursor-pointer"
                     >
                         Continue to CAS ID Verification
                     </button>
