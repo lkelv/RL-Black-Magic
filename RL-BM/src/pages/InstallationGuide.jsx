@@ -35,11 +35,15 @@ function InstallationGuide() {
                 <div className="bg-[#2d3642] rounded-lg p-8 mb-[32px]">
                     <h2 className="text-2xl font-semibold mb-4">Step 1</h2>
                     <p className="text-gray-300 leading-relaxed">
-                        Placeholder text: Here you will find a step-by-step guide on how to
-                        install and activate the Black Magic program on your CAS calculator.
-                        Detailed instructions, screenshots, and troubleshooting tips will
-                        be provided here soon.
+                        Click on Activate
                     </p>
+                    <div className="mt-4">
+                        <img
+                            src="../assets/ActivateNow.png"
+                            alt="Where to click Activate Now"
+                            className="rounded-lg shadow-lg border border-[#3a4552]"
+                        />
+                    </div>
                 </div>
                 <div className="bg-[#2d3642] rounded-lg p-8 mb-[32px]">
                     <h2 className="text-2xl font-semibold mb-4">Step 2</h2>
