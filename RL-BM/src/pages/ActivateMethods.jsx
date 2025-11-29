@@ -31,16 +31,16 @@ function ActivateMethods() {
         }
     };
 
-    const handleActivate = async () => {
+    const handleActivate = () => {
         if (!productKey.trim()) {
             setPopup({ type: 'error', message: 'Please enter a valid product key' });
             return;
         }
 
-        const validation = await validateProductKey(productKey, 'methods');
+        const validation = validateProductKey(productKey, 'methods');
 
         if (validation.valid) {
-            await markProductKeyAsUsed(productKey);
+            markProductKeyAsUsed(productKey);
             setPopup({
                 type: 'success',
                 message: 'Product key validated! Redirecting to download...'
@@ -48,7 +48,7 @@ function ActivateMethods() {
 
             // Navigate after showing popup briefly
             setTimeout(() => {
-                navigate('/file-download/methods', { state: { productType: 'methods', productKey } });
+                navigate('/file-download', { state: { productType: 'methods', productKey } });
             }, 2000);
         } else {
             setPopup({ type: 'error', message: validation.message });

@@ -9,9 +9,7 @@ import ActivateMethods from './pages/ActivateMethods';
 import ActivateSpecialist from './pages/ActivateSpecialist';
 import ActivateBoth from './pages/ActivateBoth';
 import CasID from "./pages/CasID.jsx";
-import FileDownloadMethods from "./pages/FileDownloadMethods.jsx";
-import FileDownloadSpecialist from "./pages/FileDownloadSpecialist.jsx";
-import FileDownloadBoth from "./pages/FileDownloadBoth.jsx";
+import FileDownload from "./pages/FileDownload.jsx";
 import InstallationComplete from "./pages/InstallationComplete.jsx";
 import InstallationGuide from './pages/InstallationGuide';
 import FindCasID from './pages/FindCasID';
@@ -30,9 +28,7 @@ function App() {
                         <Route path="/activate/methods" element={<ActivateMethods />} />
                         <Route path="/activate/specialist" element={<ActivateSpecialist />} />
                         <Route path="/activate/both" element={<ActivateBoth />} />
-                        <Route path="/file-download/methods" element={<FileDownloadMethods />} />
-                        <Route path="/file-download/specialist" element={<FileDownloadSpecialist />} />
-                        <Route path="/file-download/both" element={<FileDownloadBoth />} />
+                        <Route path="/file-download" element={<FileDownload />} />
                         <Route path="/cas-id" element={<CasID />} />
                         <Route path="/installation-complete" element={<InstallationComplete />} />
                         <Route path="/installation-guide" element={<InstallationGuide />} />
