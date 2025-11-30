@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326b954d-e91c-4877-8aec-61a15920c540" name="Changes" comment="added some small fixes">
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/ActivateNow.png" afterDir="false" />
+    <list default="true" id="326b954d-e91c-4877-8aec-61a15920c540" name="Changes" comment="Main after rollback - UI still bugged">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RL-BM/src/pages/InstallationGuide.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/src/pages/InstallationGuide.jsx" afterDir="false" />
     </list>
@@ -110,6 +109,7 @@
       <workItem from="1763785034532" duration="3197000" />
       <workItem from="1764395232747" duration="104000" />
       <workItem from="1764399148374" duration="569000" />
+      <workItem from="1764401065819" duration="1041000" />
     </task>
     <task id="LOCAL-00001" summary="installed tailwind">
       <option name="closed" value="true" />

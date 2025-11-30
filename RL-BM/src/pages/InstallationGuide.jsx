@@ -1,5 +1,6 @@
 // src/pages/InstallationGuide.jsx
 import React from 'react';
+import ActivateNowImg from '../assets/ActivateNow.png';
 
 function InstallationGuide() {
     return (
@@ -35,11 +36,11 @@ function InstallationGuide() {
                 <div className="bg-[#2d3642] rounded-lg p-8 mb-[32px]">
                     <h2 className="text-2xl font-semibold mb-4">Step 1</h2>
                     <p className="text-gray-300 leading-relaxed">
-                        Click on Activate
+                        Click on Activate Now
                     </p>
                     <div className="mt-4">
                         <img
-                            src="../assets/ActivateNow.png"
+                            src={ActivateNowImg}
                             alt="Where to click Activate Now"
                             className="rounded-lg shadow-lg border border-[#3a4552]"
                         />
