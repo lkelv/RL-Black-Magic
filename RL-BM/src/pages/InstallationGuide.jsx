@@ -1,4 +1,4 @@
-// src/pages/InstallationGuide.jsx
+// src/pages/InstallationGuide.jsx 930
 import React from 'react';
 import ActivateNowImg from '../assets/ActivateNow.png';
 
