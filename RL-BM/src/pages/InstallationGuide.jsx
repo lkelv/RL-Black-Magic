@@ -4,8 +4,16 @@ import ActivateNowImg from '../assets/ActivateNow.png';
 import SubjectSelection from '../assets/SubjectSelection.png';
 import ProductKey from '../assets/ProductKey.png';
 import Redirect from '../assets/Redirect.png';
+import Downloads from '../assets/Download.png';
 import Downloadmanual from '../assets/Downloadmanual.png';
 import FileTransfer from '../assets/FileTransfer.png';
+import ConnectCalc from '../assets/ConnectCalc.png';
+import ToDoCAS from '../assets/ToDoCAS.png';
+import ToCalc from '../assets/ToCalc.png';
+import TransferPage from '../assets/TransferPage.png';
+import CASIDverification from '../assets/CASIDverification.png';
+import CASIDlocation from '../assets/CASIDlocation.png';
+import InstallationComplete from '../assets/InstallationComplete.png';
 
 function InstallationGuide() {
     return (
@@ -129,41 +137,111 @@ function InstallationGuide() {
                     <div className="mt-4">
                         <img
                             src={FileTransfer}
-                            alt="Manual download link"
+                            alt="CAS connection page"
                             className="rounded-lg shadow-lg border border-[#3a4552]"
                         />
                     </div>
+                    <p className="text-gray-300 leading-relaxed">
+                        You should see your calculator appear after clicking "Connect to Calculator".
+                        If it doesn’t show up, please contact RL staff for assistance,
+                        as older versions of the CAS calculator (eg. black CAS) may not be supported.
+                    </p>
+                    <div className="mt-4">
+                        <img
+                            src={ConnectCalc}
+                            alt="Connect Calculator"
+                            className="rounded-lg shadow-lg border border-[#3a4552]"
+                        />
+                    </div>
+                    <p className="text-gray-300 leading-relaxed">
+                        Click on "Transfer File".
+                    </p>
+                    <div className="mt-4">
+                        <img
+                            src={ToDoCAS}
+                            alt="Connect Calculator"
+                            className="rounded-lg shadow-lg border border-[#3a4552]"
+                        />
+                    </div>
+                    <p className="text-gray-300 leading-relaxed">
+                        Click on "To Calculator".
+                    </p>
+                    <div className="mt-4">
+                        <img
+                            src={ToCalc}
+                            alt="Connect Calculator"
+                            className="rounded-lg shadow-lg border border-[#3a4552]"
+                        />
+                    </div>
+                    <p className="text-gray-300 leading-relaxed">
+                        Now click on either Google Drive or your Computer drive, depending
+                        on where you saved your black magic file, and transfer it to your CAS
+                        calculator.
+                    </p>
+                    <div className="mt-4">
+                        <img
+                            src={TransferPage}
+                            alt="Connect Calculator"
+                            className="rounded-lg shadow-lg border border-[#3a4552]"
+                        />
+                    </div>
+                    <p className="text-gray-300 leading-relaxed">
+                        Once you have successfully completed the following steps, please
+                        proceed to the next step by clicking the "Continue to CAS ID verification"
+                        button.
+                    </p>
+                    <div className="mt-4">
+                        <img
+                            src={Downloads}
+                            alt="Connect Calculator"
+                            className="rounded-lg shadow-lg border border-[#3a4552]"
+                        />
+                    </div>
+
 
                 </div>
                 <div className="bg-[#2d3642] rounded-lg p-8 mb-[32px]">
                     <h2 className="text-2xl font-semibold mb-4">Step 6</h2>
                     <p className="text-gray-300 leading-relaxed">
-                        Placeholder text: Here you will find a step-by-step guide on how to
-                        install and activate the Black Magic program on your CAS calculator.
-                        Detailed instructions, screenshots, and troubleshooting tips will
-                        be provided here soon.
+                        Please enter the last 6 digits of your CAS ID into the input box.
                     </p>
+                    <div className="mt-4">
+                        <img
+                            src={CASIDverification}
+                            alt="CAS ID verification"
+                            className="rounded-lg shadow-lg border border-[#3a4552]"
+                        />
+                    </div>
+                    <p className="text-gray-300 leading-relaxed">
+                        If you are wondering where are the last 6 digits of your CAS ID,
+                        please open up the downloaded program in your CAS calculator. The CAS ID
+                        should be shown on the front page as soon as you open the file.
+                    </p>
+                    <div className="mt-4">
+                        <img
+                            src={CASIDlocation}
+                            alt="CAS ID location"
+                            className="rounded-lg shadow-lg border border-[#3a4552]"
+                        />
+                    </div>
                 </div>
                 <div className="bg-[#2d3642] rounded-lg p-8 mb-[32px]">
                     <h2 className="text-2xl font-semibold mb-4">Step 7</h2>
                     <p className="text-gray-300 leading-relaxed">
-                        Placeholder text: Here you will find a step-by-step guide on how to
-                        install and activate the Black Magic program on your CAS calculator.
-                        Detailed instructions, screenshots, and troubleshooting tips will
-                        be provided here soon.
+                        Now you have finished setting up the Black Magic Program!
+                        Please ensure you save your password, to ensure you don't get
+                        locked out of the program.
                     </p>
+                    <div className="mt-4">
+                        <img
+                            src={InstallationComplete}
+                            alt="CAS ID Complete"
+                            className="rounded-lg shadow-lg border border-[#3a4552]"
+                        />
+                    </div>
                 </div>
                 <div className="bg-[#2d3642] rounded-lg p-8 mb-[32px]">
                     <h2 className="text-2xl font-semibold mb-4">Step 8</h2>
-                    <p className="text-gray-300 leading-relaxed">
-                        Placeholder text: Here you will find a step-by-step guide on how to
-                        install and activate the Black Magic program on your CAS calculator.
-                        Detailed instructions, screenshots, and troubleshooting tips will
-                        be provided here soon.
-                    </p>
-                </div>
-                <div className="bg-[#2d3642] rounded-lg p-8 mb-[32px]">
-                    <h2 className="text-2xl font-semibold mb-4">Step 9</h2>
                     <p className="text-gray-300 leading-relaxed">
                         Placeholder text: Here you will find a step-by-step guide on how to
                         install and activate the Black Magic program on your CAS calculator.
