@@ -1,4 +1,3 @@
-// src/pages/InstallationComplete.jsx
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle2, Copy } from 'lucide-react';
@@ -6,48 +5,116 @@ import { CheckCircle2, Copy } from 'lucide-react';
 function InstallationComplete() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { password, casId } = location.state || {};
+    const { password: generatedPassword, casId } = location.state || {};
 
+    // Security: Redirect if user tries to access this page directly without completing verification
     useEffect(() => {
-        if (!password || !casId) {
+        if (!generatedPassword || !casId) {
             navigate('/activate', { replace: true });
         }
-    }, [password, casId, navigate]);
+    }, [generatedPassword, casId, navigate]);
+
+    // Handle page refresh/close - show browser's native confirmation
+    useEffect(() => {
+        // Push initial state so popstate can be triggered
+        window.history.pushState(null, '', window.location.href);
+
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = 'Are you sure you want to leave? This will require you to re-enter your activation details.';
+        };
+
+        const handlePopState = () => {
+            const confirmLeave = window.confirm(
+                'Are you sure you want to go back? This will require you to re-enter your product key.'
+            );
+            if (!confirmLeave) {
+                // Remove listener before navigating to prevent loop
+                window.removeEventListener('popstate', handlePopState);
+                window.history.back();
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        window.addEventListener('popstate', handlePopState);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            window.removeEventListener('popstate', handlePopState);
+        };
+    }, []);
+
+    // Use generated password or placeholder
+    const password = generatedPassword || 'XXXXXXXX';
 
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
         navigator.clipboard.writeText(password);
         setCopied(true);
-        setTimeout(() => setCopied(false), 1800);
+        setTimeout(() => setCopied(false), 2000);
     };
 
     return (
         <div className="bg-[#202830] text-white py-12 px-8 flex flex-col items-center">
-            <CheckCircle2 className="text-[#74be9c] w-24 h-24 mb-4" />
+                {/* Check Icon */}
+                <CheckCircle2 className="text-[#74be9c] w-24 h-24 mb-4 animate-fade-in" />
 
-            <h1 className="text-4xl font-bold mb-4">
-                Installation Complete!
+            {/* Title */}
+            <h1 className="text-3xl md:text-4xl font-bold mb-2 text-center animate-fade-in-down">
+                Installation complete!
             </h1>
 
-            <div className="bg-[#2d5047] p-10 rounded-2xl max-w-lg text-center">
-                <h2 className="text-[#f4a52e] text-2xl font-bold mb-3">
+            {/* Password Section */}
+            <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12 mt-10 max-w-lg w-full text-center animate-fade-in-up">
+                <h2 className="text-2xl font-bold text-[#f4a52e] mb-3">
                     Your Activation Password
                 </h2>
+                <p className="text-sm text-gray-300 mb-6">
+                    Save this password – you'll need it to access the Black Magic program if it logs you out.
+                </p>
 
-                <div className="bg-white text-gray-800 px-4 py-3 rounded-lg flex justify-between items-center mb-3">
-                    <span className="font-mono text-xl">{password}</span>
-                    <button onClick={handleCopy}>
-                        <Copy className="text-[#2d5047] hover:text-[#74be9c]" />
+                <div className="flex items-center justify-between bg-white rounded-lg px-4 py-3 mb-4">
+                    <span className="text-gray-800 text-lg font-mono select-all">{password}</span>
+                    <button
+                        onClick={handleCopy}
+                        className="text-[#2d5047] hover:text-[#74be9c] transition"
+                        title="Copy password"
+                    >
+                        <Copy className="w-6 h-6" />
                     </button>
                 </div>
 
-                {copied && <p className="text-[#74be9c]">Copied!</p>}
+                {copied && (
+                    <p className="text-[#74be9c] text-sm animate-fade-in">
+                        Password copied to clipboard!
+                    </p>
+                )}
+
+                {/* Instructions */}
+                <div className="mt-8 text-left bg-[#202830] rounded-lg p-6">
+                    <h3 className="text-lg font-bold text-[#74be9c] mb-4">Next Steps:</h3>
+                    <ol className="space-y-3 text-gray-300">
+                        <li className="flex gap-3">
+                            <span className="text-[#74be9c] font-bold">1.</span>
+                            <span>Open the Black Magic program on your CAS calculator</span>
+                        </li>
+                        <li className="flex gap-3">
+                            <span className="text-[#74be9c] font-bold">2.</span>
+                            <span>Enter the activation password when prompted</span>
+                        </li>
+                        <li className="flex gap-3">
+                            <span className="text-[#74be9c] font-bold">3.</span>
+                            <span>Start using all premium features!</span>
+                        </li>
+                    </ol>
+                </div>
             </div>
 
+            {/* Back to Home Button */}
             <a
                 href="/"
-                className="mt-8 bg-gradient-to-r from-[#62a888] to-[#74be9c] text-[#202830] px-8 py-3 rounded-lg font-bold"
+                className="mt-8 bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-3 px-8 rounded-lg transition-all"
             >
                 Back to Home
             </a>
