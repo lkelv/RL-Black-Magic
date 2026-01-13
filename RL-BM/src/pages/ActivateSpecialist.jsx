@@ -31,22 +31,21 @@ function ActivateSpecialist() {
         }
     };
 
-    const handleActivate = () => {
+    const handleActivate = async () => {
         if (!productKey.trim()) {
             setPopup({ type: 'error', message: 'Please enter a valid product key' });
             return;
         }
 
-        const validation = validateProductKey(productKey, 'specialist');
+        const validation = await validateProductKey(productKey, 'specialist');
 
         if (validation.valid) {
-            markProductKeyAsUsed(productKey);
+            await markProductKeyAsUsed(productKey, null);
             setPopup({
                 type: 'success',
                 message: 'Product key validated! Redirecting to download...'
             });
 
-            // Navigate after showing popup briefly
             setTimeout(() => {
                 navigate('/file-download', { state: { productType: 'specialist', productKey } });
             }, 2000);

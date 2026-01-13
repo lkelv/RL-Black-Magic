@@ -1,8 +1,8 @@
 // src/pages/CasID.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { validateCasId, generatePassword } from '../utils/productKeys';
 import Popup from '../components/Popup';
+import { validateCasId, generatePassword, markProductKeyAsUsed } from '../utils/productKeys'; // Import markProductKeyAsUsed
 
 function CasID() {
     const [casId, setCasId] = useState('');
@@ -10,14 +10,15 @@ function CasID() {
     const [popup, setPopup] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
+    
 
-    const { productType } = location.state || {};
+    const { productType, productKey, productKeyMethods, productKeySpecialist } = location.state || {}; // Destructure keys
 
     useEffect(() => {
         if (!productType) navigate('/activate', { replace: true });
     }, [productType, navigate]);
 
-    const handleVerify = () => {
+    const handleVerify = async () => { // Make async
         if (!casId.trim() || !confirmCasId.trim()) {
             setPopup({ type: 'error', message: 'Please enter valid CAS IDs.' });
             return;
@@ -34,7 +35,16 @@ function CasID() {
             return;
         }
 
+        // Update the database with the CAS ID for the used key(s)
         const last6 = casId.slice(-6);
+        
+        if (productType === 'both') {
+             if (productKeyMethods) await markProductKeyAsUsed(productKeyMethods, last6);
+             if (productKeySpecialist) await markProductKeyAsUsed(productKeySpecialist, last6);
+        } else {
+             if (productKey) await markProductKeyAsUsed(productKey, last6);
+        }
+
         const productChar =
             productType === "methods" ? "M" :
                 productType === "specialist" ? "S" :
