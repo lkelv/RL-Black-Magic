@@ -33,15 +33,14 @@ function ActivateBoth() {
     };
 
 
-    const handleActivate = () => {
+    const handleActivate = async () => {
         if (!productKeyMethods.trim() || !productKeySpecialist.trim()) {
             setPopup({ type: 'error', message: 'Please enter valid product keys for both subjects' });
             return;
         }
 
-        // Validate both keys
-        const validationMethods = validateProductKey(productKeyMethods, 'methods');
-        const validationSpecialist = validateProductKey(productKeySpecialist, 'specialist');
+        const validationMethods = await validateProductKey(productKeyMethods, 'methods');
+        const validationSpecialist = await validateProductKey(productKeySpecialist, 'specialist');
 
         if (!validationMethods.valid) {
             setPopup({ type: 'error', message: `Methods key: ${validationMethods.message}` });
@@ -54,15 +53,14 @@ function ActivateBoth() {
         }
 
         // Both keys valid
-        markProductKeyAsUsed(productKeyMethods);
-        markProductKeyAsUsed(productKeySpecialist);
+        await markProductKeyAsUsed(productKeyMethods, null);
+        await markProductKeyAsUsed(productKeySpecialist, null);
 
         setPopup({
             type: 'success',
             message: 'Both product keys validated! Redirecting to download...'
         });
 
-        // Navigate after showing popup briefly
         setTimeout(() => {
             navigate('/file-download', {
                 state: {

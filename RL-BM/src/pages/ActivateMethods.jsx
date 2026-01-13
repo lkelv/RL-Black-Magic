@@ -31,22 +31,27 @@ function ActivateMethods() {
         }
     };
 
-    const handleActivate = () => {
+    const handleActivate = async () => {
         if (!productKey.trim()) {
             setPopup({ type: 'error', message: 'Please enter a valid product key' });
             return;
         }
 
-        const validation = validateProductKey(productKey, 'methods');
+        // Await the validation
+        const validation = await validateProductKey(productKey, 'methods');
 
         if (validation.valid) {
-            markProductKeyAsUsed(productKey);
+            // Await the usage marking. 
+            // NOTE: CAS ID is not available here, so we send null. 
+            // It will be updated later if you choose to implement it in CasID.jsx, 
+            // or simply marked as used here.
+            await markProductKeyAsUsed(productKey, null);
+            
             setPopup({
                 type: 'success',
                 message: 'Product key validated! Redirecting to download...'
             });
 
-            // Navigate after showing popup briefly
             setTimeout(() => {
                 navigate('/file-download', { state: { productType: 'methods', productKey } });
             }, 2000);
