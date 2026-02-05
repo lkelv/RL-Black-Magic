@@ -97,23 +97,39 @@ function ActivateBoth() {
                             <label className="block text-white font-semibold mb-4">
                                 Product Key for Maths Methods
                             </label>
+
                             <input
                                 type="text"
                                 value={productKeyMethods}
                                 onChange={(e) => setProductKeyMethods(formatProductKey(e.target.value))}
+                                // ADD THIS:
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleActivate();
+                                    }
+                                }}
                                 placeholder="XXX-XXX-XXX"
                                 className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
                             />
+
                         </div>
 
                         <div>
                             <label className="block text-white font-semibold mb-4">
                                 Product Key for Specialist Maths
                             </label>
+
+
                             <input
                                 type="text"
                                 value={productKeySpecialist}
                                 onChange={(e) => setProductKeySpecialist(formatProductKey(e.target.value))}
+                                // ADD THIS:
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleActivate();
+                                    }
+                                }}
                                 placeholder="XXX-XXX-XXX"
                                 className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
                             />
