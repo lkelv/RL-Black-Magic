@@ -12,7 +12,7 @@
 
 
 ## Vars needed in env file includes
-MONGODB_URI=
-PORT=5001
-VITE_API_URL=http://localhost:5001/api
-MASTER_CODE=
+* MONGODB_URI
+* PORT
+* VITE_API_URL
+* MASTER_CODE
