@@ -9,3 +9,10 @@
   
 3. run `node src/utils/productKeyUpload.js` in the terminal
 4. It should be uploaded in the "product-keys" database
+
+
+## Vars needed in env file includes
+MONGODB_URI=
+PORT=5001
+VITE_API_URL=http://localhost:5001/api
+MASTER_CODE=
