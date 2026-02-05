@@ -16,3 +16,8 @@
 * PORT
 * VITE_API_URL
 * MASTER_CODE
+
+
+## Removing master code uses from monogodb
+1. Make sure in right directory (RL-BM)
+2. Enter <node src/utils/exportMasterLogs.js> into terminal
