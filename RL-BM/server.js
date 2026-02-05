@@ -2,14 +2,36 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import rateLimit from 'express-rate-limit';
 
 dotenv.config();
 
 const app = express();
+
+// Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+// see https://expressjs.com/en/guide-behind-proxies.html
+// app.set('trust proxy', 1);
+
 app.use(cors());
 app.use(express.json());
 
-// MongoDB Schema
+// 2. CONFIGURE THE LIMITER
+const validateLimiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 10, // Limit each IP to 10 requests per `window` (here, per 15 minutes)
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    message: { 
+        valid: false, 
+        message: "Too many attempts. Please try again in 15 minutes." 
+    }
+});
+
+// ==========================================
+// MONGODB SCHEMAS
+// ==========================================
+
+// 1. Existing Product Key Schema
 const ProductKeySchema = new mongoose.Schema({
   key: { type: String, required: true, unique: true },
   type: { type: String, required: true }, // 'methods', 'specialist', 'both'
@@ -19,18 +41,43 @@ const ProductKeySchema = new mongoose.Schema({
 
 const ProductKey = mongoose.model('ProductKey', ProductKeySchema);
 
+// 2. NEW: Master Code Usage Schema
+const MasterCodeUsageSchema = new mongoose.Schema({
+  casId: { type: String, required: true },
+  usedAt: { type: Date, default: Date.now },
+  productType: { type: String } // To know if they used it on MM or SM page
+}, { collection: 'master-code-uses' }); // Explicitly naming the folder/collection
+
+const MasterCodeUsage = mongoose.model('MasterCodeUsage', MasterCodeUsageSchema);
+
+
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Routes
+
+// ==========================================
+// ROUTES
+// ==========================================
 
 // Validate Key
-app.post('/api/validate', async (req, res) => {
+app.post('/api/validate', validateLimiter, async (req, res) => {
   try {
     const { key, type } = req.body;
-    const productKey = await ProductKey.findOne({ key: key.toUpperCase() });
+    
+    // Clean the input key
+    const cleanKey = key.toUpperCase().replace(/-/g, '');
+    const cleanMasterCode = process.env.MASTER_CODE ? process.env.MASTER_CODE.toUpperCase().replace(/-/g, '') : null;
+
+    // --- CHECK 1: IS IT THE MASTER CODE? ---
+    if (cleanMasterCode && cleanKey === cleanMasterCode) {
+        // Master code is valid for ALL types (methods, specialist, both)
+        return res.json({ valid: true, message: "Master code accepted!" });
+    }
+
+    // --- CHECK 2: REGULAR KEY VALIDATION ---
+    const productKey = await ProductKey.findOne({ key: cleanKey });
 
     if (!productKey) {
       return res.json({ valid: false, message: "Invalid product key. Please check and try again." });
@@ -38,12 +85,10 @@ app.post('/api/validate', async (req, res) => {
     if (productKey.used) {
       return res.json({ valid: false, message: "This product key has already been used." });
     }
-    // Handle specific type checks
+    
+    // Check specific types
     if (productKey.type !== type && productKey.type !== 'both') {
-       // Note: 'both' keys might be valid for individual activation if intended, 
-       // but strictly following your existing logic:
        if (type === 'both' && productKey.type !== 'both') {
-         // Trying to use a single key for 'both' activation
          return res.json({ valid: false, message: `This product key is for ${productKey.type}, not both.` });
        }
        if (type !== 'both' && productKey.type !== type) {
@@ -53,23 +98,46 @@ app.post('/api/validate', async (req, res) => {
 
     res.json({ valid: true, message: "Product key validated successfully!" });
   } catch (error) {
+    console.error("Validation error:", error);
     res.status(500).json({ valid: false, message: "Server error during validation." });
   }
 });
 
-// Mark as Used (and store CAS ID if provided)
+// Mark as Used
 app.post('/api/use', async (req, res) => {
   try {
-    const { key, casId } = req.body;
+    const { key, casId } = req.body; 
+    
+    const cleanKey = key.toUpperCase().replace(/-/g, '');
+    const cleanMasterCode = process.env.MASTER_CODE ? process.env.MASTER_CODE.toUpperCase().replace(/-/g, '') : null;
+
+    // --- CASE 1: MASTER CODE USAGE ---
+    if (cleanMasterCode && cleanKey === cleanMasterCode) {
+        // FIX: If we don't have a CAS ID yet, do nothing (don't log "Unknown").
+        // We only want to log it when the user actually finishes the process.
+        if (!casId) {
+             return res.json({ success: true });
+        }
+
+        // Now we have a CAS ID, so we log it.
+        await MasterCodeUsage.create({
+            casId: casId,
+            productType: 'master-override' 
+        });
+        return res.json({ success: true });
+    }
+
+    // --- CASE 2: REGULAR KEY USAGE ---
     const updateData = { used: true };
     if (casId) updateData.casId = casId;
 
     await ProductKey.findOneAndUpdate(
-      { key: key.toUpperCase() },
+      { key: cleanKey },
       updateData
     );
     res.json({ success: true });
   } catch (error) {
+    console.error("Usage error:", error);
     res.status(500).json({ success: false });
   }
 });
