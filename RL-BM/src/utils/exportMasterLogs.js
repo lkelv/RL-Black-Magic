@@ -1,3 +1,13 @@
+/*
+The purpose of this file is to export all the uses of master codes 
+currently stored in the database. This is so we can keep a record of 
+people who used the master code, and clear the database.
+
+*/
+
+
+
+
 import mongoose from 'mongoose';
 import fs from 'fs';
 import path from 'path';
