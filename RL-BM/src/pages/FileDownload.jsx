@@ -1,3 +1,7 @@
+/*
+This is the page where the user downloads the file and gets instructions on how to transfer it to their calculator
+*/
+
 // src/pages/FileDownload.jsx
 import React, { useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';

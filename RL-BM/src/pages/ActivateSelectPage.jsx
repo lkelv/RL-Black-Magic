@@ -1,3 +1,8 @@
+/*
+This is to activate the page where the user selects which version of black magic they want to activate (MM, SM or both)
+*/
+
+
 // src/pages/Activate.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
