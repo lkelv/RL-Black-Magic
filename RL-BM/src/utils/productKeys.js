@@ -1,3 +1,9 @@
+/*
+This file generates the passwords from the casID
+
+*/
+
+
 // src/utils/productKeys.js
 
 // If a custom URL is set in .env, use it. Otherwise, assume we are on localhost.

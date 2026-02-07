@@ -1,10 +1,10 @@
-// src/pages/ActivateMethods.jsx
+// src/pages/ActivateSpecialist.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { validateProductKey, markProductKeyAsUsed } from '../utils/productKeys';
-import Popup from '../components/Popup';
+import { validateProductKey, markProductKeyAsUsed } from '../../utils/productKeys';
+import Popup from '../../components/Popup';
 
-function ActivateMethods() {
+function ActivateSpecialist() {
     const [productKey, setProductKey] = useState('');
     const [popup, setPopup] = useState(null);
     const navigate = useNavigate();
@@ -37,23 +37,17 @@ function ActivateMethods() {
             return;
         }
 
-        // Await the validation
-        const validation = await validateProductKey(productKey, 'methods');
+        const validation = await validateProductKey(productKey, 'specialist');
 
         if (validation.valid) {
-            // Await the usage marking. 
-            // NOTE: CAS ID is not available here, so we send null. 
-            // It will be updated later if you choose to implement it in CasID.jsx, 
-            // or simply marked as used here.
             await markProductKeyAsUsed(productKey, null);
-            
             setPopup({
                 type: 'success',
                 message: 'Product key validated! Redirecting to download...'
             });
 
             setTimeout(() => {
-                navigate('/file-download', { state: { productType: 'methods', productKey } });
+                navigate('/file-download', { state: { productType: 'specialist', productKey } });
             }, 2000);
         } else {
             setPopup({ type: 'error', message: validation.message });
@@ -66,7 +60,7 @@ function ActivateMethods() {
                 {/* Title Section */}
                 <div className="text-center mb-8">
                     <h1 className="text-3xl md:text-4xl font-bold mb-3">
-                        Maths Methods Product Key
+                        Specialist Maths Product Key
                     </h1>
                     <p className="text-lg text-gray-300 mb-6">
                         Activate your premium learning experience
@@ -84,25 +78,37 @@ function ActivateMethods() {
                         <label className="block text-white font-semibold mb-3">
                             Product Key
                         </label>
+
+
+
+
                         <input
                             type="text"
                             value={productKey}
                             onChange={(e) => setProductKey(formatProductKey(e.target.value))}
+                            // ADD THIS SECTION:
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    handleActivate();
+                                }
+                            }}
+                            // -----------------
                             placeholder="XXX-XXX-XXX"
                             className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
                         />
+                        
                         <p className="text-sm text-gray-300 mt-2 text-center">
 
 
-                            <a 
-                            href="/installation-guide" 
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            <a
+                                href="/installation-guide"
+                                target="_blank"
+                                rel="noopener noreferrer"
                             >
 
-                            Can't find it? <u>Click here!</u>
+                                Can't find it? <u>Click here!</u>
 
-                        </a>
+                            </a>
 
                         </p>
 
@@ -157,4 +163,4 @@ function ActivateMethods() {
     );
 }
 
-export default ActivateMethods;
+export default ActivateSpecialist;

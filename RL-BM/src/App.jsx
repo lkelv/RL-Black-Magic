@@ -4,16 +4,16 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import Activate from './pages/ActivatePage';
-import ActivateMethods from './pages/ActivateMethods';
-import ActivateSpecialist from './pages/ActivateSpecialist';
-import ActivateBoth from './pages/ActivateBoth';
+import Activate from './pages/ActivateSelectPage.jsx';
+import ActivateMethods from './pages/Activation pages/ActivateMethods.jsx';
+import ActivateSpecialist from './pages/Activation pages/ActivateSpecialist.jsx';
+import ActivateBoth from './pages/Activation pages/ActivateBoth.jsx';
 import CasID from "./pages/CasID.jsx";
 import FileDownload from "./pages/FileDownload.jsx";
 import InstallationComplete from "./pages/InstallationComplete.jsx";
-import InstallationGuide from './pages/InstallationGuide';
-import FindCasID from './pages/FindCasID';
-import ContactUs from './pages/ContactUs';
+import InstallationGuide from './pages/helper pages/InstallationGuide';
+import FindCasID from './pages/helper pages/FindCasID';
+import ContactUs from './pages/helper pages/ContactUs';
 import './App.css';
 
 function App() {

@@ -1,14 +1,13 @@
+// src/pages/ActivateMethods.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { validateProductKey, markProductKeyAsUsed } from '../utils/productKeys';
-import Popup from '../components/Popup';
+import { validateProductKey, markProductKeyAsUsed } from '../../utils/productKeys';
+import Popup from '../../components/Popup';
 
-function ActivateBoth() {
-    const [productKeyMethods, setProductKeyMethods] = useState('');
-    const [productKeySpecialist, setProductKeySpecialist] = useState('');
+function ActivateMethods() {
+    const [productKey, setProductKey] = useState('');
     const [popup, setPopup] = useState(null);
     const navigate = useNavigate();
-
 
     const formatProductKey = (value) => {
         const uppercased = value.toUpperCase();
@@ -32,44 +31,33 @@ function ActivateBoth() {
         }
     };
 
-
     const handleActivate = async () => {
-        if (!productKeyMethods.trim() || !productKeySpecialist.trim()) {
-            setPopup({ type: 'error', message: 'Please enter valid product keys for both subjects' });
+        if (!productKey.trim()) {
+            setPopup({ type: 'error', message: 'Please enter a valid product key' });
             return;
         }
 
-        const validationMethods = await validateProductKey(productKeyMethods, 'methods');
-        const validationSpecialist = await validateProductKey(productKeySpecialist, 'specialist');
+        // Await the validation
+        const validation = await validateProductKey(productKey, 'methods');
 
-        if (!validationMethods.valid) {
-            setPopup({ type: 'error', message: `Methods key: ${validationMethods.message}` });
-            return;
-        }
-
-        if (!validationSpecialist.valid) {
-            setPopup({ type: 'error', message: `Specialist key: ${validationSpecialist.message}` });
-            return;
-        }
-
-        // Both keys valid
-        await markProductKeyAsUsed(productKeyMethods, null);
-        await markProductKeyAsUsed(productKeySpecialist, null);
-
-        setPopup({
-            type: 'success',
-            message: 'Both product keys validated! Redirecting to download...'
-        });
-
-        setTimeout(() => {
-            navigate('/file-download', {
-                state: {
-                    productType: 'both',
-                    productKeyMethods,
-                    productKeySpecialist
-                }
+        if (validation.valid) {
+            // Await the usage marking. 
+            // NOTE: CAS ID is not available here, so we send null. 
+            // It will be updated later if you choose to implement it in CasID.jsx, 
+            // or simply marked as used here.
+            await markProductKeyAsUsed(productKey, null);
+            
+            setPopup({
+                type: 'success',
+                message: 'Product key validated! Redirecting to download...'
             });
-        }, 2000);
+
+            setTimeout(() => {
+                navigate('/file-download', { state: { productType: 'methods', productKey } });
+            }, 2000);
+        } else {
+            setPopup({ type: 'error', message: validation.message });
+        }
     };
 
     return (
@@ -78,7 +66,7 @@ function ActivateBoth() {
                 {/* Title Section */}
                 <div className="text-center mb-8">
                     <h1 className="text-3xl md:text-4xl font-bold mb-3">
-                        Maths Methods and Specialist Maths
+                        Maths Methods Product Key
                     </h1>
                     <p className="text-lg text-gray-300 mb-6">
                         Activate your premium learning experience
@@ -88,46 +76,48 @@ function ActivateBoth() {
                 {/* Activation Container */}
                 <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12">
                     <h2 className="text-2xl md:text-3xl font-bold mb-8 text-[#f4a52e] text-center">
-                        1. Enter your Product Keys
+                        1. Enter your Product Key
                     </h2>
 
                     {/* Product Key Input */}
-                    <div className="mb-6 space-y-8">
-                        <div>
-                            <label className="block text-white font-semibold mb-4">
-                                Product Key for Maths Methods
-                            </label>
-                            <input
-                                type="text"
-                                value={productKeyMethods}
-                                onChange={(e) => setProductKeyMethods(formatProductKey(e.target.value))}
-                                placeholder="XXX-XXX-XXX"
-                                className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
-                            />
-                        </div>
+                    <div className="mb-6">
+                        <label className="block text-white font-semibold mb-3">
+                            Product Key
+                        </label>
 
-                        <div>
-                            <label className="block text-white font-semibold mb-4">
-                                Product Key for Specialist Maths
-                            </label>
-                            <input
-                                type="text"
-                                value={productKeySpecialist}
-                                onChange={(e) => setProductKeySpecialist(formatProductKey(e.target.value))}
-                                placeholder="XXX-XXX-XXX"
-                                className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
-                            />
-                        </div>
 
-                        <p className="text-sm text-gray-300 text-center">
-                            <a
-                                href="/installation-guide"
-                                target="_blank"
-                                rel="noopener noreferrer"
+
+                        <input
+                            type="text"
+                            value={productKey}
+                            onChange={(e) => setProductKey(formatProductKey(e.target.value))}
+                            // ADD THIS SECTION:
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    handleActivate();
+                                }
+                            }}
+                            // -----------------
+                            placeholder="XXX-XXX-XXX"
+                            className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
+                        />
+
+
+                        <p className="text-sm text-gray-300 mt-2 text-center">
+
+
+                            <a 
+                            href="/installation-guide" 
+                            target="_blank"
+                            rel="noopener noreferrer"
                             >
-                                Can't find it? <u>Click here!</u>
-                            </a>
+
+                            Can't find it? <u>Click here!</u>
+
+                        </a>
+
                         </p>
+
                     </div>
 
                     {/* Activate Button */}
@@ -141,7 +131,7 @@ function ActivateBoth() {
                     {/* Warning Box */}
                     <div className="border-2 border-[#74be9c] rounded-lg p-4 mb-8 text-center">
                         <p className="text-gray-300">
-                            Your product keys will be used once activated
+                            Your product key will be used once activated
                         </p>
                     </div>
 
@@ -153,7 +143,7 @@ function ActivateBoth() {
                         </div>
                         <div className="flex items-center gap-3 md:ml-8">
                             <span className="text-[#74be9c] text-xl">✓</span>
-                            <span className="text-white">Premium Content</span>
+                            <span className="text-white"> Premium Content</span>
                         </div>
                         <div className="flex items-center gap-3">
                             <span className="text-[#74be9c] text-xl">⚡</span>
@@ -179,4 +169,4 @@ function ActivateBoth() {
     );
 }
 
-export default ActivateBoth;
+export default ActivateMethods;

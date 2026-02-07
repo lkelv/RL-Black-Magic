@@ -1,3 +1,8 @@
+/*
+This s the page where they enter the casID and then we return the valid password
+We also update the database in the productKeys.js
+*/
+
 // src/pages/CasID.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
