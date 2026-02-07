@@ -1,8 +1,8 @@
 // src/pages/ActivateMethods.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { validateProductKey, markProductKeyAsUsed } from '../utils/productKeys';
-import Popup from '../components/Popup';
+import { validateProductKey, markProductKeyAsUsed } from '../../utils/productKeys';
+import Popup from '../../components/Popup';
 
 function ActivateMethods() {
     const [productKey, setProductKey] = useState('');
