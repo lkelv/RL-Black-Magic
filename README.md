@@ -1,7 +1,9 @@
 # RL-Black-Magic
 
 
-## Instructions to upload MM and SM codes to database
+## For database
+
+### Instructions to upload MM and SM codes to database
 1. In root directory (RL-BM folder), add two files called MM.csv and SM.csv
   a. In each of the files, make sure it is just the code, followed by another code. There should also be dashes (-) every third character for example, this is what it should look like in MM.csv
 
@@ -11,13 +13,15 @@
 4. It should be uploaded in the "product-keys" database
 
 
-## Vars needed in env file includes
-* MONGODB_URI
-* PORT
-* VITE_API_URL
-* MASTER_CODE
-
-
-## Removing master code uses from monogodb
+### Removing master code uses from monogodb
 1. Make sure in right directory (RL-BM)
 2. Enter <node src/utils/exportMasterLogs.js> into terminal
+
+
+## To run code
+
+### Vars needed in env file (in root directory) includes
+MONGODB_URI=
+PORT=
+VITE_API_URL=
+MASTER_CODE=
