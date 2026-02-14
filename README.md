@@ -22,6 +22,9 @@
 
 ### Vars needed in env file (in root directory) includes
 MONGODB_URI=
+
 PORT=
+
 VITE_API_URL=
+
 MASTER_CODE=
