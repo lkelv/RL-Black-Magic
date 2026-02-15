@@ -1,4 +1,13 @@
 /*
+The purpose of this file is to export all the uses of master codes 
+currently stored in the database. This is so we can keep a record of 
+people who used the master code, and clear the database.
+
+*/
+
+
+
+/*
 Codes stored in database should be in the format XXX-XXX-XXX with the - included
 
 To change it so that the database just includes XXXXXXXXX without the dashed,
@@ -30,9 +39,10 @@ app.use(express.json());
 // 2. CONFIGURE THE LIMITER
 const validateLimiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
-	max: 10, // Limit each IP to 10 requests per `window` (here, per 15 minutes)
+	max: 2, // Limit each IP to 100 requests per `window`
 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    skipSuccessfulRequests: true, // <--- CHANGED: Only count failed (non-200) requests
     message: { 
         valid: false, 
         message: "Too many attempts. Please try again in 15 minutes." 
@@ -82,8 +92,7 @@ app.post('/api/validate', validateLimiter, async (req, res) => {
     //const cleanKey = key.toUpperCase().replace(/-/g, '');
     const cleanKey = key.toUpperCase()
     console.log(cleanKey)
-    const cleanMasterCode = process.env.MASTER_CODE ? process.env.MASTER_CODE.toUpperCase() : null;
-    console.log(cleanMasterCode)
+    const cleanMasterCode = process.env.MASTER_CODE ? process.env.MASTER_CODE.toUpperCase().replace(/-/g, '') : null;
 
     // --- CHECK 1: IS IT THE MASTER CODE? ---
     if (cleanMasterCode && cleanKey === cleanMasterCode) {
@@ -95,22 +104,27 @@ app.post('/api/validate', validateLimiter, async (req, res) => {
     const productKey = await ProductKey.findOne({ key: cleanKey });
 
     if (!productKey) {
-      return res.json({ valid: false, message: "Invalid product key. Please check and try again"});
+      // CHANGED: Return 400 so rate limiter counts this as a failure
+      return res.status(400).json({ valid: false, message: "Invalid product key. Please check and try again"});
     }
     if (productKey.used) {
-      return res.json({ valid: false, message: "This product key has already been used." });
+      // CHANGED: Return 400 so rate limiter counts this as a failure
+      return res.status(400).json({ valid: false, message: "This product key has already been used." });
     }
     
     // Check specific types
     if (productKey.type !== type && productKey.type !== 'both') {
        if (type === 'both' && productKey.type !== 'both') {
-         return res.json({ valid: false, message: `This product key is for ${productKey.type}, not both.` });
+         // CHANGED: Return 400 so rate limiter counts this as a failure
+         return res.status(400).json({ valid: false, message: `This product key is for ${productKey.type}, not both.` });
        }
        if (type !== 'both' && productKey.type !== type) {
-          return res.json({ valid: false, message: `This product key is for ${productKey.type}, not ${type}.` });
+          // CHANGED: Return 400 so rate limiter counts this as a failure
+          return res.status(400).json({ valid: false, message: `This product key is for ${productKey.type}, not ${type}.` });
        }
     }
 
+    // Success - Status 200 (default) will cause rate limiter to skip counting this request
     res.json({ valid: true, message: "Product key validated successfully!" });
   } catch (error) {
     console.error("Validation error:", error);
@@ -125,7 +139,7 @@ app.post('/api/use', async (req, res) => {
     
     //const cleanKey = key.toUpperCase().replace(/-/g, '');
     const cleanKey = key.toUpperCase();
-    const cleanMasterCode = process.env.MASTER_CODE ? process.env.MASTER_CODE.toUpperCase() : null;
+    const cleanMasterCode = process.env.MASTER_CODE ? process.env.MASTER_CODE.toUpperCase().replace(/-/g, '') : null;
 
     // --- CASE 1: MASTER CODE USAGE ---
     if (cleanMasterCode && cleanKey === cleanMasterCode) {
@@ -160,3 +174,27 @@ app.post('/api/use', async (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+// --- FIX FOR SLOW RESTART ---
+// Assign the server to a variable so we can close it later
+const server = app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Listen for the "Stop" signal (Ctrl+C)
+process.on('SIGINT', async () => {
+  console.log('\nGracefully shutting down...');
+  try {
+    // 1. Close MongoDB Connection
+    await mongoose.connection.close();
+    console.log('MongoDB connection closed.');
+    
+    // 2. Close Server
+    server.close(() => {
+      console.log('Server closed.');
+      process.exit(0); // Quit the process immediately
+    });
+  } catch (err) {
+    console.error('Error during shutdown:', err);
+    process.exit(1);
+  }
+});
