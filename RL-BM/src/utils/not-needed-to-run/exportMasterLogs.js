@@ -5,196 +5,76 @@ people who used the master code, and clear the database.
 
 */
 
-
-
-/*
-Codes stored in database should be in the format XXX-XXX-XXX with the - included
-
-To change it so that the database just includes XXXXXXXXX without the dashed,
-the following should be changed:
-const cleanKey = key.toUpperCase().replace(/-/g, '');
-
-There should be two places which need to be change, once at api use and 
-and the other at api validate
-*/
-
-
-import express from 'express';
 import mongoose from 'mongoose';
-import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
 import dotenv from 'dotenv';
-import rateLimit from 'express-rate-limit';
+import { fileURLToPath } from 'url';
 
-dotenv.config();
+// 1. Setup Environment
+// Fix: Use __dirname to find .env relative to this file, so you can run it from anywhere
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
-const app = express();
-
-// Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
-// see https://expressjs.com/en/guide-behind-proxies.html
-// app.set('trust proxy', 1);
-
-app.use(cors());
-app.use(express.json());
-
-// 2. CONFIGURE THE LIMITER
-const validateLimiter = rateLimit({
-	windowMs: 15 * 60 * 1000, // 15 minutes
-	max: 2, // Limit each IP to 100 requests per `window`
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-    skipSuccessfulRequests: true, // <--- CHANGED: Only count failed (non-200) requests
-    message: { 
-        valid: false, 
-        message: "Too many attempts. Please try again in 15 minutes." 
-    }
-});
-
-// ==========================================
-// MONGODB SCHEMAS
-// ==========================================
-
-// 1. Existing Product Key Schema
-const ProductKeySchema = new mongoose.Schema({
-  key: { type: String, required: true, unique: true },
-  type: { type: String, required: true }, // 'methods', 'specialist', 'both'
-  used: { type: Boolean, default: false },
-  casId: { type: String, default: null }
-});
-
-const ProductKey = mongoose.model('ProductKey', ProductKeySchema);
-
-// 2. NEW: Master Code Usage Schema
+// 2. Define Schema (Must match the one in server.js)
 const MasterCodeUsageSchema = new mongoose.Schema({
   casId: { type: String, required: true },
   usedAt: { type: Date, default: Date.now },
-  productType: { type: String } // To know if they used it on MM or SM page
-}, { collection: 'master-code-uses' }); // Explicitly naming the folder/collection
+  productType: { type: String } 
+}, { collection: 'master-code-uses' });
 
 const MasterCodeUsage = mongoose.model('MasterCodeUsage', MasterCodeUsageSchema);
 
-
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
-
-
-// ==========================================
-// ROUTES
-// ==========================================
-
-// Validate Key
-app.post('/api/validate', validateLimiter, async (req, res) => {
+async function exportAndClear() {
   try {
-    const { key, type } = req.body;
-    
-    // Clean the input key
-    //const cleanKey = key.toUpperCase().replace(/-/g, '');
-    const cleanKey = key.toUpperCase()
-    console.log(cleanKey)
-    const cleanMasterCode = process.env.MASTER_CODE ? process.env.MASTER_CODE.toUpperCase().replace(/-/g, '') : null;
+    // 3. Connect to MongoDB
+    if (!process.env.MONGODB_URI) {
+        throw new Error("MONGODB_URI is missing in .env file");
+    }
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('Connected to MongoDB...');
 
-    // --- CHECK 1: IS IT THE MASTER CODE? ---
-    if (cleanMasterCode && cleanKey === cleanMasterCode) {
-        // Master code is valid for ALL types (methods, specialist, both)
-        return res.json({ valid: true, message: "Master code accepted!" });
+    // 4. Fetch Data
+    const logs = await MasterCodeUsage.find({});
+
+    if (logs.length === 0) {
+        console.log('No master code usage logs found. Nothing to export.');
+        return;
     }
 
-    // --- CHECK 2: REGULAR KEY VALIDATION ---
-    const productKey = await ProductKey.findOne({ key: cleanKey });
-
-    if (!productKey) {
-      // CHANGED: Return 400 so rate limiter counts this as a failure
-      return res.status(400).json({ valid: false, message: "Invalid product key. Please check and try again"});
-    }
-    if (productKey.used) {
-      // CHANGED: Return 400 so rate limiter counts this as a failure
-      return res.status(400).json({ valid: false, message: "This product key has already been used." });
-    }
-    
-    // Check specific types
-    if (productKey.type !== type && productKey.type !== 'both') {
-       if (type === 'both' && productKey.type !== 'both') {
-         // CHANGED: Return 400 so rate limiter counts this as a failure
-         return res.status(400).json({ valid: false, message: `This product key is for ${productKey.type}, not both.` });
-       }
-       if (type !== 'both' && productKey.type !== type) {
-          // CHANGED: Return 400 so rate limiter counts this as a failure
-          return res.status(400).json({ valid: false, message: `This product key is for ${productKey.type}, not ${type}.` });
-       }
-    }
-
-    // Success - Status 200 (default) will cause rate limiter to skip counting this request
-    res.json({ valid: true, message: "Product key validated successfully!" });
-  } catch (error) {
-    console.error("Validation error:", error);
-    res.status(500).json({ valid: false, message: "Server error during validation." });
-  }
-});
-
-// Mark as Used
-app.post('/api/use', async (req, res) => {
-  try {
-    const { key, casId } = req.body; 
-    
-    //const cleanKey = key.toUpperCase().replace(/-/g, '');
-    const cleanKey = key.toUpperCase();
-    const cleanMasterCode = process.env.MASTER_CODE ? process.env.MASTER_CODE.toUpperCase().replace(/-/g, '') : null;
-
-    // --- CASE 1: MASTER CODE USAGE ---
-    if (cleanMasterCode && cleanKey === cleanMasterCode) {
-        // FIX: If we don't have a CAS ID yet, do nothing (don't log "Unknown").
-        // We only want to log it when the user actually finishes the process.
-        if (!casId) {
-             return res.json({ success: true });
-        }
-
-        // Now we have a CAS ID, so we log it.
-        await MasterCodeUsage.create({
-            casId: casId,
-            productType: 'master-override' 
-        });
-        return res.json({ success: true });
-    }
-
-    // --- CASE 2: REGULAR KEY USAGE ---
-    const updateData = { used: true };
-    if (casId) updateData.casId = casId;
-
-    await ProductKey.findOneAndUpdate(
-      { key: cleanKey },
-      updateData
-    );
-    res.json({ success: true });
-  } catch (error) {
-    console.error("Usage error:", error);
-    res.status(500).json({ success: false });
-  }
-});
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-// --- FIX FOR SLOW RESTART ---
-// Assign the server to a variable so we can close it later
-const server = app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-// Listen for the "Stop" signal (Ctrl+C)
-process.on('SIGINT', async () => {
-  console.log('\nGracefully shutting down...');
-  try {
-    // 1. Close MongoDB Connection
-    await mongoose.connection.close();
-    console.log('MongoDB connection closed.');
-    
-    // 2. Close Server
-    server.close(() => {
-      console.log('Server closed.');
-      process.exit(0); // Quit the process immediately
+    // 5. Convert to CSV Format
+    const headers = ['CAS ID,Product Type,Time Used'];
+    const rows = logs.map(log => {
+        const time = new Date(log.usedAt).toLocaleString();
+        return `${log.casId},${log.productType},"${time}"`;
     });
-  } catch (err) {
-    console.error('Error during shutdown:', err);
-    process.exit(1);
+    const csvContent = headers.concat(rows).join('\n');
+
+    // 6. Save to File (with timestamp)
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const filename = `master_code_logs_${timestamp}.csv`;
+    
+    // Resolve full path based on where the script is run
+    const outputPath = path.resolve(process.cwd(), filename);
+
+    fs.writeFileSync(outputPath, csvContent);
+    
+    // --- UPDATE: Log the full path (outputPath) instead of just filename ---
+    console.log(`Successfully exported ${logs.length} records to:`);
+    console.log(outputPath); 
+
+    // 7. Delete Data
+    const deleteResult = await MasterCodeUsage.deleteMany({});
+    console.log(`Deleted ${deleteResult.deletedCount} records from the database.`);
+
+  } catch (error) {
+    console.error('Error:', error);
+  } finally {
+    await mongoose.disconnect();
+    console.log('Disconnected.');
+    process.exit();
   }
-});
+}
+
+exportAndClear();

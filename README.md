@@ -9,13 +9,13 @@
 
     <img width="227" height="67" alt="Screenshot 2026-01-13 at 3 18 53 pm" src="https://github.com/user-attachments/assets/4ba138c3-b93c-40d5-a1cd-d60595530689" />
   
-3. run `node src/utils/productKeyUpload.js` in the terminal
+3. run `node src/utils/not-needed-to-run/productKeyUpload.js` in the terminal
 4. It should be uploaded in the "product-keys" database
 
 
 ### Removing master code uses from monogodb
 1. Make sure in right directory (RL-BM)
-2. Enter <node src/utils/exportMasterLogs.js> into terminal
+2. Enter `node src/utils/not-needed-to-run/exportMasterLogs.js` into terminal
 
 
 ## To run code
