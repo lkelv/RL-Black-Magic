@@ -1,27 +1,25 @@
 /*
 This is the page where the user downloads the file and gets instructions on how to transfer it to their calculator
 */
-
 // src/pages/FileDownload.jsx
 import React, { useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-// Configuration for each product type
 const productConfig = {
     methods: {
         title: 'Methods',
         fileName: 'rlBM26.tns',
-        filePath: '/files/BMmm34.tns'
+        filePath: '/BMmm34.tns'
     },
     specialist: {
         title: 'Specialist',
         fileName: 'rlBM26.tns',
-        filePath: '/files/rlBMsm34.tns'
+        filePath: '/rlBMsm34.tns'
     },
     both: {
         title: 'Methods & Specialist',
         fileName: 'rlBM26.tns',
-        filePath: '/files/rlBMmmsm34.tns'
+        filePath: '/rlBMmmsm34.tns'
     }
 };
 
@@ -29,55 +27,60 @@ function FileDownload() {
     const navigate = useNavigate();
     const location = useLocation();
     const hasDownloaded = useRef(false);
+    
+    // REF TO PREVENT DOUBLE TRAP
+    const trapRef = useRef(false);
 
-    // Get product info from navigation state
     const { productType, productKey, productKeyMethods, productKeySpecialist } = location.state || {};
-
-    // Get config for current product type
     const config = productConfig[productType];
 
-    // Security: Redirect if user tries to access this page directly without validation
     useEffect(() => {
         if (!productType || !productConfig[productType]) {
             navigate('/activate', { replace: true });
         }
     }, [productType, navigate]);
 
-    // Handle page refresh/close and browser back button
+    // --- FIX: ROBUST BACK BUTTON TRAP ---
     useEffect(() => {
-        // Push initial state so popstate can be triggered
-        window.history.pushState(null, '', window.location.href);
+        // Only push state once
+        if (!trapRef.current) {
+            window.history.pushState({ trapped: true }, '', window.location.href);
+            trapRef.current = true;
+        }
 
-        const handleBeforeUnload = (e) => {
-            e.preventDefault();
-            e.returnValue = 'Are you sure you want to leave? This will require you to re-enter your product key.';
-        };
-
-        const handlePopState = () => {
-            const confirmLeave = window.confirm(
+        const handlePopState = (e) => {
+            const userWantsToLeave = window.confirm(
                 'Are you sure you want to go back? This will require you to re-enter your product key.'
             );
-            if (!confirmLeave) {
-                // Remove listener before navigating to prevent loop
+
+            if (userWantsToLeave) {
+                // User clicked OK -> Leave
                 window.removeEventListener('popstate', handlePopState);
                 window.history.back();
+            } else {
+                // User clicked Cancel -> Stay -> Restore trap
+                window.history.pushState({ trapped: true }, '', window.location.href);
             }
         };
 
-        window.addEventListener('beforeunload', handleBeforeUnload);
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = '';
+        };
+
         window.addEventListener('popstate', handlePopState);
+        window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
             window.removeEventListener('popstate', handlePopState);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, []);
+    // -------------------------------------
 
-    // Auto-download the file when the page loads
     useEffect(() => {
         if (config && !hasDownloaded.current) {
             hasDownloaded.current = true;
-            // Trigger the download
             const downloadLink = document.createElement('a');
             downloadLink.href = config.filePath;
             downloadLink.download = config.fileName;
@@ -98,7 +101,6 @@ function FileDownload() {
     };
 
     const handleContinue = () => {
-        // Pass appropriate state based on product type
         const state = productType === 'both'
             ? { productType, productKeyMethods, productKeySpecialist }
             : { productType, productKey };
@@ -106,13 +108,11 @@ function FileDownload() {
         navigate('/cas-id', { state });
     };
 
-    // Don't render if no valid config
     if (!config) return null;
 
     return (
         <div className="bg-[#202830] text-white py-12 px-8">
             <div className="max-w-3xl mx-auto">
-                {/* Title Section */}
                 <div className="text-center mb-8">
                     <h1 className="text-3xl md:text-4xl font-bold mb-3">
                         Download Black Magic - {config.title}
@@ -122,13 +122,11 @@ function FileDownload() {
                     </p>
                 </div>
 
-                {/* Main Container */}
                 <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12">
                     <h2 className="text-2xl md:text-3xl font-bold mb-8 text-[#f4a52e] text-center">
                         2. Transfer to Calculator
                     </h2>
 
-                    {/* Download Status */}
                     <div className="mb-8 text-center">
                         <p className="text-white mb-4">
                             If the download didn't start automatically:
@@ -141,7 +139,6 @@ function FileDownload() {
                         </button>
                     </div>
 
-                    {/* Instructions Box */}
                     <div className="border-2 border-[#74be9c] rounded-lg p-6 mb-8">
                         <h3 className="text-xl font-bold text-[#f4a52e] mb-4 text-center">
                             How to Transfer the File
@@ -165,7 +162,6 @@ function FileDownload() {
                         </ol>
                     </div>
 
-                    {/* Continue Button */}
                     <button
                         onClick={handleContinue}
                         className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6"
@@ -173,7 +169,6 @@ function FileDownload() {
                         Continue to CAS ID Verification
                     </button>
 
-                    {/* Features Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="flex items-center gap-3">
                             <span className="text-[#74be9c] text-xl">1</span>

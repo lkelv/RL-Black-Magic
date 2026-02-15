@@ -1,3 +1,15 @@
+/*
+Codes stored in database should be in the format XXX-XXX-XXX with the - included
+
+To change it so that the database just includes XXXXXXXXX without the dashed,
+the following should be changed:
+const cleanKey = key.toUpperCase().replace(/-/g, '');
+
+There should be two places which need to be change, once at api use and 
+and the other at api validate
+*/
+
+
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -67,8 +79,11 @@ app.post('/api/validate', validateLimiter, async (req, res) => {
     const { key, type } = req.body;
     
     // Clean the input key
-    const cleanKey = key.toUpperCase().replace(/-/g, '');
-    const cleanMasterCode = process.env.MASTER_CODE ? process.env.MASTER_CODE.toUpperCase().replace(/-/g, '') : null;
+    //const cleanKey = key.toUpperCase().replace(/-/g, '');
+    const cleanKey = key.toUpperCase()
+    console.log(cleanKey)
+    const cleanMasterCode = process.env.MASTER_CODE ? process.env.MASTER_CODE.toUpperCase() : null;
+    console.log(cleanMasterCode)
 
     // --- CHECK 1: IS IT THE MASTER CODE? ---
     if (cleanMasterCode && cleanKey === cleanMasterCode) {
@@ -80,7 +95,7 @@ app.post('/api/validate', validateLimiter, async (req, res) => {
     const productKey = await ProductKey.findOne({ key: cleanKey });
 
     if (!productKey) {
-      return res.json({ valid: false, message: "Invalid product key. Please check and try again." });
+      return res.json({ valid: false, message: "Invalid product key. Please check and try again"});
     }
     if (productKey.used) {
       return res.json({ valid: false, message: "This product key has already been used." });
@@ -108,8 +123,9 @@ app.post('/api/use', async (req, res) => {
   try {
     const { key, casId } = req.body; 
     
-    const cleanKey = key.toUpperCase().replace(/-/g, '');
-    const cleanMasterCode = process.env.MASTER_CODE ? process.env.MASTER_CODE.toUpperCase().replace(/-/g, '') : null;
+    //const cleanKey = key.toUpperCase().replace(/-/g, '');
+    const cleanKey = key.toUpperCase();
+    const cleanMasterCode = process.env.MASTER_CODE ? process.env.MASTER_CODE.toUpperCase() : null;
 
     // --- CASE 1: MASTER CODE USAGE ---
     if (cleanMasterCode && cleanKey === cleanMasterCode) {

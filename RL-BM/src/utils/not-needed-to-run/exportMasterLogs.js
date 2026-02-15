@@ -5,9 +5,6 @@ people who used the master code, and clear the database.
 
 */
 
-
-
-
 import mongoose from 'mongoose';
 import fs from 'fs';
 import path from 'path';
@@ -15,9 +12,10 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 
 // 1. Setup Environment
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+// Fix: Use __dirname to find .env relative to this file, so you can run it from anywhere
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
 // 2. Define Schema (Must match the one in server.js)
 const MasterCodeUsageSchema = new mongoose.Schema({
@@ -49,7 +47,6 @@ async function exportAndClear() {
     const headers = ['CAS ID,Product Type,Time Used'];
     const rows = logs.map(log => {
         const time = new Date(log.usedAt).toLocaleString();
-        // Handle potential commas in data by wrapping in quotes if needed
         return `${log.casId},${log.productType},"${time}"`;
     });
     const csvContent = headers.concat(rows).join('\n');
@@ -57,10 +54,15 @@ async function exportAndClear() {
     // 6. Save to File (with timestamp)
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const filename = `master_code_logs_${timestamp}.csv`;
+    
+    // Resolve full path based on where the script is run
     const outputPath = path.resolve(process.cwd(), filename);
 
     fs.writeFileSync(outputPath, csvContent);
-    console.log(`Successfully exported ${logs.length} records to ${filename}`);
+    
+    // --- UPDATE: Log the full path (outputPath) instead of just filename ---
+    console.log(`Successfully exported ${logs.length} records to:`);
+    console.log(outputPath); 
 
     // 7. Delete Data
     const deleteResult = await MasterCodeUsage.deleteMany({});
