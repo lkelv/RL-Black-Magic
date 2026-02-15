@@ -28,3 +28,7 @@ PORT=
 VITE_API_URL=
 
 MASTER_CODE=
+
+### Math function
+Under RL-BM/src/utils create a file called secret_math.js. It should return a function
+called dhPasswordCore, and that should return a 6 character string

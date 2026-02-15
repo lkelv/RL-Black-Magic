@@ -4,10 +4,10 @@ We also update the database in the productKeys.js
 */
 
 // src/pages/CasID.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Popup from '../components/Popup';
-import { validateCasId, generatePassword, markProductKeyAsUsed } from '../utils/productKeys'; // Import markProductKeyAsUsed
+import { validateCasId, generatePassword, markProductKeyAsUsed } from '../utils/productKeys';
 
 function CasID() {
     const [casId, setCasId] = useState('');
@@ -16,14 +16,56 @@ function CasID() {
     const navigate = useNavigate();
     const location = useLocation();
     
+    // REF TO PREVENT DOUBLE TRAP IN STRICT MODE
+    const trapRef = useRef(false);
 
-    const { productType, productKey, productKeyMethods, productKeySpecialist } = location.state || {}; // Destructure keys
+    const { productType, productKey, productKeyMethods, productKeySpecialist } = location.state || {}; 
 
+    // Redirect if state is missing
     useEffect(() => {
         if (!productType) navigate('/activate', { replace: true });
     }, [productType, navigate]);
 
-    const handleVerify = async () => { // Make async
+    // --- FIX: ROBUST BACK BUTTON TRAP ---
+    useEffect(() => {
+        // Only push the trap state IF we haven't done it yet
+        if (!trapRef.current) {
+            window.history.pushState({ trapped: true }, '', window.location.href);
+            trapRef.current = true;
+        }
+
+        const handlePopState = (e) => {
+            // Prevent the user from leaving immediately
+            const userWantsToLeave = window.confirm(
+                'Are you sure you want to go back? This will require you to re-enter your product key.'
+            );
+
+            if (userWantsToLeave) {
+                // User clicked OK -> Clean up and leave
+                window.removeEventListener('popstate', handlePopState);
+                window.history.back();
+            } else {
+                // User clicked Cancel -> Stay on page -> Restore the trap
+                window.history.pushState({ trapped: true }, '', window.location.href);
+            }
+        };
+
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = ''; 
+        };
+
+        window.addEventListener('popstate', handlePopState);
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+    // -------------------------------------
+
+    const handleVerify = async () => {
         if (!casId.trim() || !confirmCasId.trim()) {
             setPopup({ type: 'error', message: 'Please enter valid CAS IDs.' });
             return;
@@ -40,7 +82,7 @@ function CasID() {
             return;
         }
 
-        // Update the database with the CAS ID for the used key(s)
+        // Update the database with the CAS ID
         const last6 = casId.slice(-6);
         
         if (productType === 'both') {
@@ -71,7 +113,6 @@ function CasID() {
     return (
         <div className="bg-[#202830] text-white py-12 px-8">
             <div className="max-w-3xl mx-auto">
-                {/* Title Section */}
                 <div className="text-center mb-8">
                     <h1 className="text-3xl md:text-4xl font-bold mb-3">
                         CAS ID Verification
@@ -81,13 +122,11 @@ function CasID() {
                     </p>
                 </div>
 
-                {/* Main Input Container */}
                 <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12">
                     <h2 className="text-2xl md:text-3xl font-bold mb-8 text-[#f4a52e] text-center">
                         Enter the <u>last 6 digits</u> of the CAS ID
                     </h2>
 
-                    {/* CAS ID Inputs */}
                     <div className="mb-6 space-y-8">
                         <div>
                             <label className="block text-white font-semibold mb-4">
@@ -128,7 +167,6 @@ function CasID() {
                         </p>
                     </div>
 
-                    {/* Verify Button */}
                     <button
                         onClick={handleVerify}
                         className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6"
@@ -136,14 +174,12 @@ function CasID() {
                         Verify CAS ID
                     </button>
 
-                    {/* Warning Box */}
                     <div className="border-2 border-[#74be9c] rounded-lg p-4 mb-8 text-center">
                         <p className="text-gray-300">
                             An activation code will be generated once the CAS ID is verified
                         </p>
                     </div>
 
-                    {/* Features Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="flex items-center gap-3">
                             <span className="text-[#74be9c] text-xl">🔎</span>
@@ -165,7 +201,6 @@ function CasID() {
                 </div>
             </div>
 
-            {/* Popup */}
             {popup && (
                 <Popup
                     type={popup.type}

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// src/pages/InstallationComplete.jsx
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle2, Copy } from 'lucide-react';
 
@@ -7,6 +8,9 @@ function InstallationComplete() {
     const navigate = useNavigate();
     const { password: generatedPassword, casId } = location.state || {};
 
+    // REF TO PREVENT DOUBLE TRAP IN STRICT MODE
+    const trapRef = useRef(false);
+
     // Security: Redirect if user tries to access this page directly without completing verification
     useEffect(() => {
         if (!generatedPassword || !casId) {
@@ -14,35 +18,44 @@ function InstallationComplete() {
         }
     }, [generatedPassword, casId, navigate]);
 
-    // Handle page refresh/close - show browser's native confirmation
+    // --- FIX: ROBUST BACK BUTTON TRAP ---
     useEffect(() => {
-        // Push initial state so popstate can be triggered
-        window.history.pushState(null, '', window.location.href);
+        // Only push the trap state IF we haven't done it yet
+        if (!trapRef.current) {
+            window.history.pushState({ trapped: true }, '', window.location.href);
+            trapRef.current = true;
+        }
 
-        const handleBeforeUnload = (e) => {
-            e.preventDefault();
-            e.returnValue = 'Are you sure you want to leave? This will require you to re-enter your activation details.';
-        };
-
-        const handlePopState = () => {
-            const confirmLeave = window.confirm(
-                'Are you sure you want to go back? This will require you to re-enter your product key.'
+        const handlePopState = (e) => {
+            // Prevent the user from leaving immediately
+            const userWantsToLeave = window.confirm(
+                'Are you sure you want to go back? This will require you to re-enter your activation details.'
             );
-            if (!confirmLeave) {
-                // Remove listener before navigating to prevent loop
+
+            if (userWantsToLeave) {
+                // User clicked OK -> Clean up and leave
                 window.removeEventListener('popstate', handlePopState);
                 window.history.back();
+            } else {
+                // User clicked Cancel -> Stay on page -> Restore the trap
+                window.history.pushState({ trapped: true }, '', window.location.href);
             }
         };
 
-        window.addEventListener('beforeunload', handleBeforeUnload);
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = '';
+        };
+
         window.addEventListener('popstate', handlePopState);
+        window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
             window.removeEventListener('popstate', handlePopState);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, []);
+    // -------------------------------------
 
     // Use generated password or placeholder
     const password = generatedPassword || 'XXXXXXXX';
