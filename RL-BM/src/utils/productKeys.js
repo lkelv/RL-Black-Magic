@@ -71,7 +71,10 @@ export const generatePassword = (casId, productType) => {
 // ===============================================
 export const validateCasId = (casId) => {
   if (!casId || casId.trim().length < 6) {
-    return { valid: false, message: "CAS ID must be at least 6 characters long." };
+    return { valid: false, message: "CAS ID must be 6 characters long." };
+  }
+  if (casId.trim().length > 6) {
+    return { valid: false, message: "CAS ID must be 6 characters long." };
   }
   const last6 = casId.slice(-6);
   if (!/^[0-9A-Fa-f]{6}$/.test(last6)) {
