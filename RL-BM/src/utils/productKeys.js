@@ -13,20 +13,30 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 // ===============================================
 // PRODUCT KEY VALIDATION (Async)
 // ===============================================
-export const validateProductKey = async (key, expectedType) => {
-  console.log("Frontend sending key:", key);
-  console.log("Frontend sending type:", expectedType);
-  console.log("Sending to URL:", `${API_URL}/validate`);
+export const validateProductKey = async (itemsInput, token = null) => {
+  // Normalize input: if a single object is passed, wrap it in array
+  const items = Array.isArray(itemsInput) ? itemsInput : [itemsInput];
+  
+  // items structure should be: [{ key: '...', type: '...' }]
+  
   try {
     const response = await fetch(`${API_URL}/validate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ key, type: expectedType })
+      body: JSON.stringify({ items, token })
     });
     const data = await response.json();
-    return data;
+    
+    // If we sent an array, return the array of results
+    if (data.batchResults) {
+        return Array.isArray(itemsInput) ? data.batchResults : data.batchResults[0];
+    }
+    
+    // Fallback for error cases
+    return { valid: false, message: data.message || "Validation failed" };
   } catch (error) {
-    return { valid: false, message: "Connection error. Please ensure server is running." };
+    const errorObj = { valid: false, message: "Connection error. Please ensure server is running." };
+    return Array.isArray(itemsInput) ? [errorObj, errorObj] : errorObj;
   }
 };
 

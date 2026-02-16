@@ -3,42 +3,36 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateProductKey, markProductKeyAsUsed } from '../../utils/productKeys';
 import Popup from '../../components/Popup';
+import { Turnstile } from '@marsidev/react-turnstile';
+import { formatProductKey } from './formatproductkey';
 
 function ActivateMethods() {
     const [productKey, setProductKey] = useState('');
     const [popup, setPopup] = useState(null);
     const navigate = useNavigate();
+    const [turnstileToken, setTurnstileToken] = useState(null);
 
-    const formatProductKey = (value) => {
-        const uppercased = value.toUpperCase();
-        // Clean everything except alphanumeric and dashes
-        const cleanedWithDashes = uppercased.replace(/[^A-Z0-9-]/g, '');
-        // Clean to just alphanumeric
-        const cleanedNoDashes = uppercased.replace(/[^A-Z0-9]/g, '');
 
-        // Check if dashes are in correct positions (index 3 and 7)
-        const firstDashCorrect = cleanedWithDashes.length <= 3 || cleanedWithDashes[3] === '-';
-        const secondDashCorrect = cleanedNoDashes.length <= 6 || cleanedWithDashes[7] === '-';
-        const dashesCorrect = firstDashCorrect && secondDashCorrect;
-
-        if (cleanedWithDashes.includes('-') && dashesCorrect) {
-            // Dashes in correct positions - preserve them
-            return cleanedWithDashes.slice(0, 11);
-        } else {
-            // No dashes or wrong positions - add them automatically
-            const formatted = cleanedNoDashes.match(/.{1,3}/g)?.join('-') || '';
-            return formatted.slice(0, 11);
-        }
-    };
 
     const handleActivate = async () => {
         if (!productKey.trim()) {
             setPopup({ type: 'error', message: 'Please enter a valid product key' });
             return;
         }
+        
+        // 3. CHECK TOKEN
+        if (!turnstileToken) {
+            setPopup({ type: 'error', message: 'Please complete the security check.' });
+            return;
+        }
+
+        // 4. PASS TOKEN TO VALIDATION
+        const validation = await validateProductKey(
+            { key: productKey, type: 'methods' }, 
+            turnstileToken
+        );
 
         // Await the validation
-        const validation = await validateProductKey(productKey, 'methods');
 
         if (validation.valid) {
             // Await the usage marking. 
@@ -102,38 +96,49 @@ function ActivateMethods() {
                             className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
                         />
 
+                        {/* Cloudflare verification */}
+                        <div className="mb-0 mt-3 flex justify-center ">
+                            <Turnstile 
+                                siteKey="0x4AAAAAACdgJCV1SeB-JP9V" 
+                                onSuccess={setTurnstileToken}
+                                options={{ theme: 'auto' }}
+                            />
+                        </div>
 
-                        <p className="text-sm text-gray-300 mt-2 text-center">
 
-
-                            <a 
-                            href="/installation-guide" 
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            >
-
-                            Can't find it? <u>Click here!</u>
-
-                        </a>
-
-                        </p>
 
                     </div>
 
                     {/* Activate Button */}
                     <button
                         onClick={handleActivate}
-                        className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6"
+                        className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c]
+                        hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6"
                     >
                         Activate
                     </button>
 
+ 
+
                     {/* Warning Box */}
                     <div className="border-2 border-[#74be9c] rounded-lg p-4 mb-8 text-center">
                         <p className="text-gray-300">
-                            Your product key will be used once activated
+                            Your product key will be used once activated.
                         </p>
+
+                        <p className="text-sm text-gray-300 mt-2 text-center">
+                            <a 
+                            href="/installation-guide" 
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >
+                            Can't find it? <u>Click here!</u>
+                            </a>
+                        </p>
+
                     </div>
+
+
 
                     {/* Features Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

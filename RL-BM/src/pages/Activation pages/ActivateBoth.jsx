@@ -2,35 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateProductKey, markProductKeyAsUsed } from '../../utils/productKeys';
 import Popup from '../../components/Popup';
+import { Turnstile } from '@marsidev/react-turnstile';
+import { formatProductKey } from './formatproductkey';
 
 function ActivateBoth() {
     const [productKeyMethods, setProductKeyMethods] = useState('');
     const [productKeySpecialist, setProductKeySpecialist] = useState('');
     const [popup, setPopup] = useState(null);
     const navigate = useNavigate();
-
-
-    const formatProductKey = (value) => {
-        const uppercased = value.toUpperCase();
-        // Clean everything except alphanumeric and dashes
-        const cleanedWithDashes = uppercased.replace(/[^A-Z0-9-]/g, '');
-        // Clean to just alphanumeric
-        const cleanedNoDashes = uppercased.replace(/[^A-Z0-9]/g, '');
-
-        // Check if dashes are in correct positions (index 3 and 7)
-        const firstDashCorrect = cleanedWithDashes.length <= 3 || cleanedWithDashes[3] === '-';
-        const secondDashCorrect = cleanedNoDashes.length <= 6 || cleanedWithDashes[7] === '-';
-        const dashesCorrect = firstDashCorrect && secondDashCorrect;
-
-        if (cleanedWithDashes.includes('-') && dashesCorrect) {
-            // Dashes in correct positions - preserve them
-            return cleanedWithDashes.slice(0, 11);
-        } else {
-            // No dashes or wrong positions - add them automatically
-            const formatted = cleanedNoDashes.match(/.{1,3}/g)?.join('-') || '';
-            return formatted.slice(0, 11);
-        }
-    };
+    const [turnstileToken, setTurnstileToken] = useState(null);
 
 
     const handleActivate = async () => {
@@ -39,8 +19,25 @@ function ActivateBoth() {
             return;
         }
 
-        const validationMethods = await validateProductKey(productKeyMethods, 'methods');
-        const validationSpecialist = await validateProductKey(productKeySpecialist, 'specialist');
+        // 3. CHECK TOKEN
+        if (!turnstileToken) {
+            setPopup({ type: 'error', message: 'Please complete the security check.' });
+            return;
+        }
+
+        // 4. BATCH VALIDATION
+        // We pass an array of items to validate them in one request with one token
+        const results = await validateProductKey(
+            [
+                { key: productKeyMethods, type: 'methods' },
+                { key: productKeySpecialist, type: 'specialist' }
+            ],
+            turnstileToken
+        );
+
+        // Extract results in order
+        const validationMethods = results[0];
+        const validationSpecialist = results[1];
 
         if (!validationMethods.valid) {
             setPopup({ type: 'error', message: `Methods key: ${validationMethods.message}` });
@@ -135,15 +132,17 @@ function ActivateBoth() {
                             />
                         </div>
 
-                        <p className="text-sm text-gray-300 text-center">
-                            <a
-                                href="/installation-guide"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Can't find it? <u>Click here!</u>
-                            </a>
-                        </p>
+
+                        {/* Cloudflare verification */}
+                        <div className="mb-0 mt-3 flex justify-center ">
+                            <Turnstile 
+                                siteKey="0x4AAAAAACdgJCV1SeB-JP9V" 
+                                onSuccess={setTurnstileToken}
+                                options={{ theme: 'auto' }}
+                            />
+                        </div>
+
+
                     </div>
 
                     {/* Activate Button */}
@@ -159,6 +158,14 @@ function ActivateBoth() {
                         <p className="text-gray-300">
                             Your product keys will be used once activated
                         </p>
+
+
+                        <p className="text-sm text-gray-300 mt-2 text-center">
+                            <a href="/installation-guide" target="_blank" rel="noopener noreferrer">
+                                Can't find it? <u>Click here!</u>
+                            </a>
+                        </p>
+
                     </div>
 
                     {/* Features Grid */}
