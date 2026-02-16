@@ -15,7 +15,7 @@ Create a file called `.env` in the root directory (RL-BM folder), varibles in th
 * TURNSTILE_SECRET_KEY=
 
 ### Step 3
-Under RL-BM/src/utils create a file called secret_math.js (same level as productKeys.js).
+Under `RL-BM/src/utils` create a file called `secret_math.js` (same level as productKeys.js).
 It should return a function called dhPasswordCore, and that should return a 6 character string 
 
 ### Step 4
