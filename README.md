@@ -1,7 +1,30 @@
 # RL-Black-Magic
 
 
-## For database
+## To run code
+
+### Step 1
+Pull the code, then run `npm install` in the terminal
+
+### Step 2
+Create a file called `.env` in the root directory (RL-BM folder), varibles in the ENV files needed are 
+* MONGODB_URI=
+* PORT=
+* VITE_API_URL=
+* MASTER_CODE=
+* TURNSTILE_SECRET_KEY=
+
+### Step 3
+Under RL-BM/src/utils create a file called secret_math.js (same level as productKeys.js).
+It should return a function called dhPasswordCore, and that should return a 6 character string 
+
+### Step 4
+Run `npm run server` and `npm run dev` at the same time. A local host link will appear from
+running the latter
+
+
+
+## Backend uploads
 
 ### Instructions to upload MM and SM codes to database
 1. In root directory (RL-BM folder), add two files called MM.csv and SM.csv
@@ -18,17 +41,3 @@
 2. Enter `node src/utils/not-needed-to-run/exportMasterLogs.js` into terminal
 
 
-## To run code
-
-### Vars needed in env file (in root directory) includes
-MONGODB_URI=
-
-PORT=
-
-VITE_API_URL=
-
-MASTER_CODE=
-
-### Math function
-Under RL-BM/src/utils create a file called secret_math.js. It should return a function
-called dhPasswordCore, and that should return a 6 character string
