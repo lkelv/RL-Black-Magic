@@ -3,33 +3,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateProductKey, markProductKeyAsUsed } from '../../utils/productKeys';
 import Popup from '../../components/Popup';
+import { Turnstile } from '@marsidev/react-turnstile';
+import { formatProductKey } from './formatproductkey';
 
 function ActivateSpecialist() {
     const [productKey, setProductKey] = useState('');
     const [popup, setPopup] = useState(null);
     const navigate = useNavigate();
+    const [turnstileToken, setTurnstileToken] = useState(null);
 
-    const formatProductKey = (value) => {
-        const uppercased = value.toUpperCase();
-        // Clean everything except alphanumeric and dashes
-        const cleanedWithDashes = uppercased.replace(/[^A-Z0-9-]/g, '');
-        // Clean to just alphanumeric
-        const cleanedNoDashes = uppercased.replace(/[^A-Z0-9]/g, '');
-
-        // Check if dashes are in correct positions (index 3 and 7)
-        const firstDashCorrect = cleanedWithDashes.length <= 3 || cleanedWithDashes[3] === '-';
-        const secondDashCorrect = cleanedNoDashes.length <= 6 || cleanedWithDashes[7] === '-';
-        const dashesCorrect = firstDashCorrect && secondDashCorrect;
-
-        if (cleanedWithDashes.includes('-') && dashesCorrect) {
-            // Dashes in correct positions - preserve them
-            return cleanedWithDashes.slice(0, 11);
-        } else {
-            // No dashes or wrong positions - add them automatically
-            const formatted = cleanedNoDashes.match(/.{1,3}/g)?.join('-') || '';
-            return formatted.slice(0, 11);
-        }
-    };
 
     const handleActivate = async () => {
         if (!productKey.trim()) {
@@ -37,7 +19,16 @@ function ActivateSpecialist() {
             return;
         }
 
-        const validation = await validateProductKey(productKey, 'specialist');
+        if (!turnstileToken) {
+            setPopup({ type: 'error', message: 'Please complete the security check.' });
+            return;
+        }
+
+        // 4. PASS TOKEN TO VALIDATION
+        const validation = await validateProductKey(
+            { key: productKey, type: 'specialist' }, 
+            turnstileToken
+        );
 
         if (validation.valid) {
             await markProductKeyAsUsed(productKey, null);
@@ -97,20 +88,17 @@ function ActivateSpecialist() {
                             className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
                         />
                         
-                        <p className="text-sm text-gray-300 mt-2 text-center">
+                        {/* Cloudflare verification */}
+                        <div className="mb-0 mt-3 flex justify-center ">
+                            <Turnstile 
+                                siteKey="0x4AAAAAACdgJCV1SeB-JP9V" 
+                                onSuccess={setTurnstileToken}
+                                options={{ theme: 'auto' }}
+                            />
+                        </div>
 
 
-                            <a
-                                href="/installation-guide"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
 
-                                Can't find it? <u>Click here!</u>
-
-                            </a>
-
-                        </p>
 
                     </div>
 
@@ -127,6 +115,13 @@ function ActivateSpecialist() {
                         <p className="text-gray-300">
                             Your product key will be used once activated
                         </p>
+
+                        <p className="text-sm text-gray-300 mt-2 text-center">
+                            <a href="/installation-guide" target="_blank" rel="noopener noreferrer">
+                                Can't find it? <u>Click here!</u>
+                            </a>
+                        </p>
+
                     </div>
 
                     {/* Features Grid */}

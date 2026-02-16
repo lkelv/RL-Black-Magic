@@ -24,6 +24,30 @@ const app = express();
 // see https://expressjs.com/en/guide-behind-proxies.html
 // app.set('trust proxy', 1);
 
+// verification
+const verifyTurnstile = async (token) => {
+  const SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
+  if (!SECRET_KEY) return true; // Skip if no key configured (dev mode)
+  
+  try {
+      const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+              secret: SECRET_KEY,
+              response: token
+          })
+      });
+      const data = await response.json();
+      return data.success;
+  } catch (error) {
+      console.error("Turnstile verification error:", error);
+      return false;
+  }
+};
+
+
+
 app.use(cors());
 app.use(express.json());
 
@@ -76,42 +100,64 @@ mongoose.connect(process.env.MONGODB_URI)
 // Validate Key
 app.post('/api/validate', validateLimiter, async (req, res) => {
   try {
-    const { key, type } = req.body;
+    // Support both old (single) and new (batch) formats for backward compatibility if needed
+    // But we will use 'items' array for the new logic
+    const { token, items } = req.body;
     
-    // Clean the input key
-    //const cleanKey = key.toUpperCase().replace(/-/g, '');
-    const cleanKey = key.toUpperCase()
-    console.log(cleanKey)
+    // 1. Verify Turnstile Token (Once for the whole batch)
+    // You can skip this check if using the Master Code if you prefer
+    const isHuman = await verifyTurnstile(token);
+    if (!isHuman) {
+        return res.json({ 
+            batchResults: items.map(() => ({ valid: false, message: "Security check failed. Please try again." })) 
+        });
+    }
+
     const cleanMasterCode = process.env.MASTER_CODE ? process.env.MASTER_CODE.toUpperCase() : null;
-    console.log(cleanMasterCode)
-
-    // --- CHECK 1: IS IT THE MASTER CODE? ---
-    if (cleanMasterCode && cleanKey === cleanMasterCode) {
-        // Master code is valid for ALL types (methods, specialist, both)
-        return res.json({ valid: true, message: "Master code accepted!" });
-    }
-
-    // --- CHECK 2: REGULAR KEY VALIDATION ---
-    const productKey = await ProductKey.findOne({ key: cleanKey });
-
-    if (!productKey) {
-      return res.json({ valid: false, message: "Invalid product key. Please check and try again"});
-    }
-    if (productKey.used) {
-      return res.json({ valid: false, message: "This product key has already been used." });
-    }
     
-    // Check specific types
-    if (productKey.type !== type && productKey.type !== 'both') {
-       if (type === 'both' && productKey.type !== 'both') {
-         return res.json({ valid: false, message: `This product key is for ${productKey.type}, not both.` });
-       }
-       if (type !== 'both' && productKey.type !== type) {
-          return res.json({ valid: false, message: `This product key is for ${productKey.type}, not ${type}.` });
-       }
+    const results = [];
+
+    // 2. Process each key in the batch
+    for (const item of items) {
+        const { key, type } = item;
+        const cleanKey = key.toUpperCase();
+
+        // --- CHECK 1: MASTER CODE ---
+        if (cleanMasterCode && cleanKey === cleanMasterCode) {
+            results.push({ valid: true, message: "Master code accepted!" });
+            continue;
+        }
+
+        // --- CHECK 2: REGULAR KEY VALIDATION ---
+        const productKey = await ProductKey.findOne({ key: cleanKey });
+
+        if (!productKey) {
+            results.push({ valid: false, message: "Invalid product key." });
+            continue;
+        }
+        if (productKey.used) {
+            results.push({ valid: false, message: "This product key has already been used." });
+            continue;
+        }
+        
+        // Check specific types
+        if (productKey.type !== type && productKey.type !== 'both') {
+            if (type === 'both' && productKey.type !== 'both') {
+                results.push({ valid: false, message: `This product key is for ${productKey.type}, not both.` });
+                continue;
+            }
+            if (type !== 'both' && productKey.type !== type) {
+                results.push({ valid: false, message: `This product key is for ${productKey.type}, not ${type}.` });
+                continue;
+            }
+        }
+
+        results.push({ valid: true, message: "Product key validated successfully!" });
     }
 
-    res.json({ valid: true, message: "Product key validated successfully!" });
+    // Return array of results matching the input order
+    res.json({ batchResults: results });
+
   } catch (error) {
     console.error("Validation error:", error);
     res.status(500).json({ valid: false, message: "Server error during validation." });
