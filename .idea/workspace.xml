@@ -5,11 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="326b954d-e91c-4877-8aec-61a15920c540" name="Changes" comment="CAS ID Verification Passcode complete">
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/ActivateNow.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/CASIDlocation.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/CASIDverification.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/ConnectCalc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/Download.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/Downloadmanual.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/FileTransfer.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/InstallationComplete.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/ProductKey.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/Redirect.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/SubjectSelection.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/ToCalc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/ToDoCAS.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/TransferPage.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RL-BM/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RL-BM/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RL-BM/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/src/App.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RL-BM/src/pages/helper pages/InstallationGuide.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/src/pages/helper pages/InstallationGuide.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RL-BM/src/utils/not-needed-to-run/productkey_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/src/utils/not-needed-to-run/productkey_generator.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,6 +121,7 @@
       <workItem from="1763689420643" duration="8415000" />
       <workItem from="1763703516992" duration="839000" />
       <workItem from="1771540441651" duration="1953000" />
+      <workItem from="1771543353029" duration="596000" />
     </task>
     <task id="LOCAL-00001" summary="installed tailwind">
       <option name="closed" value="true" />

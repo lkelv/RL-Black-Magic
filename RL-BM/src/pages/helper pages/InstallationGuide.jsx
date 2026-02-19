@@ -1,19 +1,19 @@
 // src/pages/InstallationGuide.jsx
 import React from 'react';
-import ActivateNowImg from '../assets/ActivateNow.png';
-import SubjectSelection from '../assets/SubjectSelection.png';
-import ProductKey from '../assets/ProductKey.png';
-import Redirect from '../assets/Redirect.png';
-import Downloads from '../assets/Download.png';
-import Downloadmanual from '../assets/Downloadmanual.png';
-import FileTransfer from '../assets/FileTransfer.png';
-import ConnectCalc from '../assets/ConnectCalc.png';
-import ToDoCAS from '../assets/ToDoCAS.png';
-import ToCalc from '../assets/ToCalc.png';
-import TransferPage from '../assets/TransferPage.png';
-import CASIDverification from '../assets/CASIDverification.png';
-import CASIDlocation from '../assets/CASIDlocation.png';
-import InstallationComplete from '../assets/InstallationComplete.png';
+import ActivateNowImg from '../../assets/ActivateNow.png';
+import SubjectSelection from '../../assets/SubjectSelection.png';
+import ProductKey from '../../assets/ProductKey.png';
+import Redirect from '../../assets/Redirect.png';
+import Downloads from '../../assets/Download.png';
+import Downloadmanual from '../../assets/Downloadmanual.png';
+import FileTransfer from '../../assets/FileTransfer.png';
+import ConnectCalc from '../../assets/ConnectCalc.png';
+import ToDoCAS from '../../assets/ToDoCAS.png';
+import ToCalc from '../../assets/ToCalc.png';
+import TransferPage from '../../assets/TransferPage.png';
+import CASIDverification from '../../assets/CASIDverification.png';
+import CASIDlocation from '../../assets/CASIDlocation.png';
+import InstallationComplete from '../../assets/InstallationComplete.png';
 
 function InstallationGuide() {
     return (

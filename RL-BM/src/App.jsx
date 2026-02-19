@@ -11,7 +11,7 @@ import ActivateBoth from './pages/Activation pages/ActivateBoth.jsx';
 import CasID from "./pages/CasID.jsx";
 import FileDownload from "./pages/FileDownload.jsx";
 import InstallationComplete from "./pages/InstallationComplete.jsx";
-import InstallationGuide from './pages/helper pages/InstallationGuide';
+import InstallationGuide from './pages/helper pages/InstallationGuide.jsx';
 import FindCasID from './pages/helper pages/FindCasID';
 import ContactUs from './pages/helper pages/ContactUs';
 import './App.css';
