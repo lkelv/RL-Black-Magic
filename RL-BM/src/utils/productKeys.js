@@ -7,7 +7,6 @@ This file generates the passwords from the casID
 // src/utils/productKeys.js
 
 // If a custom URL is set in .env, use it. Otherwise, assume we are on localhost.
-import { dhPasswordCore } from './secret_math.js';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 // ===============================================
