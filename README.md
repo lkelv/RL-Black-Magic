@@ -17,8 +17,9 @@ Create a file called `.env` in the root directory (RL-BM folder), varibles in th
 * VITE_DH_G=
 
 ### Step 3
-Run `npm run server` and `npm run dev` at the same time. A local host link will appear from
-running the latter
+Run `cd RL-BM`
+Then run `npm run server` and `npm run dev` at the same time.
+A local host link will appear from running the latter
 
 
 
