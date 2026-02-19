@@ -13,14 +13,13 @@ Create a file called `.env` in the root directory (RL-BM folder), varibles in th
 * VITE_API_URL=
 * MASTER_CODE=
 * TURNSTILE_SECRET_KEY=
+* VITE_DH_P=
+* VITE_DH_G=
 
 ### Step 3
-Under `RL-BM/src/utils` create a file called `secret_math.js` (same level as productKeys.js).
-It should return a function called dhPasswordCore, and that should return a 6 character string 
-
-### Step 4
-Run `npm run server` and `npm run dev` at the same time. A local host link will appear from
-running the latter
+Run `cd RL-BM`
+Then run `npm run server` and `npm run dev` at the same time.
+A local host link will appear from running the latter
 
 
 

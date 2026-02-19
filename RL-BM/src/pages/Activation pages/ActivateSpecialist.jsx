@@ -91,7 +91,7 @@ function ActivateSpecialist() {
                         {/* Cloudflare verification */}
                         <div className="mb-0 mt-3 flex justify-center ">
                             <Turnstile 
-                                siteKey="0x4AAAAAACdgJCV1SeB-JP9V" 
+                                siteKey="0x4AAAAAACfst3SwT11g1g2m" 
                                 onSuccess={setTurnstileToken}
                                 options={{ theme: 'auto' }}
                             />

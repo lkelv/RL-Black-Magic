@@ -150,7 +150,7 @@ def format_product_key(key: str, format_style: str = 'dash') -> str:
         Formatted key string
     """
     if format_style == 'dash' and len(key) == 9:
-        return f"{key[0:3]}-{key[3:6]}-{key[6:9]},{False}"
+        return f"{key[0:3]}-{key[3:6]}-{key[6:9]}"
     return key
 
 
@@ -253,8 +253,8 @@ if __name__ == "__main__":
     sm = []
     mmsm = []
     for productkey in productkeylist:
-        productkey = productkey.split("-")
-        productkey = "".join(productkey)
+        # productkey = productkey.split("-")
+        # productkey = "".join(productkey)
         # print(productkey)
         sumord = 0
         for i in productkey:
@@ -274,10 +274,11 @@ if __name__ == "__main__":
     print(mm)
     print(sm)
     # print(mmsm)
+
     dfmm = pd.DataFrame(mm)
-    dfmm.to_csv('mm_2.csv', index=False, encoding='utf-8')
+    dfmm.to_csv('mm_3.csv', index=False, encoding='utf-8')
     dfsm = pd.DataFrame(sm)
-    dfsm.to_csv('sm_2.csv', index=False, encoding='utf-8')
+    dfsm.to_csv('sm_3.csv', index=False, encoding='utf-8')
     # dfmmsm = pd.DataFrame(mmsm)
     # dfmmsm.to_csv('mmsm.csv', index=False, encoding='utf-8')
 

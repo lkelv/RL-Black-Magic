@@ -59,7 +59,40 @@ export const markProductKeyAsUsed = async (key, casId = null) => {
 // REAL CAS DH PASSWORD LOGIC (unchanged)
 // ===============================================
 
+const DH_G = import.meta.env.VITE_DH_G;
+const DH_P = import.meta.env.VITE_DH_P;
+   
 
+function modexp(base, exp, mod) {
+    let result = 1n;
+    let b = BigInt(base % mod);
+    let e = BigInt(exp);
+    const m = BigInt(mod);
+  
+    while (e > 0n) {
+      if (e & 1n) {
+        result = (result * b) % m;
+      }
+      b = (b * b) % m;
+      e >>= 1n;
+    }
+    return Number(result); 
+  }
+  
+export function dhPasswordCore(last6Num, productChar) {
+    last6Num = last6Num | 0;
+    const ascii = productChar.charCodeAt(0); 
+    const mixed = (last6Num ^ ascii) >>> 0;
+    const shared = modexp(DH_G, mixed, DH_P);
+  
+    let offset = 0;
+    if (productChar === "M") offset = 100000;
+    else if (productChar === "S") offset = 200000;
+    else if (productChar === "B") offset = 300000;
+  
+    let pw = (shared + offset) % 1000000;
+    return String(pw).padStart(6, "0");
+  }
 
 
 export const generatePassword = (casId, productType) => {
