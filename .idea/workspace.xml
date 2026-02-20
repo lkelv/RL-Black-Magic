@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326b954d-e91c-4877-8aec-61a15920c540" name="Changes" comment="CAS ID Verification Passcode complete">
+    <list default="true" id="326b954d-e91c-4877-8aec-61a15920c540" name="Changes" comment="CAS ID finding">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RL-BM/src/pages/CasID.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/src/pages/CasID.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RL-BM/src/pages/helper pages/FindCasID.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/src/pages/helper pages/FindCasID.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RL-BM/src/components/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/src/components/Header.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,6 +61,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -108,7 +108,7 @@
       <workItem from="1763703516992" duration="839000" />
       <workItem from="1771540441651" duration="1953000" />
       <workItem from="1771543353029" duration="596000" />
-      <workItem from="1771547599969" duration="687000" />
+      <workItem from="1771547599969" duration="2054000" />
     </task>
     <task id="LOCAL-00001" summary="installed tailwind">
       <option name="closed" value="true" />
@@ -198,7 +198,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763700247314</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="CAS ID finding">
+      <option name="closed" value="true" />
+      <created>1771548573970</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1771548573970</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -229,7 +237,8 @@
     <MESSAGE value="product key" />
     <MESSAGE value="product key accidentally deleted" />
     <MESSAGE value="CAS ID Verification Passcode complete" />
-    <option name="LAST_COMMIT_MESSAGE" value="CAS ID Verification Passcode complete" />
+    <MESSAGE value="CAS ID finding" />
+    <option name="LAST_COMMIT_MESSAGE" value="CAS ID finding" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/RL_Black_Magic$productkey.coverage" NAME="productkey Coverage Results" MODIFIED="1763703841822" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/RL-BM/src/utils" />
