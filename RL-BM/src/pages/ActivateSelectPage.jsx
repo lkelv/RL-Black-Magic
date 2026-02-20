@@ -23,7 +23,15 @@ function Activate() {
                         Install Black Magic in two easy steps<br />
                         Select <span className="font-semibold">one version</span> only
                     </p>
+
+                    <h1 className="text-3xl text-center text-[#F04D4D] font-bold mb-4 mt-5">
+                    Activate Black Magic on a computer as it requires a direct connection to your CAS calculator
+                    </h1>
+
                 </div>
+
+
+
 
                 {/* Cards Section */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
