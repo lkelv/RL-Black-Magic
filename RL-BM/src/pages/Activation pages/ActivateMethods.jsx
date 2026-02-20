@@ -16,7 +16,10 @@ function ActivateMethods() {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const turnstileRef = useRef(null);
+    const turnstileRef = useRef(null); //check for token and reset widget if token is spent or invalid 
+
+    const [showSlowMessage, setShowSlowMessage] = useState(false);
+    const loadingTimerRef = useRef(null); // To store the timeout ID
 
 
     const handleActivate = async () => {
@@ -33,6 +36,13 @@ function ActivateMethods() {
 
         // 3. Start loading
         setIsLoading(true); 
+        setShowSlowMessage(false); // Reset message state
+
+
+            // Start a 5-second timer
+        loadingTimerRef.current = setTimeout(() => {
+            setShowSlowMessage(true);
+        }, 1);
 
         try {
             const validation = await validateProductKey(
@@ -58,6 +68,10 @@ function ActivateMethods() {
         } finally {
             // 4. Stop loading regardless of success or failure
             setIsLoading(false); 
+
+            //reset timer
+            clearTimeout(loadingTimerRef.current);
+            setShowSlowMessage(false);
         }
     };
 
@@ -135,7 +149,13 @@ function ActivateMethods() {
                             'Activate'
                         )}
                     </button>
- 
+
+                    {showSlowMessage && (
+                        <p className="text-center text-gray-300 text-sm mt-4 mb-6 animate-pulse">
+                            This process can take up to 1 minute.
+                        </p>
+                    )}
+                    
 
                     {/* Warning Box */}
                     <div className="border-2 border-[#74be9c] rounded-lg p-4 mb-8 text-center">

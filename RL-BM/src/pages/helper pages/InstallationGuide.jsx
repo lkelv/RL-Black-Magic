@@ -243,10 +243,8 @@ function InstallationGuide() {
                 <div className="bg-[#2d3642] rounded-lg p-8 mb-[32px]">
                     <h2 className="text-2xl font-semibold mb-4">Step 8</h2>
                     <p className="text-gray-300 leading-relaxed">
-                        Placeholder text: Here you will find a step-by-step guide on how to
-                        install and activate the Black Magic program on your CAS calculator.
-                        Detailed instructions, screenshots, and troubleshooting tips will
-                        be provided here soon.
+                        Put the code into the Enter Password section of the CAS Calculator
+                        and click ctrl+s on your CAS to save the code into the program.
                     </p>
                 </div>
             </div>

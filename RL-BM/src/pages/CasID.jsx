@@ -118,7 +118,7 @@ function CasID() {
 
                 <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12">
                     <h2 className="text-2xl md:text-3xl font-bold mb-8 text-[#f4a52e] text-center">
-                        Enter the <u>last 6 digits</u> of the CAS ID
+                        3. Enter the <u>last 6 digits</u> of the CAS ID
                     </h2>
 
                     <div className="mb-6 space-y-8">
