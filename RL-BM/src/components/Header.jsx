@@ -8,7 +8,7 @@ function Header() {
         <header className="bg-[#2c3f51] px-8 py-4">
             <div className="max-w-7xl mx-auto flex justify-between items-center">
                 <div className="text-white font-bold text-xl">
-                    <Link to="/" className="cursor-pointer">
+                    <Link to="https://rleducation.com.au/" className="cursor-pointer">
                         <img
                             src={logo}
                             alt="Company Logo"
