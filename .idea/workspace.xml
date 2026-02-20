@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="326b954d-e91c-4877-8aec-61a15920c540" name="Changes" comment="redirects to rl website when clicking icon">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RL-BM/src/components/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/src/components/Header.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RL-BM/src/pages/CasID.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/src/pages/CasID.jsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Python Script" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2ywDseFnjRQyEkytO24lFIeNXq1" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "JavaScript Debug.test.html.executor": "Run",
+    "Node.js.CasID.jsx.executor": "Run",
+    "Node.js.keyGenerator.js.executor": "Run",
+    "Node.js.testKeysWork.js.executor": "Run",
+    "Python.productKey.executor": "Run",
+    "Python.productkey.executor": "Run",
+    "Python.productkey_generator.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Merging main",
+    "last_opened_file_path": "C:/Users/Yeeheng/Documents/GitHub/RL-Black-Magic/RL-BM/src/pages",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Yeeheng\Documents\GitHub\RL-Black-Magic\RL-BM\src\pages" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Yeeheng\Documents\GitHub\RL-Black-Magic\RL-BM\src\assets" />
+      <recent name="C:\Users\Yeeheng\Documents\GitHub\RL-Black-Magic\RL-BM\src\pages" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-WS-243.26053.12" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="326b954d-e91c-4877-8aec-61a15920c540" name="Changes" comment="" />
+      <created>1750736954250</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1750736954250</updated>
+      <workItem from="1750736956706" duration="967000" />
+      <workItem from="1750737997346" duration="3046000" />
+      <workItem from="1756541831882" duration="109000" />
+      <workItem from="1759190282890" duration="2828000" />
+      <workItem from="1759194200323" duration="15623000" />
+      <workItem from="1759229375019" duration="1325000" />
+      <workItem from="1759491604684" duration="31000" />
+      <workItem from="1761981330923" duration="1009000" />
+      <workItem from="1762053759131" duration="5485000" />
+      <workItem from="1762562025398" duration="2709000" />
+      <workItem from="1763592570801" duration="9350000" />
+      <workItem from="1763606813095" duration="1891000" />
+      <workItem from="1763608974979" duration="4894000" />
+      <workItem from="1763613972123" duration="3290000" />
+      <workItem from="1763683064008" duration="2368000" />
+      <workItem from="1763689420643" duration="8415000" />
+      <workItem from="1763703516992" duration="839000" />
+      <workItem from="1771540441651" duration="1953000" />
+      <workItem from="1771543353029" duration="596000" />
+    </task>
+    <task id="LOCAL-00001" summary="installed tailwind">
+      <option name="closed" value="true" />
+      <created>1750737574482</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1750737574484</updated>
+    </task>
+    <task id="LOCAL-00002" summary="working margin">
+      <option name="closed" value="true" />
+      <created>1759196759667</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1759196759667</updated>
+    </task>
+    <task id="LOCAL-00003" summary="moved homepage to pages file">
+      <option name="closed" value="true" />
+      <created>1759197163465</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1759197163465</updated>
+    </task>
+    <task id="LOCAL-00004" summary="added images">
+      <option name="closed" value="true" />
+      <created>1759206932582</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1759206932582</updated>
+    </task>
+    <task id="LOCAL-00005" summary="added images">
+      <option name="closed" value="true" />
+      <created>1759207583006</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1759207583008</updated>
+    </task>
+    <task id="LOCAL-00006" summary="installation guide page">
+      <option name="closed" value="true" />
+      <created>1759229405452</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1759229405452</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Added Specialist and Both activation pages, probably need to update both pages spacing">
+      <option name="closed" value="true" />
+      <created>1761982265557</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1761982265558</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Fixed Specialist and Both, added CAS page, and installation completion page">
+      <option name="closed" value="true" />
+      <created>1762056663225</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1762056663225</updated>
+    </task>
+    <task id="LOCAL-00009" summary="product key">
+      <option name="closed" value="true" />
+      <created>1763617224887</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1763617224888</updated>
+    </task>
+    <task id="LOCAL-00010" summary="product key accidentally deleted">
+      <option name="closed" value="true" />
+      <created>1763692947263</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1763692947263</updated>
+    </task>
+    <task id="LOCAL-00011" summary="CAS ID Verification Passcode complete">
+      <option name="closed" value="true" />
+      <created>1763700247312</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1763700247314</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.py" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="installed tailwind" />
+    <MESSAGE value="working margin" />
+    <MESSAGE value="moved homepage to pages file" />
+    <MESSAGE value="added images" />
+    <MESSAGE value="installation guide page" />
+    <MESSAGE value="Added Specialist and Both activation pages, probably need to update both pages spacing" />
+    <MESSAGE value="Fixed Specialist and Both, added CAS page, and installation completion page" />
+    <MESSAGE value="product key" />
+    <MESSAGE value="product key accidentally deleted" />
+    <MESSAGE value="CAS ID Verification Passcode complete" />
+    <MESSAGE value="redirects to rl website when clicking icon" />
+    <option name="LAST_COMMIT_MESSAGE" value="redirects to rl website when clicking icon" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/RL_Black_Magic$productkey.coverage" NAME="productkey Coverage Results" MODIFIED="1763703841822" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/RL-BM/src/utils" />
+    <SUITE FILE_PATH="coverage/RL_Black_Magic$productkey_generator.coverage" NAME="productkey_generator Coverage Results" MODIFIED="1771540846923" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/RL-BM/src/utils/not-needed-to-run" />
+    <SUITE FILE_PATH="coverage/RL_Black_Magic$productKey.coverage" NAME="productKey Coverage Results" MODIFIED="1763684150191" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/RL-BM/src/utils" />
+  </component>
+</project>
