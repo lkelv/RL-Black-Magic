@@ -4,24 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326b954d-e91c-4877-8aec-61a15920c540" name="Changes" comment="CAS ID Verification Passcode complete">
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/ActivateNow.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/CASIDlocation.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/CASIDverification.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/ConnectCalc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/Download.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/Downloadmanual.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/FileTransfer.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/InstallationComplete.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/ProductKey.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/Redirect.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/SubjectSelection.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/ToCalc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/ToDoCAS.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RL-BM/src/assets/TransferPage.png" afterDir="false" />
+    <list default="true" id="326b954d-e91c-4877-8aec-61a15920c540" name="Changes" comment="redirects to rl website when clicking icon">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RL-BM/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RL-BM/src/pages/helper pages/InstallationGuide.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/RL-BM/src/pages/helper pages/InstallationGuide.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,28 +41,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;JavaScript Debug.test.html.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.CasID.jsx.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.keyGenerator.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.testKeysWork.js.executor&quot;: &quot;Run&quot;,
-    &quot;Python.productKey.executor&quot;: &quot;Run&quot;,
-    &quot;Python.productkey.executor&quot;: &quot;Run&quot;,
-    &quot;Python.productkey_generator.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;preproduction-to-production-changes&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Yeeheng/Documents/GitHub/RL-Black-Magic/RL-BM/src/pages&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "JavaScript Debug.test.html.executor": "Run",
+    "Node.js.CasID.jsx.executor": "Run",
+    "Node.js.keyGenerator.js.executor": "Run",
+    "Node.js.testKeysWork.js.executor": "Run",
+    "Python.productKey.executor": "Run",
+    "Python.productkey.executor": "Run",
+    "Python.productkey_generator.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "FindCASIDguide",
+    "last_opened_file_path": "C:/Users/Yeeheng/Documents/GitHub/RL-Black-Magic/RL-BM/src/pages",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Yeeheng\Documents\GitHub\RL-Black-Magic\RL-BM\src\pages" />
@@ -122,6 +107,7 @@
       <workItem from="1763703516992" duration="839000" />
       <workItem from="1771540441651" duration="1953000" />
       <workItem from="1771543353029" duration="596000" />
+      <workItem from="1771547599969" duration="3929000" />
     </task>
     <task id="LOCAL-00001" summary="installed tailwind">
       <option name="closed" value="true" />
@@ -211,7 +197,23 @@
       <option name="project" value="LOCAL" />
       <updated>1763700247314</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="CAS ID finding">
+      <option name="closed" value="true" />
+      <created>1771548573970</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1771548573970</updated>
+    </task>
+    <task id="LOCAL-00013" summary="redirects to rl website when clicking icon">
+      <option name="closed" value="true" />
+      <created>1771550166045</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1771550166046</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -242,7 +244,9 @@
     <MESSAGE value="product key" />
     <MESSAGE value="product key accidentally deleted" />
     <MESSAGE value="CAS ID Verification Passcode complete" />
-    <option name="LAST_COMMIT_MESSAGE" value="CAS ID Verification Passcode complete" />
+    <MESSAGE value="CAS ID finding" />
+    <MESSAGE value="redirects to rl website when clicking icon" />
+    <option name="LAST_COMMIT_MESSAGE" value="redirects to rl website when clicking icon" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/RL_Black_Magic$productkey.coverage" NAME="productkey Coverage Results" MODIFIED="1763703841822" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/RL-BM/src/utils" />
