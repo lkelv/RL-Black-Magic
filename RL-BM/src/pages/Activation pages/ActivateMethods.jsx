@@ -42,7 +42,7 @@ function ActivateMethods() {
             // Start a 5-second timer
         loadingTimerRef.current = setTimeout(() => {
             setShowSlowMessage(true);
-        }, 1);
+        }, 1000);
 
         try {
             const validation = await validateProductKey(

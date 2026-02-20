@@ -18,6 +18,9 @@ function ActivateSpecialist() {
 
     const turnstileRef = useRef(null);
 
+    const [showSlowMessage, setShowSlowMessage] = useState(false);
+    const loadingTimerRef = useRef(null); // To store the timeout ID
+
 
     const handleActivate = async () => {
         if (!productKey.trim()) {
@@ -32,6 +35,14 @@ function ActivateSpecialist() {
 
 
         setIsLoading(true); 
+
+        setShowSlowMessage(false); // Reset message state
+
+
+        loadingTimerRef.current = setTimeout(() => {
+            setShowSlowMessage(true);
+        }, 1000);
+
 
         try {
             const validation = await validateProductKey(
@@ -63,6 +74,8 @@ function ActivateSpecialist() {
         } finally {
             // 4. Stop loading regardless of success or failure
             setIsLoading(false); 
+            clearTimeout(loadingTimerRef.current);
+            setShowSlowMessage(false);
         }
 
 
@@ -144,6 +157,14 @@ function ActivateSpecialist() {
                             'Activate'
                         )}
                     </button>
+
+
+                    {showSlowMessage && (
+                        <p className="text-center text-gray-300 text-sm mt-4 mb-6 animate-pulse">
+                            This process can take up to 1 minute.
+                        </p>
+                    )}
+                    
                     
                     {/* Warning Box */}
                     <div className="border-2 border-[#74be9c] rounded-lg p-4 mb-8 text-center">

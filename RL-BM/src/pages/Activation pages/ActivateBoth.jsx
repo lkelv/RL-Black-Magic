@@ -16,6 +16,9 @@ function ActivateBoth() {
     const turnstileRef = useRef(null); // Reference to reset the widget
     const navigate = useNavigate();
 
+    const [showSlowMessage, setShowSlowMessage] = useState(false);
+    const loadingTimerRef = useRef(null); // To store the timeout ID
+
     const handleActivate = async () => {
         if (!productKeyMethods.trim() || !productKeySpecialist.trim()) {
             setPopup({ type: 'error', message: 'Please enter valid product keys for both subjects' });
@@ -28,6 +31,12 @@ function ActivateBoth() {
         }
 
         setIsLoading(true); // Start loading state
+        setShowSlowMessage(false); // Reset message state
+
+
+        loadingTimerRef.current = setTimeout(() => {
+            setShowSlowMessage(true);
+        }, 1000);
 
         try {
             // Batch validation request
@@ -82,6 +91,8 @@ function ActivateBoth() {
             turnstileRef.current?.reset(); // Reset on network failure
         } finally {
             setIsLoading(false); // End loading state
+            clearTimeout(loadingTimerRef.current);
+            setShowSlowMessage(false);
         }
     };
 
@@ -156,6 +167,14 @@ function ActivateBoth() {
                             'Activate'
                         )}
                     </button>
+
+
+                    {showSlowMessage && (
+                        <p className="text-center text-gray-300 text-sm mt-4 mb-6 animate-pulse">
+                            This process can take up to 1 minute.
+                        </p>
+                    )}
+
 
                     <div className="border-2 border-[#74be9c] rounded-lg p-4 mb-8 text-center">
                         <p className="text-gray-300">
