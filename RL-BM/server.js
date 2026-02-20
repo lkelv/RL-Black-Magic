@@ -28,18 +28,28 @@ app.set('trust proxy', 1);
 // verification
 const verifyTurnstile = async (token) => {
   const SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
-  if (!SECRET_KEY) return true; // Skip if no key configured (dev mode)
+  if (!SECRET_KEY) {
+      console.log("No Turnstile secret key found, skipping verification.");
+      return true; 
+  }
   
   try {
+      // Use URLSearchParams for application/x-www-form-urlencoded
+      const formData = new URLSearchParams();
+      formData.append('secret', SECRET_KEY);
+      formData.append('response', token);
+
       const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-              secret: SECRET_KEY,
-              response: token
-          })
+          body: formData, // Cloudflare prefers form data over JSON
       });
+      
       const data = await response.json();
+      
+      if (!data.success) {
+          console.error("Turnstile failed. Error codes:", data['error-codes']);
+      }
+      
       return data.success;
   } catch (error) {
       console.error("Turnstile verification error:", error);
@@ -50,7 +60,7 @@ const verifyTurnstile = async (token) => {
 
 
 app.use(cors({
-  origin: ["https://rl-black-magic.vercel.app"]
+  origin: ["https://rl-black-magic.vercel.app", "http://localhost:5173"]
 }));
 app.use(express.json());
 
@@ -207,5 +217,5 @@ app.post('/api/use', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
