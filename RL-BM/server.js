@@ -19,6 +19,7 @@ import rateLimit from 'express-rate-limit';
 dotenv.config();
 
 const app = express();
+app.set('trust proxy', 1);
 
 // Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 // see https://expressjs.com/en/guide-behind-proxies.html
@@ -49,14 +50,14 @@ const verifyTurnstile = async (token) => {
 
 
 app.use(cors({
-  origin: ["https://rl-black-magic.vercel.app/"]
+  origin: ["https://rl-black-magic.vercel.app"]
 }));
 app.use(express.json());
 
 // 2. CONFIGURE THE LIMITER
 const validateLimiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
-	max: 10, // Limit each IP to 10 requests per `window` (here, per 15 minutes)
+	max: 100, // Limit each IP to 10 requests per `window` (here, per 15 minutes)
 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
     message: { 
