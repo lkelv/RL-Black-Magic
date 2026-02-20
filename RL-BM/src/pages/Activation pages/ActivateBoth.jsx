@@ -4,13 +4,17 @@ import { validateProductKey, markProductKeyAsUsed } from '../../utils/productKey
 import Popup from '../../components/Popup';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { formatProductKey } from './formatproductkey';
+import { Loader2 } from 'lucide-react'; 
 
 function ActivateBoth() {
     const [productKeyMethods, setProductKeyMethods] = useState('');
     const [productKeySpecialist, setProductKeySpecialist] = useState('');
     const [popup, setPopup] = useState(null);
-    const navigate = useNavigate();
+    
     const [turnstileToken, setTurnstileToken] = useState(null);
+
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
 
     const handleActivate = async () => {
@@ -25,48 +29,61 @@ function ActivateBoth() {
             return;
         }
 
-        // 4. BATCH VALIDATION
-        // We pass an array of items to validate them in one request with one token
-        const results = await validateProductKey(
-            [
-                { key: productKeyMethods, type: 'methods' },
-                { key: productKeySpecialist, type: 'specialist' }
-            ],
-            turnstileToken
-        );
 
-        // Extract results in order
-        const validationMethods = results[0];
-        const validationSpecialist = results[1];
+        setIsLoading(true); 
 
-        if (!validationMethods.valid) {
-            setPopup({ type: 'error', message: `Methods key: ${validationMethods.message}` });
-            return;
-        }
+        try {
+                        // 4. BATCH VALIDATION
+            // We pass an array of items to validate them in one request with one token
+            const results = await validateProductKey(
+                [
+                    { key: productKeyMethods, type: 'methods' },
+                    { key: productKeySpecialist, type: 'specialist' }
+                ],
+                turnstileToken
+            );
 
-        if (!validationSpecialist.valid) {
-            setPopup({ type: 'error', message: `Specialist key: ${validationSpecialist.message}` });
-            return;
-        }
+            // Extract results in order
+            const validationMethods = results[0];
+            const validationSpecialist = results[1];
 
-        // Both keys valid
-        await markProductKeyAsUsed(productKeyMethods, null);
-        await markProductKeyAsUsed(productKeySpecialist, null);
+            if (!validationMethods.valid) {
+                setPopup({ type: 'error', message: `Methods key: ${validationMethods.message}` });
+                return;
+            }
 
-        setPopup({
-            type: 'success',
-            message: 'Both product keys validated! Redirecting to download...'
-        });
+            if (!validationSpecialist.valid) {
+                setPopup({ type: 'error', message: `Specialist key: ${validationSpecialist.message}` });
+                return;
+            }
 
-        setTimeout(() => {
-            navigate('/file-download', {
-                state: {
-                    productType: 'both',
-                    productKeyMethods,
-                    productKeySpecialist
-                }
+            // Both keys valid
+            await markProductKeyAsUsed(productKeyMethods, null);
+            await markProductKeyAsUsed(productKeySpecialist, null);
+
+            setPopup({
+                type: 'success',
+                message: 'Both product keys validated! Redirecting to download...'
             });
-        }, 2000);
+
+            setTimeout(() => {
+                navigate('/file-download', {
+                    state: {
+                        productType: 'both',
+                        productKeyMethods,
+                        productKeySpecialist
+                    }
+                });
+            }, 2000);
+
+        } catch (error) {
+            setPopup({ type: 'error', message: 'Something went wrong. Please try again.' });
+        } finally {
+            // 4. Stop loading regardless of success or failure
+            setIsLoading(false); 
+        }
+
+
     };
 
     return (
@@ -148,10 +165,23 @@ function ActivateBoth() {
                     {/* Activate Button */}
                     <button
                         onClick={handleActivate}
-                        className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6"
+                        // 5. Disable the button while loading
+                        disabled={isLoading} 
+                        className={`w-full font-bold py-4 rounded-lg transition-all text-lg mb-6 flex items-center justify-center gap-2
+                            ${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830]'}`}
                     >
-                        Activate
+                        {/* 6. Show spinner and change text conditionally */}
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="animate-spin" size={20} />
+                                Activating...
+                            </>
+                        ) : (
+                            'Activate'
+                        )}
                     </button>
+
+                    
 
                     {/* Warning Box */}
                     <div className="border-2 border-[#74be9c] rounded-lg p-4 mb-8 text-center">
