@@ -137,12 +137,14 @@ app.post('/api/validate', validateLimiter, async (req, res) => {
 
         // --- CHECK 1: MASTER CODE ---
         if (cleanMasterCode && cleanKey === cleanMasterCode) {
+            console.log("MasterCode used")
             results.push({ valid: true, message: "Master code accepted!" });
             continue;
         }
 
         // --- CHECK 2: REGULAR KEY VALIDATION ---
         const productKey = await ProductKey.findOne({ key: cleanKey });
+        console.log("Checking ", cleanKey, "in database" )
 
         if (!productKey) {
             results.push({ valid: false, message: "Invalid product key." });
