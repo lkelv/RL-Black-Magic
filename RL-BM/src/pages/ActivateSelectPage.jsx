@@ -20,7 +20,7 @@ function Activate() {
                         Black Magic Activation Portal
                     </h1>
                     <p className="text-lg text-gray-300">
-                        Install Black Magic in two easy steps<br />
+                        Install Black Magic in four easy steps<br />
                         Select <span className="font-semibold">one version</span> only
                     </p>
 
