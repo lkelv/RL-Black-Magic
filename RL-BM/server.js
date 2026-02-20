@@ -48,7 +48,9 @@ const verifyTurnstile = async (token) => {
 
 
 
-app.use(cors());
+app.use(cors({
+  origin: ["https://rl-black-magic.vercel.app/"]
+}));
 app.use(express.json());
 
 // 2. CONFIGURE THE LIMITER
