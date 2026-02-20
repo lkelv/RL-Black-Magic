@@ -1,16 +1,22 @@
 // src/pages/ActivateSpecialist.jsx
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateProductKey, markProductKeyAsUsed } from '../../utils/productKeys';
 import Popup from '../../components/Popup';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { formatProductKey } from './formatproductkey';
+import { Loader2 } from 'lucide-react'; 
 
 function ActivateSpecialist() {
     const [productKey, setProductKey] = useState('');
     const [popup, setPopup] = useState(null);
     const navigate = useNavigate();
     const [turnstileToken, setTurnstileToken] = useState(null);
+
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    const turnstileRef = useRef(null);
 
 
     const handleActivate = async () => {
@@ -24,25 +30,42 @@ function ActivateSpecialist() {
             return;
         }
 
-        // 4. PASS TOKEN TO VALIDATION
-        const validation = await validateProductKey(
-            { key: productKey, type: 'specialist' }, 
-            turnstileToken
-        );
 
-        if (validation.valid) {
-            await markProductKeyAsUsed(productKey, null);
-            setPopup({
-                type: 'success',
-                message: 'Product key validated! Redirecting to download...'
-            });
+        setIsLoading(true); 
 
-            setTimeout(() => {
-                navigate('/file-download', { state: { productType: 'specialist', productKey } });
-            }, 2000);
-        } else {
-            setPopup({ type: 'error', message: validation.message });
+        try {
+            const validation = await validateProductKey(
+                { key: productKey, type: 'specialist' }, 
+                turnstileToken
+            );
+    
+            if (validation.valid) {
+                await markProductKeyAsUsed(productKey, null);
+                setPopup({
+                    type: 'success',
+                    message: 'Product key validated! Redirecting to download...'
+                });
+    
+                setTimeout(() => {
+                    navigate('/file-download', { state: { productType: 'specialist', productKey } });
+                }, 2000);
+
+            } else {
+                setPopup({ type: 'error', message: validation.message });
+                setTurnstileToken(null);
+                turnstileRef.current?.reset();
+            }
+
+        } catch (error) {
+            setPopup({ type: 'error', message: 'Something went wrong. Please try again.' });
+            turnstileRef.current?.reset();
+
+        } finally {
+            // 4. Stop loading regardless of success or failure
+            setIsLoading(false); 
         }
+
+
     };
 
     return (
@@ -93,6 +116,7 @@ function ActivateSpecialist() {
                             <Turnstile 
                                 siteKey="0x4AAAAAACfst3SwT11g1g2m" 
                                 onSuccess={setTurnstileToken}
+                                ref={turnstileRef}
                                 options={{ theme: 'auto' }}
                             />
                         </div>
@@ -105,11 +129,22 @@ function ActivateSpecialist() {
                     {/* Activate Button */}
                     <button
                         onClick={handleActivate}
-                        className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6"
+                        // 5. Disable the button while loading
+                        disabled={isLoading} 
+                        className={`w-full font-bold py-4 rounded-lg transition-all text-lg mb-6 flex items-center justify-center gap-2
+                            ${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830]'}`}
                     >
-                        Activate
+                        {/* 6. Show spinner and change text conditionally */}
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="animate-spin" size={20} />
+                                Activating...
+                            </>
+                        ) : (
+                            'Activate'
+                        )}
                     </button>
-
+                    
                     {/* Warning Box */}
                     <div className="border-2 border-[#74be9c] rounded-lg p-4 mb-8 text-center">
                         <p className="text-gray-300">
