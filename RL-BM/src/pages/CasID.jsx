@@ -1,13 +1,10 @@
-/*
-This s the page where they enter the casID and then we return the valid password
-We also update the database in the productKeys.js
-*/
+// Updated CasID.jsx with scroll-to-image functionality
 
-// src/pages/CasID.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Popup from '../components/Popup';
 import { validateCasId, generatePassword, markProductKeyAsUsed } from '../utils/productKeys';
+import CASIDlocation from '../assets/CASIDlocation.png'
 
 function CasID() {
     const [casId, setCasId] = useState('');
@@ -15,44 +12,38 @@ function CasID() {
     const [popup, setPopup] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
-    
-    // REF TO PREVENT DOUBLE TRAP IN STRICT MODE
+
     const trapRef = useRef(false);
+    const imageSectionRef = useRef(null); // NEW REF FOR SCROLL
 
-    const { productType, productKey, productKeyMethods, productKeySpecialist } = location.state || {}; 
+    const { productType, productKey, productKeyMethods, productKeySpecialist } = location.state || {};
 
-    // Redirect if state is missing
     useEffect(() => {
         if (!productType) navigate('/activate', { replace: true });
     }, [productType, navigate]);
 
-    // --- FIX: ROBUST BACK BUTTON TRAP ---
     useEffect(() => {
-        // Only push the trap state IF we haven't done it yet
         if (!trapRef.current) {
             window.history.pushState({ trapped: true }, '', window.location.href);
             trapRef.current = true;
         }
 
         const handlePopState = (e) => {
-            // Prevent the user from leaving immediately
             const userWantsToLeave = window.confirm(
                 'Are you sure you want to go back? This will require you to re-enter your product key.'
             );
 
             if (userWantsToLeave) {
-                // User clicked OK -> Clean up and leave
                 window.removeEventListener('popstate', handlePopState);
                 window.history.back();
             } else {
-                // User clicked Cancel -> Stay on page -> Restore the trap
                 window.history.pushState({ trapped: true }, '', window.location.href);
             }
         };
 
         const handleBeforeUnload = (e) => {
             e.preventDefault();
-            e.returnValue = ''; 
+            e.returnValue = '';
         };
 
         window.addEventListener('popstate', handlePopState);
@@ -63,7 +54,10 @@ function CasID() {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, []);
-    // -------------------------------------
+
+    const scrollToImage = () => {
+        imageSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     const handleVerify = async () => {
         if (!casId.trim() || !confirmCasId.trim()) {
@@ -82,14 +76,13 @@ function CasID() {
             return;
         }
 
-        // Update the database with the CAS ID
         const last6 = casId.slice(-6);
-        
+
         if (productType === 'both') {
-             if (productKeyMethods) await markProductKeyAsUsed(productKeyMethods, last6);
-             if (productKeySpecialist) await markProductKeyAsUsed(productKeySpecialist, last6);
+            if (productKeyMethods) await markProductKeyAsUsed(productKeyMethods, last6);
+            if (productKeySpecialist) await markProductKeyAsUsed(productKeySpecialist, last6);
         } else {
-             if (productKey) await markProductKeyAsUsed(productKey, last6);
+            if (productKey) await markProductKeyAsUsed(productKey, last6);
         }
 
         const productChar =
@@ -117,6 +110,7 @@ function CasID() {
                     <h1 className="text-3xl md:text-4xl font-bold mb-3">
                         CAS ID Verification
                     </h1>
+
                     <p className="text-lg text-gray-300 mb-6">
                         Verify your CAS ID to get an activation code
                     </p>
@@ -156,14 +150,12 @@ function CasID() {
 
                         <p className="text-sm text-gray-300 text-center">
                             Enter the unique identifier found in your CAS calculator. Not sure how?{' '}
-                            <a
-                                href="/find-cas-id"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="underline text-[#74be9c]"
+                            <button
+                                onClick={scrollToImage}
+                                className="underline text-[#74be9c] bg-transparent border-none cursor-pointer"
                             >
                                 Click here!
-                            </a>
+                            </button>
                         </p>
                     </div>
 
@@ -173,30 +165,27 @@ function CasID() {
                     >
                         Verify CAS ID
                     </button>
+                </div>
 
-                    <div className="border-2 border-[#74be9c] rounded-lg p-4 mb-8 text-center">
-                        <p className="text-gray-300">
-                            An activation code will be generated once the CAS ID is verified
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="flex items-center gap-3">
-                            <span className="text-[#74be9c] text-xl">🔎</span>
-                            <span className="text-white">Instant verification</span>
-                        </div>
-                        <div className="flex items-center gap-3 md:ml-8">
-                            <span className="text-[#74be9c] text-xl">✓</span>
-                            <span className="text-white">Premium Content</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <span className="text-[#74be9c] text-xl">💻</span>
-                            <span className="text-white">Full Black Magic access</span>
-                        </div>
-                        <div className="flex items-center gap-3 md:ml-8">
-                            <span className="text-[#74be9c] text-xl">👥</span>
-                            <span className="text-white">Guaranteed support</span>
-                        </div>
+                {/* IMAGE SECTION */}
+                <div
+                    ref={imageSectionRef}
+                    className="bg-[#2d3642] rounded-lg p-8 mb-[32px] mt-10"
+                >
+                    <h2 className="text-2xl font-semibold mb-4">Find your CAS ID</h2>
+                    <p className="text-gray-300 leading-relaxed">
+                        Locate your CAS ID within the Black Magic Program installed on your CAS calculator.
+                    </p>
+                    <p className="text-gray-300 leading-relaxed">
+                        Need more help?
+                        <a href="/installation-guide" target="_blank" rel="noopener noreferrer" className="underline text-[#74be9c]" > Click here! </a>
+                    </p>
+                    <div className="mt-4">
+                        <img
+                            src={CASIDlocation}
+                            alt="CAS ID Location"
+                            className="rounded-lg shadow-lg border border-[#3a4552]"
+                        />
                     </div>
                 </div>
             </div>
