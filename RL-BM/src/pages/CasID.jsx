@@ -118,7 +118,7 @@ function CasID() {
 
                 <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12">
                     <h2 className="text-2xl md:text-3xl font-bold mb-8 text-[#f4a52e] text-center">
-                        3. Enter the <u>last 6 digits</u> of the CAS ID
+                        3. Enter the <u>last 6 characters</u> of the CAS ID
                     </h2>
 
                     <div className="mb-6 space-y-8">
@@ -132,23 +132,28 @@ function CasID() {
                                 onChange={(e) => setCasId(e.target.value)}
                                 placeholder="Enter CAS ID"
                                 className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
+                                maxlength="6"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-white font-semibold mb-4">
-                                Confirm your CAS ID
+                            <label className="block text-white font-semibold mb-2">
+                                Confirm your CAS ID (<u>retype</u> the same 6 digits)
                             </label>
                             <input
                                 type="text"
                                 value={confirmCasId}
                                 onChange={(e) => setConfirmCasId(e.target.value)}
+                                onPaste={(e) => e.preventDefault()} 
                                 placeholder="Re-enter CAS ID"
                                 className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
+                                maxlength="6"
                             />
                         </div>
 
                         <p className="text-sm text-gray-300 text-center">
+                            <p className="mb-3 text-[#F04D4D]">WARNING: Inputs are case sensitive</p>
+
                             Enter the unique identifier found in your CAS calculator. Not sure how?{' '}
                             <button
                                 onClick={scrollToImage}

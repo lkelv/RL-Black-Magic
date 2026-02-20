@@ -153,6 +153,7 @@ function ActivateMethods() {
                     {showSlowMessage && (
                         <p className="text-center text-gray-300 text-sm mt-4 mb-6 animate-pulse">
                             This process can take up to 1 minute.
+                            <p><b>Do <u>not</u> reload the page</b></p>
                         </p>
                     )}
                     
