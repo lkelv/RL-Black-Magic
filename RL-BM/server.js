@@ -60,7 +60,7 @@ const verifyTurnstile = async (token) => {
 
 
 app.use(cors({
-  origin: ["https://rl-black-magic.vercel.app", "http://localhost:5173"]
+  origin: ["https://rl-black-magic.vercel.app", "http://localhost:5173", "https://rlblackmagic.com/"]
 }));
 app.use(express.json());
 
