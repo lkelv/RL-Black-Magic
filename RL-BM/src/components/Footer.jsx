@@ -8,7 +8,7 @@ function Footer() {
                 <div>
                     <h3 className="text-xl font-bold mb-4 text-white">Our Services</h3>
                     <ul className="space-y-2">
-                        <li>Programs K-12 Academic Coaching</li>
+                        <li><a href="/mentors" className="hover:text-white transition-colors">Programs K-12 Academic Coaching</a></li>
                         <li>CAS Calculator Booklet-Exclusive in Australia</li>
                         <li>Medpro-Australian Medical School Application</li>
                         <li>Overseas Study-US/UK/EU Universities Application</li>
