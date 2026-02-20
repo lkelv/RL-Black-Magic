@@ -1,5 +1,5 @@
 // src/pages/ActivateSpecialist.jsx
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateProductKey, markProductKeyAsUsed } from '../../utils/productKeys';
 import Popup from '../../components/Popup';
@@ -15,6 +15,8 @@ function ActivateSpecialist() {
 
 
     const [isLoading, setIsLoading] = useState(false);
+
+    const turnstileRef = useRef(null);
 
 
     const handleActivate = async () => {
@@ -47,12 +49,17 @@ function ActivateSpecialist() {
                 setTimeout(() => {
                     navigate('/file-download', { state: { productType: 'specialist', productKey } });
                 }, 2000);
+
             } else {
                 setPopup({ type: 'error', message: validation.message });
+                setTurnstileToken(null);
+                turnstileRef.current?.reset();
             }
 
         } catch (error) {
             setPopup({ type: 'error', message: 'Something went wrong. Please try again.' });
+            turnstileRef.current?.reset();
+
         } finally {
             // 4. Stop loading regardless of success or failure
             setIsLoading(false); 
@@ -109,6 +116,7 @@ function ActivateSpecialist() {
                             <Turnstile 
                                 siteKey="0x4AAAAAACfst3SwT11g1g2m" 
                                 onSuccess={setTurnstileToken}
+                                ref={turnstileRef}
                                 options={{ theme: 'auto' }}
                             />
                         </div>

@@ -1,5 +1,5 @@
 // src/pages/ActivateMethods.jsx
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateProductKey, markProductKeyAsUsed } from '../../utils/productKeys';
 import Popup from '../../components/Popup';
@@ -16,6 +16,7 @@ function ActivateMethods() {
 
     const [isLoading, setIsLoading] = useState(false);
 
+    const turnstileRef = useRef(null);
 
 
     const handleActivate = async () => {
@@ -47,9 +48,13 @@ function ActivateMethods() {
                 }, 2000);
             } else {
                 setPopup({ type: 'error', message: validation.message });
+                setTurnstileToken(null); // Clear the spent token
+                turnstileRef.current?.reset(); // Force widget to get a new token
             }
+
         } catch (error) {
             setPopup({ type: 'error', message: 'Something went wrong. Please try again.' });
+            turnstileRef.current?.reset(); // Force widget to get a new token
         } finally {
             // 4. Stop loading regardless of success or failure
             setIsLoading(false); 
@@ -101,6 +106,7 @@ function ActivateMethods() {
                         {/* Cloudflare verification */}
                         <div className="mb-0 mt-3 flex justify-center ">
                             <Turnstile 
+                                ref={turnstileRef}
                                 siteKey="0x4AAAAAACfst3SwT11g1g2m" 
                                 onSuccess={setTurnstileToken}
                                 options={{ theme: 'auto' }}
