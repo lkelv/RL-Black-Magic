@@ -99,7 +99,7 @@ function Home() {
                 }`}
             >
                 <div className="max-w-5xl w-full flex flex-col items-center">
-                    <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12 w-full hover:scale-105 transition-transform duration-300 hover:shadow-2xl">
+                    <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12 w-full">
                     <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#f4a52e] text-center">
                         Supercharge Your CAS. Maximise Your Marks.
                     </h2>
@@ -172,7 +172,7 @@ function Home() {
             >
                 <div className="max-w-6xl mx-auto">
                     <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center text-white">Subject Coverage</h2>
-                    <div className="bg-[#2d3642] rounded-2xl p-8 md:p-12 hover:scale-105 transition-transform duration-300 hover:shadow-2xl">
+                    <div className="bg-[#2d3642] rounded-2xl p-8 md:p-12">
                         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
                             <div className="text-white space-y-8 flex flex-col justify-center">
                                 <p className="font-semibold text-lg">This tool is optimised for:</p>

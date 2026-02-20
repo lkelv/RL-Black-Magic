@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+html, body {
+    background-color: #202830; /* Matches your home page background */
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+  
+/* Ensure the root div also fills the space */
+#root {
+min-height: 100vh;
+background-color: #202830;
+}
+
 /** {*/
 /*  margin: 0;*/
 /*  padding: 0;*/
