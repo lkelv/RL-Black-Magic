@@ -118,7 +118,7 @@ function InstallationComplete() {
                         </li>
                         <li className="flex gap-3">
                             <span className="text-[#74be9c] font-bold">3.</span>
-                            <span>Start using all premium features!</span>
+                            <span className="text-[#F04D4D]">Press <b>ctrl+s</b> to save password on CAS</span>
                         </li>
                     </ol>
                 </div>
