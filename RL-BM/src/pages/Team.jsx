@@ -21,13 +21,13 @@ const teamMembers = [
     {
         name: 'Yeeheng Lee',
         role: 'Software Engineer',
-        description: 'Lead architect for web and activation systems.',
+        description: 'Web and activation systems, specialising in UX and front-end development.',
         image: yeehengImg,
     },
     {
         name: 'Kelvin Liang',
         role: 'Software Engineer',
-        description: 'UX specialist and front-end developer. Lead architect for web and activation systems.',
+        description: 'Skilled architect for web and activation systems.',
         image: kelvinImg,
     },
     {
