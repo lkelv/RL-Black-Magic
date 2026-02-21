@@ -1,6 +1,7 @@
 // src/App.jsx
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route , useLocation} from 'react-router-dom';
+import { useEffect } from 'react';
 import { Analytics } from "@vercel/analytics/react";
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -16,11 +17,21 @@ import InstallationGuide from './pages/helper pages/InstallationGuide.jsx';
 import FindCasID from './pages/helper pages/FindCasID';
 import ContactUs from './pages/helper pages/ContactUs';
 import TermsOfService from './pages/TermsOfService.jsx';
+import Team from './pages/Team.jsx'
 import './App.css';
+
+function ScrollToTop() {
+    const { pathname } = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+    return null;
+}
 
 function App() {
     return (
         <Router>
+            <ScrollToTop />
             <div className="min-h-screen flex flex-col">
                 <Header />
                 <main className="flex-grow">
@@ -37,6 +48,7 @@ function App() {
                         <Route path="/find-cas-id" element={<FindCasID />} />
                         <Route path="/contact-us" element={<ContactUs />} />
                         <Route path="/terms-of-service" element={<TermsOfService/>} />
+                        <Route path="/team" element={<Team/>} />
                     </Routes>
                 </main>
                 <Footer />

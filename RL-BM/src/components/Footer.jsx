@@ -91,8 +91,8 @@ function Footer() {
                         </h3>
                         <ul className="space-y-4">
                             <li>
-                                <Link to="/mentors" className="hover:text-[#74be9c] flex items-center gap-2 transition-all hover:translate-x-1">
-                                    Meet Our Mentors
+                                <Link to="/team" className="hover:text-[#74be9c] flex items-center gap-2 transition-all hover:translate-x-1">
+                                    Meet Our Team
                                 </Link>
                             </li>
                             <li>
