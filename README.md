@@ -41,3 +41,13 @@ A local host link will appear from running the latter
 2. Enter `node src/utils/not-needed-to-run/exportMasterLogs.js` into terminal
 
 
+
+## Post production
+
+### Changing domain requires to change
+* In server.js, change `app.use` origin and add the domain there
+* Clouldflare requires to add domain for verification
+* Vercel add domain
+
+
+
