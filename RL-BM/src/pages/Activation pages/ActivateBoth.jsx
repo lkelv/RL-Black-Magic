@@ -155,7 +155,7 @@ function ActivateBoth() {
                     <button
                         onClick={handleActivate}
                         disabled={isLoading} // Prevent double-clicks during delay
-                        className={`w-full font-bold py-4 rounded-lg transition-all text-lg mb-6 flex items-center justify-center gap-2
+                        className={`w-full font-bold py-4 rounded-lg transition-all text-lg mb-6 flex items-center justify-center gap-2 cursor-pointer
                             ${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830]'}`}
                     >
                         {isLoading ? (

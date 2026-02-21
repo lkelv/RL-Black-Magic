@@ -28,7 +28,7 @@ function InstallationGuide() {
                     <iframe
                         className="absolute inset-0 h-full w-full rounded-lg"
                         src="https://www.youtube.com/embed/dQw4w9WgXcQ?list=RDdQw4w9WgXcQ"  // use /embed/<ID>
-                        title="Black Magic Installation Guide"
+                        title="BlackMagic Installation Guide"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowFullScreen
@@ -38,10 +38,10 @@ function InstallationGuide() {
 
                 {/* Placeholder Text */}
                 <div className="bg-[#2d3642] rounded-lg p-8 mb-[32px]">
-                    <h2 className="text-2xl font-semibold mb-4">How to Install Black Magic</h2>
+                    <h2 className="text-2xl font-semibold mb-4">How to Install BlackMagic</h2>
                     <p className="text-gray-300 leading-relaxed">
                         Here you will find a step-by-step guide on how to
-                        install and activate the Black Magic program on your CAS calculator.
+                        install and activate the BlackMagic program on your CAS calculator.
                         Detailed instructions, screenshots, and troubleshooting tips are provided below.
                     </p>
                 </div>
@@ -131,7 +131,7 @@ function InstallationGuide() {
                         >
                             nspireconnect.ti.com/nsc/file-transfer
                         </a>
-                        {' '}to transfer the Black Magic Program file. Please click on "Connect
+                        {' '}to transfer the BlackMagic Program file. Please click on "Connect
                         to Calculator".
                     </p>
                     <div className="mt-4">
@@ -228,7 +228,7 @@ function InstallationGuide() {
                 <div className="bg-[#2d3642] rounded-lg p-8 mb-[32px]">
                     <h2 className="text-2xl font-semibold mb-4">Step 7</h2>
                     <p className="text-gray-300 leading-relaxed">
-                        Now you have finished setting up the Black Magic Program!
+                        Now you have finished setting up the BlackMagic Program!
                         Please ensure you save your password, to ensure you don't get
                         locked out of the program.
                     </p>

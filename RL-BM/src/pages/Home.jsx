@@ -11,7 +11,7 @@ function Home() {
 
     const testimonials = [
         "I couldn't believe how much faster I got at exams. What used to take 10 steps on the calculator was done in 2! I improved my exam score by 14 marks.",
-        "Black Magic saved me so much time during my Methods exam. The shortcuts are incredible!",
+        "BlackMagic saved me so much time during my Methods exam. The shortcuts are incredible!",
         "This program completely changed how I approach calculator work. Highly recommend!"
     ];
 
@@ -66,10 +66,10 @@ function Home() {
                         display: 'inline-block',
                         animationDuration: '8s'
                     }}>
-                    RL BLACK MAGIC PROGRAM
+                    RL BLACKMAGIC PROGRAM
                     </h1>
                     <p className="text-xl mb-12 text-white animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                    Turn 5-minute questions into 1-minute solutions with RL Black Magic.
+                    Turn 5-minute questions into 1-minute solutions with RL BlackMagic.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 animate-fade-in" style={{ animationDelay: '0.4s' }}>
                     <a
@@ -104,7 +104,7 @@ function Home() {
                         Supercharge Your CAS. Maximise Your Marks.
                     </h2>
                     <p className="text-white text-base md:text-lg leading-relaxed text-center">
-                        The RL Black Magic Program is a trusted upgrade for the CAS calculator that helps students in Methods and
+                        The RL BlackMagic Program is a trusted upgrade for the CAS calculator that helps students in Methods and
                         Specialist Maths. Designed by expert tutors and used by high-achieving students, it cuts down time spent on
                         repetitive tasks so your child can focus on solving problems, not fighting the calculator.
                     </p>
@@ -113,7 +113,7 @@ function Home() {
             </section>
                     
 
-            {/* Why Black Magic Section */}
+            {/* Why BlackMagic Section */}
             <section
                 ref={(el) => (sectionRefs.current[1] = el)}
                 data-section="why"
@@ -122,7 +122,7 @@ function Home() {
                 }`}
             >
                 <div className="max-w-6xl mx-auto">
-                    <h2 className="text-4xl md:text-5xl font-bold mb-16 text-center text-white">Why Black Magic?</h2>
+                    <h2 className="text-4xl md:text-5xl font-bold mb-16 text-center text-white">Why BlackMagic?</h2>
                     <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
                         <div className="flex justify-center items-center overflow-hidden rounded-xl">
                                 <img
@@ -135,7 +135,7 @@ function Home() {
                             <p className="text-base leading-relaxed">
                                 In high-stakes timed exams like VCE Methods and Specialist Maths, every
                                 second counts. Many students struggle because they spend too much time
-                                navigating their calculator. The Black Magic Program solves this by bringing
+                                navigating their calculator. The BlackMagic Program solves this by bringing
                                 together tools, shortcuts, and automated processes that allow students to:
                             </p>
                             <ul className="space-y-4">

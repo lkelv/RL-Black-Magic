@@ -166,7 +166,7 @@ function CasID() {
 
                     <button
                         onClick={handleVerify}
-                        className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6"
+                        className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6 cursor-pointer"
                     >
                         Verify CAS ID
                     </button>
@@ -179,7 +179,7 @@ function CasID() {
                 >
                     <h2 className="text-2xl font-semibold mb-4">Find your CAS ID</h2>
                     <p className="text-gray-300 leading-relaxed">
-                        Locate your CAS ID within the Black Magic Program installed on your CAS calculator.
+                        Locate your CAS ID within the BlackMagic Program installed on your CAS calculator.
                     </p>
                     <p className="text-gray-300 leading-relaxed">
                         Need more help?

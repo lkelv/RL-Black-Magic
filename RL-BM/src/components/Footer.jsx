@@ -117,7 +117,7 @@ function Footer() {
                     </div>
                     <div className="flex gap-6">
                         <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-                        <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+                        <a href="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</a>
                     </div>
                 </div>
             </div>

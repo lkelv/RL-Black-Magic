@@ -31,7 +31,7 @@ const Header = () => {
                 />
               </div>
               <span className="text-white font-bold text-xl tracking-tight">
-                Black <span className="text-[#74be9c]">Magic</span>
+                Black<span className="text-[#74be9c]">Magic</span>
               </span>
             </Link>
           </div>

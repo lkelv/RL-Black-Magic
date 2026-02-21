@@ -84,14 +84,14 @@ function InstallationComplete() {
                     Your Activation Password
                 </h2>
                 <p className="text-sm text-gray-300 mb-6">
-                    Save this password – you'll need it to access the Black Magic program if it logs you out.
+                    Save this password – you'll need it to access the BlackMagic program if it logs you out.
                 </p>
 
                 <div className="flex items-center justify-between bg-white rounded-lg px-4 py-3 mb-4">
                     <span className="text-gray-800 text-lg font-mono select-all">{password}</span>
                     <button
                         onClick={handleCopy}
-                        className="text-[#2d5047] hover:text-[#74be9c] transition"
+                        className="text-[#2d5047] hover:text-[#74be9c] transition cursor-pointer"
                         title="Copy password"
                     >
                         <Copy className="w-6 h-6" />
@@ -110,7 +110,7 @@ function InstallationComplete() {
                     <ol className="space-y-3 text-gray-300">
                         <li className="flex gap-3">
                             <span className="text-[#74be9c] font-bold">1.</span>
-                            <span>Open the Black Magic program on your CAS calculator</span>
+                            <span>Open the BlackMagic program on your CAS calculator</span>
                         </li>
                         <li className="flex gap-3">
                             <span className="text-[#74be9c] font-bold">2.</span>

@@ -134,12 +134,13 @@ function ActivateMethods() {
                     {/* Activate Button */}
                     <button
                         onClick={handleActivate}
-                        // 5. Disable the button while loading
-                        disabled={isLoading} 
+                        disabled={isLoading}
                         className={`w-full font-bold py-4 rounded-lg transition-all text-lg mb-6 flex items-center justify-center gap-2
-                            ${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830]'}`}
+        ${isLoading
+                            ? 'bg-gray-500 cursor-not-allowed opacity-70'
+                            : 'bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] cursor-pointer'
+                        }`}
                     >
-                        {/* 6. Show spinner and change text conditionally */}
                         {isLoading ? (
                             <>
                                 <Loader2 className="animate-spin" size={20} />

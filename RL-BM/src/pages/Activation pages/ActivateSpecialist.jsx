@@ -144,7 +144,7 @@ function ActivateSpecialist() {
                         onClick={handleActivate}
                         // 5. Disable the button while loading
                         disabled={isLoading} 
-                        className={`w-full font-bold py-4 rounded-lg transition-all text-lg mb-6 flex items-center justify-center gap-2
+                        className={`w-full font-bold py-4 rounded-lg transition-all text-lg mb-6 flex items-center justify-center gap-2 cursor-pointer
                             ${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830]'}`}
                     >
                         {/* 6. Show spinner and change text conditionally */}
