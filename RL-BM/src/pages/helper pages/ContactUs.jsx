@@ -1,5 +1,6 @@
 // src/pages/ContactUs.jsx
 import React from 'react';
+import Wecom_QR_code from '../../assets/WecomQRcode.jpeg';
 
 function ContactUs() {
     return (
@@ -12,6 +13,12 @@ function ContactUs() {
                         <p><strong>Phone:</strong> (03) 99732966</p>
                         <p><strong>Box Hill Campus:</strong> Level 2, Unit 12, 532 Station Street, Box Hill VIC 3128</p>
                         <p><strong>City Campus:</strong> Level 12 Suite 1, 190 Queen St, Melbourne VIC 3000</p>
+                        <p><strong>Add our Wechat:</strong></p>
+                        <img
+                            src={Wecom_QR_code}
+                            alt="QR code for wechat contact"
+                            className="rounded-lg shadow-lg border border-[#3a4552] w-48 h-48 object-cover"
+                        />
                     </div>
                 </div>
             </div>

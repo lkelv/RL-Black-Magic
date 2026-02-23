@@ -42,7 +42,7 @@ function Footer() {
                     {/* Contact Section */}
                     <div>
                         <h3 className="text-white text-lg font-bold mb-6 flex items-center gap-2">
-                            Contact Us
+                            <Link to="/contact-us" className="hover:text-[#74be9c]">Contact Us</Link>
                             <div className="h-1 w-8 bg-[#74be9c] rounded-full"></div>
                         </h3>
                         <ul className="space-y-5">
@@ -58,8 +58,8 @@ function Footer() {
                                 <div className="bg-gray-800 p-2 rounded-lg group-hover:bg-[#74be9c] transition-colors">
                                     <Phone className="group-hover:text-[#202830]" size={18} />
                                 </div>
-                                <a href="tel:0399732966" className="hover:text-[#74be9c] transition-colors">
-                                    (03) 9973 2966
+                                <a href="tel:0426108868" className="hover:text-[#74be9c] transition-colors">
+                                    +61 (4) 26108868
                                 </a>
                             </li>
                             <li className="flex items-start gap-4 group">
