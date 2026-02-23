@@ -16,9 +16,9 @@ import InstallationComplete from "./pages/InstallationComplete.jsx";
 import InstallationGuide from './pages/helper pages/InstallationGuide.jsx';
 import FindCasID from './pages/helper pages/FindCasID';
 import ContactUs from './pages/helper pages/ContactUs';
-import TermsOfService from './pages/TermsOfService.jsx';
+import TermsOfService from './pages/helper pages/TermsOfService.jsx';
 import Team from './pages/Team.jsx';
-import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
+import PrivacyPolicy from './pages/helper pages/PrivacyPolicy.jsx';
 import './App.css';
 
 function ScrollToTop() {

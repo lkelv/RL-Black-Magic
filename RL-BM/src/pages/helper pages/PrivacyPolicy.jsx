@@ -256,16 +256,15 @@ function PrivacyPolicy() {
                             </div>
 
                             {/* Section 12 / Contact */}
-                            <div id="contact" className="mt-16 p-8 bg-[#74be9c]/10 border border-[#74be9c]/30 rounded-xl text-center scroll-mt-8">
-                                <h2 className="text-2xl font-bold text-white mb-4">12. Contact Us</h2>
-                                <p className="mb-4 text-sm text-gray-300">
-                                    If you have questions about this Privacy Policy or your personal information, please contact:
-                                </p>
-                                <p className="font-bold text-white text-lg mb-2">RL Education</p>
-                                <a href="mailto:blackmagic@rleducation.com.au" className="text-[#74be9c] font-bold hover:underline flex items-center justify-center gap-2">
-                                    <Mail size={18} />
-                                    blackmagic@rleducation.com.au
+                            <div className="mt-16 p-8 bg-[#74be9c]/10 border border-[#74be9c]/30 rounded-xl text-center">
+                                <h3 className="text-white font-bold mb-2">Have questions about our privacy practices?</h3>
+                                <p className="mb-4 text-sm">Our team is here to help you understand how your information is collected, used, and protected.</p>
+                                <a className="">
+                                <Link to="/contact-us"
+                                className="hover:text-[#74be9c] text-[#74be9c] font-bold hover:underline">
+                                    Contact Us →</Link>
                                 </a>
+                                
                             </div>
 
                         </section>
