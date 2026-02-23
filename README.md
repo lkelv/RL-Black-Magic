@@ -4,7 +4,7 @@
 ## To run code
 
 ### Step 1
-Pull the code, then run `npm install` in the terminal
+Pull the code. First run `cd RL-BM`, then run `npm install` in the terminal
 
 ### Step 2
 Create a file called `.env` in the root directory (RL-BM folder), varibles in the ENV files needed are 
@@ -39,5 +39,15 @@ A local host link will appear from running the latter
 ### Removing master code uses from monogodb
 1. Make sure in right directory (RL-BM)
 2. Enter `node src/utils/not-needed-to-run/exportMasterLogs.js` into terminal
+
+
+
+## Post production
+
+### Changing domain requires to change
+* In server.js, change `app.use` origin and add the domain there
+* Clouldflare requires to add domain for verification
+* Vercel add domain
+
 
 

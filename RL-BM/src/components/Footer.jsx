@@ -92,10 +92,8 @@ function Footer() {
                         </h3>
                         <ul className="space-y-4">
                             <li>
-                                <Link to="https://rleducation.com.au/" 
-                                    target="_blank"
-                                    className="hover:text-[#74be9c] flex items-center gap-2 transition-all hover:translate-x-1">
-                                    Meet Our Mentors
+                                <Link to="/team" className="hover:text-[#74be9c] flex items-center gap-2 transition-all hover:translate-x-1">
+                                    Meet Our Team
                                 </Link>
                             </li>
                             <li>
@@ -119,7 +117,7 @@ function Footer() {
                         <span>© {currentYear} RL Education. All rights reserved.</span>
                     </div>
                     <div className="flex gap-6">
-                        <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+                        <a href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a>
                         <a href="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</a>
                     </div>
                 </div>
