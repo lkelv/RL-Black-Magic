@@ -9,9 +9,11 @@ function Home() {
     const sectionRefs = useRef([]);
 
     const testimonials = [
-        "I couldn't believe how much faster I got at exams. What used to take 10 steps on the calculator was done in 2! I improved my exam score by 14 marks.",
-        "BlackMagic saved me so much time during my Methods exam. The shortcuts are incredible!",
-        "This program completely changed how I approach calculator work. Highly recommend!"
+        "I didn’t even realise how slow I was on the calculator until I started using this. In trials I kept running out of time. In the actual exam I finished and had time to check. That never happens for me.",
+        "Lowkey wish I had this earlier in the year. Would’ve saved me so much stress.",
+        "My CAS used to feel clunky. Now I feel like I know what I’m doing.",
+        "It sounds small but saving 20 to 30 seconds on heaps of questions adds up."
+        
     ];
 
     // Auto-rotate testimonials every 5 seconds

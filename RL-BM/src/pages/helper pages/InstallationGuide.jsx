@@ -244,7 +244,11 @@ function InstallationGuide() {
                     <h2 className="text-2xl font-semibold mb-4">Step 8</h2>
                     <p className="text-gray-300 leading-relaxed">
                         Put the code into the Enter Password section of the CAS Calculator
-                        and click ctrl+s on your CAS to save the code into the program.
+                        and click <b className="text-[#F04D4D]">ctrl+s</b> on your CAS to save the
+                        code into the program.
+                    </p>
+                    <p className="mt-4 text-gray-300 leading-relaxed">
+                        Start using the program!
                     </p>
                 </div>
             </div>

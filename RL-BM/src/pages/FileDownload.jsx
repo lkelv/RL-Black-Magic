@@ -5,17 +5,17 @@ const productConfig = {
     methods: {
         title: 'Methods',
         fileName: 'rlBM26.tns',
-        filePath: '/BMmm34.tns'
+        filePath: '/rlBM26.tns'
     },
     specialist: {
         title: 'Specialist',
         fileName: 'rlBM26.tns',
-        filePath: '/rlBMsm34.tns'
+        filePath: '/rlBM26.tns'
     },
     both: {
         title: 'Methods & Specialist',
         fileName: 'rlBM26.tns',
-        filePath: '/rlBMmmsm34.tns'
+        filePath: '/rlBM26.tns'
     }
 };
 
