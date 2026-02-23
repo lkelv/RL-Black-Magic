@@ -29,6 +29,7 @@ function Footer() {
                                 <li key={service.name}>
                                     <Link
                                         to="https://rleducation.com.au/"
+                                        target="_blank"
                                         className="hover:text-[#74be9c] flex items-start gap-3 transition-all hover:translate-x-1 group text-sm"
                                     >
                                         <ArrowRight className="text-[#74be9c] mt-0.5 flex-shrink-0 transition-colors" size={14} />
@@ -91,12 +92,14 @@ function Footer() {
                         </h3>
                         <ul className="space-y-4">
                             <li>
-                                <Link to="https://rleducation.com.au/" className="hover:text-[#74be9c] flex items-center gap-2 transition-all hover:translate-x-1">
+                                <Link to="https://rleducation.com.au/" 
+                                    target="_blank"
+                                    className="hover:text-[#74be9c] flex items-center gap-2 transition-all hover:translate-x-1">
                                     Meet Our Mentors
                                 </Link>
                             </li>
                             <li>
-                                <Link to="https://rleducation.com.au/" className="hover:text-[#74be9c] flex items-center gap-2 transition-all hover:translate-x-1">
+                                <Link to="https://rleducation.com.au/" target="_blank" className="hover:text-[#74be9c] flex items-center gap-2 transition-all hover:translate-x-1">
                                     Student Results
                                 </Link>
                             </li>

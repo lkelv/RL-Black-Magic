@@ -119,11 +119,14 @@ function TermsOfService() {
                             </div>
 
                             <div className="mt-16 p-8 bg-[#74be9c]/10 border border-[#74be9c]/30 rounded-xl text-center">
-                                <h3 className="text-white font-bold mb-2">Have questions about our terms?</h3>
-                                <p className="mb-4 text-sm">Our team is here to help you understand your license.</p>
-                                <a href="mailto:blackmagic@rleducation.com.au" className="text-[#74be9c] font-bold hover:underline">
-                                    Contact Support →
+                                <h3 className="text-white font-bold mb-2">Have questions about our privacy practices?</h3>
+                                <p className="mb-4 text-sm">Our team is here to help you understand how your information is collected, used, and protected.</p>
+                                <a className="">
+                                <Link to="/contact-us"
+                                className="hover:text-[#74be9c] text-[#74be9c] font-bold hover:underline">
+                                    Contact Us →</Link>
                                 </a>
+                                
                             </div>
                         </section>
                     </main>
