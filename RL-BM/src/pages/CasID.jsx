@@ -1,10 +1,11 @@
-// Updated CasID.jsx with scroll-to-image functionality
+// Updated CasID.jsx with scroll-to-image and loading functionality
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Popup from '../components/Popup';
 import { validateCasId, generatePassword, markProductKeyAsUsed } from '../utils/productKeys';
-import CASIDlocation from '../assets/CASIDlocation.png'
+import CASIDlocation from '../assets/CASIDlocation.png';
+import { Loader2 } from 'lucide-react'; // Added import for the loading spinner
 
 function CasID() {
     const [casId, setCasId] = useState('');
@@ -13,8 +14,13 @@ function CasID() {
     const navigate = useNavigate();
     const location = useLocation();
 
+    // NEW STATES FOR LOADING EFFECT
+    const [isLoading, setIsLoading] = useState(false);
+    const [showSlowMessage, setShowSlowMessage] = useState(false);
+    const loadingTimerRef = useRef(null);
+
     const trapRef = useRef(false);
-    const imageSectionRef = useRef(null); // NEW REF FOR SCROLL
+    const imageSectionRef = useRef(null); 
 
     const { productType, productKey, productKeyMethods, productKeySpecialist } = location.state || {};
 
@@ -52,6 +58,7 @@ function CasID() {
         return () => {
             window.removeEventListener('popstate', handlePopState);
             window.removeEventListener('beforeunload', handleBeforeUnload);
+            clearTimeout(loadingTimerRef.current); // Cleanup timer on unmount
         };
     }, []);
 
@@ -76,31 +83,52 @@ function CasID() {
             return;
         }
 
-        const last6 = casId.slice(-6);
+        // Start loading
+        setIsLoading(true);
+        setShowSlowMessage(false);
 
-        if (productType === 'both') {
-            if (productKeyMethods) await markProductKeyAsUsed(productKeyMethods, last6);
-            if (productKeySpecialist) await markProductKeyAsUsed(productKeySpecialist, last6);
-        } else {
-            if (productKey) await markProductKeyAsUsed(productKey, last6);
-        }
-
-        const productChar =
-            productType === "methods" ? "M" :
-                productType === "specialist" ? "S" :
-                    productType === "both" ? "B" : "M";
-
-        const password = generatePassword(last6, productChar);
-
-        setTimeout(() => {
-            navigate('/installation-complete', {
-                state: {
-                    password,
-                    casId,
-                    productType,
-                }
-            });
+        // Start a 1-second timer
+        loadingTimerRef.current = setTimeout(() => {
+            setShowSlowMessage(true);
         }, 1000);
+
+        try {
+            const last6 = casId.slice(-6);
+
+            if (productType === 'both') {
+                if (productKeyMethods) await markProductKeyAsUsed(productKeyMethods, last6);
+                if (productKeySpecialist) await markProductKeyAsUsed(productKeySpecialist, last6);
+            } else {
+                if (productKey) await markProductKeyAsUsed(productKey, last6);
+            }
+
+            const productChar =
+                productType === "methods" ? "M" :
+                    productType === "specialist" ? "S" :
+                        productType === "both" ? "B" : "M";
+
+            const password = generatePassword(last6, productChar);
+
+            setTimeout(() => {
+                navigate('/installation-complete', {
+                    state: {
+                        password,
+                        casId,
+                        productType,
+                    }
+                });
+            }, 1000);
+
+        } catch (error) {
+            setPopup({ type: 'error', message: 'Something went wrong. Please try again.' });
+        } finally {
+            // Stop loading regardless of success or failure
+            setIsLoading(false);
+
+            // Reset timer
+            clearTimeout(loadingTimerRef.current);
+            setShowSlowMessage(false);
+        }
     };
 
     return (
@@ -132,7 +160,7 @@ function CasID() {
                                 onChange={(e) => setCasId(e.target.value)}
                                 placeholder="Enter CAS ID"
                                 className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
-                                maxlength="6"
+                                maxLength="6"
                             />
                         </div>
 
@@ -147,11 +175,11 @@ function CasID() {
                                 onPaste={(e) => e.preventDefault()} 
                                 placeholder="Re-enter CAS ID"
                                 className="w-full bg-white text-gray-800 px-4 py-3 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#74be9c]"
-                                maxlength="6"
+                                maxLength="6"
                             />
                         </div>
 
-                        <p className="text-sm text-gray-300 text-center">
+                        <div className="text-sm text-gray-300 text-center">
                             <p className="mb-3 text-[#F04D4D]">WARNING: Inputs are case sensitive</p>
 
                             Enter the unique identifier found in your CAS calculator. Not sure how?{' '}
@@ -161,15 +189,34 @@ function CasID() {
                             >
                                 Click here!
                             </button>
-                        </p>
+                        </div>
                     </div>
 
                     <button
                         onClick={handleVerify}
-                        className="w-full bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] font-bold py-4 rounded-lg transition-all text-lg mb-6 cursor-pointer"
+                        disabled={isLoading}
+                        className={`w-full font-bold py-4 rounded-lg transition-all text-lg mb-6 flex items-center justify-center gap-2
+                        ${isLoading
+                            ? 'bg-gray-500 cursor-not-allowed opacity-70'
+                            : 'bg-gradient-to-r from-[#62a888] to-[#74be9c] hover:from-[#74be9c] hover:to-[#62a888] text-[#202830] cursor-pointer'
+                        }`}
                     >
-                        Verify CAS ID
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="animate-spin" size={20} />
+                                Verifying...
+                            </>
+                        ) : (
+                            'Verify CAS ID'
+                        )}
                     </button>
+
+                    {showSlowMessage && (
+                        <div className="text-center text-gray-300 text-sm mt-4 mb-6 animate-pulse">
+                            This process can take up to 1 minute.
+                            <p className="mt-1"><b>Do <u>not</u> reload the page</b></p>
+                        </div>
+                    )}
                 </div>
 
                 {/* IMAGE SECTION */}
