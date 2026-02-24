@@ -35,7 +35,7 @@ function CasID() {
 
             if (userWantsToLeave) {
                 window.removeEventListener('popstate', handlePopState);
-                window.history.back();
+                navigate('/activate', { replace: true, state: null });
             } else {
                 window.history.pushState({ trapped: true }, '', window.location.href);
             }

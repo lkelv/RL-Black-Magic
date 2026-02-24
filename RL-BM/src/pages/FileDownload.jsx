@@ -75,7 +75,8 @@ function FileDownload() {
 
             if (userWantsToLeave) {
                 window.removeEventListener('popstate', handlePopState);
-                window.history.back();
+                //window.history.back();
+                navigate('/activate', { replace: true, state: null });
             } else {
                 window.history.pushState({ trapped: true }, '', window.location.href);
             }
@@ -123,7 +124,7 @@ function FileDownload() {
             ? { productType, productKeyMethods, productKeySpecialist }
             : { productType, productKey };
 
-        navigate('/cas-id', { state });
+        navigate('/cas-id', { replace: true, state });
     };
 
     const scrollToContinue = () => {
