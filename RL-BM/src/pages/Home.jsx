@@ -70,7 +70,7 @@ function Home() {
                         RL BLACKMAGIC PROGRAM
                     </h1>
                     <p className="text-lg md:text-xl mb-12 text-white animate-fade-in-up px-4" style={{ animationDelay: '0.2s' }}>
-                        Turn 5-minute questions into 1-minute solutions with RL BlackMagic.
+                        Turn 5-minute questions into 1-minute solutions with RL BlackMagic for VCE.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 animate-fade-in" style={{ animationDelay: '0.4s' }}>
                         <a
