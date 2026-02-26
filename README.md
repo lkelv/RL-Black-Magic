@@ -1,5 +1,20 @@
 # RL-Black-Magic
 
+## Overview
+This project is for RL Education only. The purpose of this website is to assist students in installing RL's calculator software called “BlackMagic”. The logic of the program is as follows:
+1.	Select the version to activate (ActivateSelectPage.jsx)
+2.	Enter product code depending on version (ActivateMethods.jsx or ActivateSpeecialist.jsx or ActivateBoth.jsx)
+3.	Download the software (FileDownload.jsx)
+4.	Input CAS ID (CasID.jsx)
+5.	Return the code to activate software on CAS (InstallationComplete.jsx)
+   
+The user has to follow this order; multiple activation codes for the CAS will compromise the security of BlackMagic. 
+With regards to step 2, the product codes are stored in Mongodb. The file productKeys.js connects the frontend to the backend. 
+With regards to step 4, the logic for calculating the CAS ID to the activation software code for the CAS is visible; however, when special numbers are needed to complete the final version of the maths function. (VITE_DH_P and VITE_DH_G).
+
+
+
+
 
 ## To run code
 
@@ -48,6 +63,22 @@ A local host link will appear from running the latter
 * In server.js, change `app.use` origin and add the domain there
 * Clouldflare requires to add domain for verification
 * Vercel add domain
+
+
+## Tech Stack
+* NodeJS for backend, hosted on render
+* React and tailwind for frontend, hosted on vercel
+* Python/JS to upload/download data from/to database
+
+
+
+
+
+
+
+
+
+
 
 
 
