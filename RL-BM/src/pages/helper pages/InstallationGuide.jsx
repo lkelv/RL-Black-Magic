@@ -24,6 +24,12 @@ function InstallationGuide() {
                 {/* Responsive 16:9 iframe (no plugin needed) */}
                 <div className="relative w-full mb-8">
                     {/* 56.25% = 9/16 to preserve 16:9 */}
+                    
+                    <p className="text-center">Video guide will be here by 7/02/2025. </p>
+
+                    <p className="text-center mt-3">For now, please use the text guide below </p>
+
+                    {/*
                     <div className="pt-[56.25%]"></div>
                     <iframe
                         className="absolute inset-0 h-full w-full rounded-lg"
@@ -34,6 +40,9 @@ function InstallationGuide() {
                         allowFullScreen
                         referrerPolicy="strict-origin-when-cross-origin"
                     />
+                    */}
+
+
                 </div>
 
                 {/* Placeholder Text */}
