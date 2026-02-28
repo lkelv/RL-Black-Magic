@@ -9,11 +9,11 @@ function Home() {
     const sectionRefs = useRef([]);
 
     const testimonials = [
-        "I didn’t even realise how slow I was on the calculator until I started using this. In trials I kept running out of time. In the actual exam I finished and had time to check. That never happens for me.",
-        "Lowkey wish I had this earlier in the year. Would’ve saved me so much stress.",
-        "My CAS used to feel clunky. Now I feel like I know what I’m doing.",
+        "I didn't even realise how slow I was on the calculator until I started using this. In trials I kept running out of time. In the actual exam I finished and had time to check. That never happens for me.",
+        "Lowkey wish I had this earlier in the year. Would've saved me so much stress.",
+        "My CAS used to feel clunky. Now I feel like I know what I'm doing.",
         "It sounds small but saving 20 to 30 seconds on heaps of questions adds up."
-        
+
     ];
 
     // Auto-rotate testimonials every 5 seconds
@@ -112,7 +112,7 @@ function Home() {
                     </div>
                 </div>
             </section>
-                    
+
             {/* Why BlackMagic Section */}
             <section
                 ref={(el) => (sectionRefs.current[1] = el)}
@@ -226,10 +226,10 @@ function Home() {
                     <div className="relative flex items-center justify-center gap-2 md:gap-6">
                         <button
                             onClick={prevTestimonial}
-                            className="text-[#f4a52e] text-4xl md:text-5xl hover:text-[#e09420] hover:scale-125 transition-all duration-300 flex-shrink-0 w-8 md:w-12 h-8 md:h-12 flex items-center justify-center"
+                            className="text-[#f4a52e] text-4xl md:text-5xl hover:text-[#e09420] hover:scale-125 transition-all duration-300 flex-shrink-0 w-8 md:w-12 h-8 md:h-12 flex items-center justify-center cursor-pointer"
                             aria-label="Previous testimonial"
                         >
-                            ◀
+                            <span style={{ fontFamily: 'sans-serif', fontStyle: 'normal' }}>&#9664;&#xFE0E;</span>
                         </button>
                         <div className="bg-[#2d5047] rounded-lg p-6 md:p-12 max-w-3xl min-h-[200px] md:min-h-[250px] flex items-center justify-center flex-1 hover:shadow-2xl transition-shadow duration-300">
                             <p
@@ -241,10 +241,10 @@ function Home() {
                         </div>
                         <button
                             onClick={nextTestimonial}
-                            className="text-[#f4a52e] text-4xl md:text-5xl hover:text-[#e09420] hover:scale-125 transition-all duration-300 flex-shrink-0 w-8 md:w-12 h-8 md:h-12 flex items-center justify-center"
+                            className="text-[#f4a52e] text-4xl md:text-5xl hover:text-[#e09420] hover:scale-125 transition-all duration-300 flex-shrink-0 w-8 md:w-12 h-8 md:h-12 flex items-center justify-center cursor-pointer"
                             aria-label="Next testimonial"
                         >
-                            ▶
+                            <span style={{ fontFamily: 'sans-serif', fontStyle: 'normal' }}>&#9654;&#xFE0E;</span>
                         </button>
                     </div>
                     <div className="flex justify-center gap-3 mt-8">

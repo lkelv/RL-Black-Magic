@@ -60,7 +60,7 @@ function Footer() {
                                     <Phone className="group-hover:text-[#202830]" size={18} />
                                 </div>
                                 <a href="tel:0426108868" className="hover:text-[#74be9c] transition-colors">
-                                    +61 (4) 26108868
+                                    +61 (0) 426 108 868
                                 </a>
                             </li>
                             <li className="flex items-start gap-4 group">

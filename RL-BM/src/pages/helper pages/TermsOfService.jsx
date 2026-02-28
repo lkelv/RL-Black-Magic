@@ -47,21 +47,29 @@ function TermsOfService() {
                 <div className="flex flex-col md:flex-row gap-12">
 
                     {/* Sticky Sidebar Navigation */}
+                    {/* Sticky Sidebar Navigation (vertically centered) */}
                     <aside className="md:w-1/4">
-                        <div className="sticky top-8 space-y-2">
-                            <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Contents</p>
-                            {sections.map((section) => (
-                                <button
-                                    key={section.id}
-                                    onClick={() => scrollToSection(section.id)}
-                                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#2d5047] hover:text-[#74be9c] transition-all text-left group"
-                                >
-                                    <span className="text-gray-500 group-hover:text-[#74be9c] transition-colors">
-                                        {section.icon}
-                                    </span>
-                                    <span className="font-medium">{section.title}</span>
-                                </button>
-                            ))}
+                        {/* This sticky wrapper is viewport-centered */}
+                        <div className="sticky top-0 h-screen flex items-center">
+                            {/* This box holds the nav; it will always be visible */}
+                            <div className="w-full max-h-[85vh] overflow-auto pr-2 space-y-2">
+                                <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">
+                                    Contents
+                                </p>
+
+                                {sections.map((section) => (
+                                    <button
+                                        key={section.id}
+                                        onClick={() => scrollToSection(section.id)}
+                                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#2d5047] hover:text-[#74be9c] transition-all text-left group"
+                                    >
+          <span className="text-gray-500 group-hover:text-[#74be9c] transition-colors">
+            {section.icon}
+          </span>
+                                        <span className="font-medium">{section.title}</span>
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </aside>
 
@@ -231,7 +239,7 @@ function TermsOfService() {
                                 className="hover:text-[#74be9c] text-[#74be9c] font-bold hover:underline">
                                     Contact Us →</Link>
                                 </a>
-                                
+
                             </div>
                         </section>
                     </main>
