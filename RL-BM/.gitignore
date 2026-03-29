@@ -30,3 +30,5 @@ secret_math.js
 # Ignore CSV data files
 SM.csv
 MM.csv
+
+.DS_Store
