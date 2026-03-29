@@ -23,13 +23,15 @@ Pull the code. First run `cd RL-BM`, then run `npm install` in the terminal
 
 ### Step 2
 Create a file called `.env` in the root directory (RL-BM folder), varibles in the ENV files needed are 
-* MONGODB_URI=
-* PORT=
-* VITE_API_URL=
-* MASTER_CODE=
-* TURNSTILE_SECRET_KEY=
-* VITE_DH_P=
-* VITE_DH_G=
+```
+MONGODB_URI=
+PORT=
+VITE_API_URL=
+MASTER_CODE=
+TURNSTILE_SECRET_KEY=
+VITE_DH_P=
+VITE_DH_G=
+```
 
 ### Step 3
 Run `cd RL-BM`
