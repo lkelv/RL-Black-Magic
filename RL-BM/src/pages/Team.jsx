@@ -1,5 +1,5 @@
 import React from 'react';
-import alanImg from '../assets/alan.jpg';
+import alanImg from '../assets/alan.png';
 import michaelImg from '../assets/michael.png';
 import yeehengImg from '../assets/Yeeheng.png';
 import kelvinImg from '../assets/kelvinv2.png';

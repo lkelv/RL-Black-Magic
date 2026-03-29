@@ -148,7 +148,7 @@ const Header = () => {
               <h3 className="text-xl font-bold text-white">Leave Page?</h3>
             </div>
             <p className="text-gray-300 mb-8 leading-relaxed">
-              Are you sure you want to leave? This will require you to re-enter your product key to access this page again.
+              Are you sure you want to leave? You will not be able to access this page again/see your product key again.
             </p>
             <div className="flex justify-end gap-3">
               <button
