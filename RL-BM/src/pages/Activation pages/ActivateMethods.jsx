@@ -14,6 +14,7 @@ function ActivateMethods() {
     const [turnstileToken, setTurnstileToken] = useState(null);
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isRedirecting, setIsRedirecting] = useState(false);
 
     const turnstileRef = useRef(null); //check for token and reset widget if token is spent or invalid 
 
@@ -33,13 +34,16 @@ function ActivateMethods() {
         loadingTimerRef,
         turnstileToken,
         trapRef,
-        windowObj: window
+        windowObj: window,
+        setIsRedirecting
     }, productKey), [productKey, turnstileToken, navigate]);
+
+    const isTrapActive = isLoading || isRedirecting;
 
     useEffect(() => {
         let cleanup = null;
         let didLock = false;
-        if (isLoading) {
+        if (isTrapActive) {
             window.dispatchEvent(new Event('lock-nav'));
             didLock = true;
             cleanup = controller.initHistoryTrap();
@@ -50,7 +54,7 @@ function ActivateMethods() {
             }
             if (cleanup) cleanup();
         };
-    }, [isLoading, controller]);
+    }, [isTrapActive, controller]);
 
     const handleActivate = async () => {
         await controller.handleActivate();
@@ -192,6 +196,7 @@ function ActivateMethods() {
                     type={popup.type}
                     message={popup.message}
                     onClose={() => setPopup(null)}
+                    disableClose={popup.disableClose}
                 />
             )}
         </div>

@@ -14,6 +14,7 @@ function ActivateSpecialist() {
 
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isRedirecting, setIsRedirecting] = useState(false);
 
     const turnstileRef = useRef(null);
 
@@ -33,20 +34,27 @@ function ActivateSpecialist() {
         loadingTimerRef,
         turnstileToken,
         trapRef,
-        windowObj: window
+        windowObj: window,
+        setIsRedirecting
     }, productKey), [productKey, turnstileToken, navigate]);
+
+    const isTrapActive = isLoading || isRedirecting;
 
     useEffect(() => {
         let cleanup = null;
-        if (isLoading) {
+        let didLock = false;
+        if (isTrapActive) {
             window.dispatchEvent(new Event('lock-nav'));
+            didLock = true;
             cleanup = controller.initHistoryTrap();
         }
         return () => {
-            window.dispatchEvent(new Event('unlock-nav'));
+            if (didLock) {
+                window.dispatchEvent(new Event('unlock-nav'));
+            }
             if (cleanup) cleanup();
         };
-    }, [isLoading, controller]);
+    }, [isTrapActive, controller]);
 
     const handleActivate = async () => {
         await controller.handleActivate();
@@ -184,6 +192,7 @@ function ActivateSpecialist() {
                     type={popup.type}
                     message={popup.message}
                     onClose={() => setPopup(null)}
+                    disableClose={popup.disableClose}
                 />
             )}
         </div>

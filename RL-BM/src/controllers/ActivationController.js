@@ -22,6 +22,7 @@ export class BaseActivationController {
         this.turnstileToken = context.turnstileToken;
         this.trapRef = context.trapRef;
         this.windowObj = context.windowObj;
+        this.setIsRedirecting = context.setIsRedirecting;
     }
 
     /**
@@ -188,7 +189,8 @@ export class MethodsActivationController extends BaseActivationController {
 
     async onSuccess() {
         await markProductKeyAsUsed(this.productKey, null);
-        this.setPopup({ type: 'success', message: 'Validated! Redirecting...' });
+        this.setIsRedirecting(true);
+        this.setPopup({ type: 'success', message: 'Validated! Redirecting...', disableClose: true });
         setTimeout(() => {
             this.navigate('/file-download', { state: { productType: 'methods', productKey: this.productKey } });
         }, 2000);
@@ -222,7 +224,8 @@ export class SpecialistActivationController extends BaseActivationController {
 
     async onSuccess() {
         await markProductKeyAsUsed(this.productKey, null);
-        this.setPopup({ type: 'success', message: 'Product key validated! Redirecting to download...' });
+        this.setIsRedirecting(true);
+        this.setPopup({ type: 'success', message: 'Product key validated! Redirecting to download...', disableClose: true });
         setTimeout(() => {
             this.navigate('/file-download', { state: { productType: 'specialist', productKey: this.productKey } });
         }, 2000);
@@ -275,7 +278,8 @@ export class BothActivationController extends BaseActivationController {
         await markProductKeyAsUsed(this.productKeyMethods, null);
         await markProductKeyAsUsed(this.productKeySpecialist, null);
 
-        this.setPopup({ type: 'success', message: 'Both product keys validated! Redirecting to download...' });
+        this.setIsRedirecting(true);
+        this.setPopup({ type: 'success', message: 'Both product keys validated! Redirecting to download...', disableClose: true });
 
         setTimeout(() => {
             this.navigate('/file-download', {

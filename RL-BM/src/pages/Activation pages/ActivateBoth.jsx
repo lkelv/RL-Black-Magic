@@ -12,6 +12,7 @@ function ActivateBoth() {
     const [popup, setPopup] = useState(null);
     const [turnstileToken, setTurnstileToken] = useState(null);
     const [isLoading, setIsLoading] = useState(false); // Track backend delay
+    const [isRedirecting, setIsRedirecting] = useState(false); // Track redirection delay
     
     const turnstileRef = useRef(null); // Reference to reset the widget
     const navigate = useNavigate();
@@ -31,12 +32,15 @@ function ActivateBoth() {
         loadingTimerRef,
         turnstileToken,
         trapRef,
-        windowObj: window
+        windowObj: window,
+        setIsRedirecting
     }, productKeyMethods, productKeySpecialist), [productKeyMethods, productKeySpecialist, turnstileToken, navigate]);
+
+    const isTrapActive = isLoading || isRedirecting;
 
     useEffect(() => {
         let cleanup = null;
-        if (isLoading) {
+        if (isTrapActive) {
             window.dispatchEvent(new Event('lock-nav'));
             cleanup = controller.initHistoryTrap();
         }
@@ -44,7 +48,7 @@ function ActivateBoth() {
             window.dispatchEvent(new Event('unlock-nav'));
             if (cleanup) cleanup();
         };
-    }, [isLoading, controller]);
+    }, [isTrapActive, controller]);
 
     const handleActivate = async () => {
         await controller.handleActivate();
@@ -153,6 +157,7 @@ function ActivateBoth() {
                     type={popup.type}
                     message={popup.message}
                     onClose={() => setPopup(null)}
+                    disableClose={popup.disableClose}
                 />
             )}
         </div>
