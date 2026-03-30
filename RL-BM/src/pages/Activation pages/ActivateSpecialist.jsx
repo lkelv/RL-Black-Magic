@@ -1,5 +1,4 @@
-// src/pages/ActivateSpecialist.jsx
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SpecialistActivationController } from '../../controllers/ActivationController';
 import Popup from '../../components/Popup';
@@ -22,17 +21,34 @@ function ActivateSpecialist() {
     const loadingTimerRef = useRef(null); // To store the timeout ID
 
 
+    const trapRef = useRef(false);
+
+    const controller = useMemo(() => new SpecialistActivationController({
+        setPopup,
+        setIsLoading,
+        setShowSlowMessage,
+        setTurnstileToken,
+        navigate,
+        turnstileRef,
+        loadingTimerRef,
+        turnstileToken,
+        trapRef,
+        windowObj: window
+    }, productKey), [productKey, turnstileToken, navigate]);
+
+    useEffect(() => {
+        let cleanup = null;
+        if (isLoading) {
+            window.dispatchEvent(new Event('lock-nav'));
+            cleanup = controller.initHistoryTrap();
+        }
+        return () => {
+            window.dispatchEvent(new Event('unlock-nav'));
+            if (cleanup) cleanup();
+        };
+    }, [isLoading, controller]);
+
     const handleActivate = async () => {
-        const controller = new SpecialistActivationController({
-            setPopup,
-            setIsLoading,
-            setShowSlowMessage,
-            setTurnstileToken,
-            navigate,
-            turnstileRef,
-            loadingTimerRef,
-            turnstileToken
-        }, productKey);
         await controller.handleActivate();
     };
 

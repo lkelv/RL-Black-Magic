@@ -20,6 +20,45 @@ export class BaseActivationController {
         this.turnstileRef = context.turnstileRef;
         this.loadingTimerRef = context.loadingTimerRef;
         this.turnstileToken = context.turnstileToken;
+        this.trapRef = context.trapRef;
+        this.windowObj = context.windowObj;
+    }
+
+    /**
+     * Initializes the history trap to prevent accidental navigation.
+     * @returns {Function} Cleanup function for event listeners.
+     */
+    initHistoryTrap() {
+        if (!this.trapRef.current) {
+            this.windowObj.history.pushState({ trapped: true }, '', this.windowObj.location.href);
+            this.trapRef.current = true;
+        }
+
+        const handlePopState = () => {
+            const userWantsToLeave = this.windowObj.confirm(
+                'Are you sure you want to go back? This might interrupt your activation.'
+            );
+
+            if (userWantsToLeave) {
+                this.windowObj.removeEventListener('popstate', handlePopState);
+                this.navigate('/', { replace: true, state: null });
+            } else {
+                this.windowObj.history.pushState({ trapped: true }, '', this.windowObj.location.href);
+            }
+        };
+
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = '';
+        };
+
+        this.windowObj.addEventListener('popstate', handlePopState);
+        this.windowObj.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            this.windowObj.removeEventListener('popstate', handlePopState);
+            this.windowObj.removeEventListener('beforeunload', handleBeforeUnload);
+        };
     }
 
     /**

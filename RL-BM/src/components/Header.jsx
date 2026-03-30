@@ -16,8 +16,9 @@ class HeaderNavigationController {
      * @param {Function} state.setPendingNav - Setter for pending navigation.
      * @param {string} state.currentPath - Current application URL path.
      * @param {Function} state.navigate - React Router navigate function.
+     * @param {boolean} state.isNavLocked - Whether navigation is locked.
      */
-    constructor({ isMenuOpen, setIsMenuOpen, pendingNav, setPendingNav, currentPath, navigate }) {
+    constructor({ isMenuOpen, setIsMenuOpen, pendingNav, setPendingNav, currentPath, navigate, isNavLocked }) {
         // State mappings
         this.isMenuOpen = isMenuOpen;
         this.setIsMenuOpen = setIsMenuOpen;
@@ -25,6 +26,7 @@ class HeaderNavigationController {
         this.setPendingNav = setPendingNav;
         this.currentPath = currentPath;
         this.navigate = navigate;
+        this.isNavLocked = isNavLocked;
 
         // Abstraction: Hide routing configuration within the class
         this.protectedRoutes = [
@@ -65,7 +67,7 @@ class HeaderNavigationController {
         }
 
         // Encapsulated logic for protected route interception
-        if (this.protectedRoutes.includes(this.currentPath)) {
+        if (this.protectedRoutes.includes(this.currentPath) || this.isNavLocked) {
             this.setPendingNav(targetPath);
             this.setIsMenuOpen(false);
         } else {
@@ -95,8 +97,20 @@ class HeaderNavigationController {
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [pendingNav, setPendingNav] = useState(null);
+  const [isNavLocked, setIsNavLocked] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+      const lock = () => setIsNavLocked(true);
+      const unlock = () => setIsNavLocked(false);
+      window.addEventListener('lock-nav', lock);
+      window.addEventListener('unlock-nav', unlock);
+      return () => {
+          window.removeEventListener('lock-nav', lock);
+          window.removeEventListener('unlock-nav', unlock);
+      };
+  }, []);
 
   // Instantiate the Controller to manage all logic
   const controller = new HeaderNavigationController({
@@ -105,7 +119,8 @@ const Header = () => {
     pendingNav,
     setPendingNav,
     currentPath: location.pathname,
-    navigate
+    navigate,
+    isNavLocked
   });
 
   const navigation = [
