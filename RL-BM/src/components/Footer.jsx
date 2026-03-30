@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Mail, Phone, MapPin, Globe, ArrowRight } from 'lucide-react';
-
+import ConfirmNavigationModal from './ConfirmNavigationModal';
 /**
  * Controller class for Footer data logic.
  * Encapsulates the operations for resolving dynamic footer values.
@@ -16,9 +16,75 @@ class FooterDataController {
     }
 }
 
+class FooterNavigationController {
+    constructor({ pendingNav, setPendingNav, currentPath, navigate, isNavLocked }) {
+        this.pendingNav = pendingNav;
+        this.setPendingNav = setPendingNav;
+        this.currentPath = currentPath;
+        this.navigate = navigate;
+        this.isNavLocked = isNavLocked;
+
+        this.protectedRoutes = [
+            '/file-download',
+            '/cas-id',
+            '/installation-complete'
+        ];
+    }
+
+    handleNavigation(e, targetPath) {
+        e.preventDefault();
+        if (this.currentPath === targetPath) {
+            return;
+        }
+        if (this.protectedRoutes.includes(this.currentPath) || this.isNavLocked) {
+            this.setPendingNav(targetPath);
+        } else {
+            this.navigate(targetPath);
+        }
+    }
+
+    confirmNavigation() {
+        if (this.pendingNav) {
+            this.setPendingNav(null);
+            this.navigate(this.pendingNav);
+        }
+    }
+
+    cancelNavigation() {
+        this.setPendingNav(null);
+    }
+}
+
 function Footer() {
-    const controller = new FooterDataController();
-    const currentYear = controller.getCurrentYear();
+    const dataController = new FooterDataController();
+    const currentYear = dataController.getCurrentYear();
+
+    const [pendingNav, setPendingNav] = useState(null);
+    const [isNavLocked, setIsNavLocked] = useState(false);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const controller = new FooterNavigationController({
+        pendingNav,
+        setPendingNav,
+        currentPath: location.pathname,
+        navigate,
+        isNavLocked
+    });
+
+    useEffect(() => {
+        const handleLockNav = () => setIsNavLocked(true);
+        const handleUnlockNav = () => setIsNavLocked(false);
+
+        window.addEventListener('lock-nav', handleLockNav);
+        window.addEventListener('unlock-nav', handleUnlockNav);
+
+        return () => {
+            window.removeEventListener('lock-nav', handleLockNav);
+            window.removeEventListener('unlock-nav', handleUnlockNav);
+        };
+    }, []);
 
     // Map service names to their respective routes
     const services = [
@@ -58,7 +124,7 @@ function Footer() {
                     {/* Contact Section */}
                     <div>
                         <h3 className="text-white text-lg font-bold mb-6 flex items-center gap-2">
-                            <Link to="/contact-us" className="hover:text-[#74be9c]">Contact Us</Link>
+                            <Link to="/contact-us" onClick={(e) => controller.handleNavigation(e, '/contact-us')} className="hover:text-[#74be9c]">Contact Us</Link>
                             <div className="h-1 w-8 bg-[#74be9c] rounded-full"></div>
                         </h3>
                         <ul className="space-y-5">
@@ -107,7 +173,7 @@ function Footer() {
                         </h3>
                         <ul className="space-y-4">
                             <li>
-                                <Link to="/team" className="hover:text-[#74be9c] flex items-center gap-2 transition-all hover:translate-x-1">
+                                <Link to="/team" onClick={(e) => controller.handleNavigation(e, '/team')} className="hover:text-[#74be9c] flex items-center gap-2 transition-all hover:translate-x-1">
                                     Meet Our Team
                                 </Link>
                             </li>
@@ -117,7 +183,7 @@ function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/activate" className="hover:text-[#74be9c] flex items-center gap-2 transition-all hover:translate-x-1">
+                                <Link to="/activate" onClick={(e) => controller.handleNavigation(e, '/activate')} className="hover:text-[#74be9c] flex items-center gap-2 transition-all hover:translate-x-1">
                                     Activate Software
                                 </Link>
                             </li>
@@ -132,11 +198,16 @@ function Footer() {
                         <span>© {currentYear} RL Education. All rights reserved.</span>
                     </div>
                     <div className="flex gap-6">
-                        <a href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a>
-                        <a href="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</a>
+                        <Link to="/privacy-policy" onClick={(e) => controller.handleNavigation(e, '/privacy-policy')} className="hover:text-white transition-colors">Privacy Policy</Link>
+                        <Link to="/terms-of-service" onClick={(e) => controller.handleNavigation(e, '/terms-of-service')} className="hover:text-white transition-colors">Terms of Service</Link>
                     </div>
                 </div>
             </div>
+            <ConfirmNavigationModal
+                isOpen={!!pendingNav}
+                onConfirm={() => controller.confirmNavigation()}
+                onCancel={() => controller.cancelNavigation()}
+            />
         </footer>
     );
 }

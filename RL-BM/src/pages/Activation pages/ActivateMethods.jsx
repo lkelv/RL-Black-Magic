@@ -1,5 +1,4 @@
-// src/pages/ActivateMethods.jsx
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MethodsActivationController } from '../../controllers/ActivationController';
 import Popup from '../../components/Popup';
@@ -15,6 +14,7 @@ function ActivateMethods() {
     const [turnstileToken, setTurnstileToken] = useState(null);
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isRedirecting, setIsRedirecting] = useState(false);
 
     const turnstileRef = useRef(null); //check for token and reset widget if token is spent or invalid 
 
@@ -22,17 +22,41 @@ function ActivateMethods() {
     const loadingTimerRef = useRef(null); // To store the timeout ID
 
 
+    const trapRef = useRef(false);
+
+    const controller = useMemo(() => new MethodsActivationController({
+        setPopup,
+        setIsLoading,
+        setShowSlowMessage,
+        setTurnstileToken,
+        navigate,
+        turnstileRef,
+        loadingTimerRef,
+        turnstileToken,
+        trapRef,
+        windowObj: window,
+        setIsRedirecting
+    }, productKey), [productKey, turnstileToken, navigate]);
+
+    const isTrapActive = isLoading || isRedirecting;
+
+    useEffect(() => {
+        let cleanup = null;
+        let didLock = false;
+        if (isTrapActive) {
+            window.dispatchEvent(new Event('lock-nav'));
+            didLock = true;
+            cleanup = controller.initHistoryTrap();
+        }
+        return () => {
+            if (didLock) {
+                window.dispatchEvent(new Event('unlock-nav'));
+            }
+            if (cleanup) cleanup();
+        };
+    }, [isTrapActive, controller]);
+
     const handleActivate = async () => {
-        const controller = new MethodsActivationController({
-            setPopup,
-            setIsLoading,
-            setShowSlowMessage,
-            setTurnstileToken,
-            navigate,
-            turnstileRef,
-            loadingTimerRef,
-            turnstileToken
-        }, productKey);
         await controller.handleActivate();
     };
 
@@ -172,6 +196,7 @@ function ActivateMethods() {
                     type={popup.type}
                     message={popup.message}
                     onClose={() => setPopup(null)}
+                    disableClose={popup.disableClose}
                 />
             )}
         </div>

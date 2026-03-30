@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'; // Added useRef
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BothActivationController } from '../../controllers/ActivationController';
 import Popup from '../../components/Popup';
@@ -12,6 +12,7 @@ function ActivateBoth() {
     const [popup, setPopup] = useState(null);
     const [turnstileToken, setTurnstileToken] = useState(null);
     const [isLoading, setIsLoading] = useState(false); // Track backend delay
+    const [isRedirecting, setIsRedirecting] = useState(false); // Track redirection delay
     
     const turnstileRef = useRef(null); // Reference to reset the widget
     const navigate = useNavigate();
@@ -19,17 +20,41 @@ function ActivateBoth() {
     const [showSlowMessage, setShowSlowMessage] = useState(false);
     const loadingTimerRef = useRef(null); // To store the timeout ID
 
+    const trapRef = useRef(false);
+
+    const controller = useMemo(() => new BothActivationController({
+        setPopup,
+        setIsLoading,
+        setShowSlowMessage,
+        setTurnstileToken,
+        navigate,
+        turnstileRef,
+        loadingTimerRef,
+        turnstileToken,
+        trapRef,
+        windowObj: window,
+        setIsRedirecting
+    }, productKeyMethods, productKeySpecialist), [productKeyMethods, productKeySpecialist, turnstileToken, navigate]);
+
+    const isTrapActive = isLoading || isRedirecting;
+
+    useEffect(() => {
+        let cleanup = null;
+        let didLock = false;
+        if (isTrapActive) {
+            window.dispatchEvent(new Event('lock-nav'));
+            didLock = true;
+            cleanup = controller.initHistoryTrap();
+        }
+        return () => {
+            if (didLock) {
+                window.dispatchEvent(new Event('unlock-nav'));
+            }
+            if (cleanup) cleanup();
+        };
+    }, [isTrapActive, controller]);
+
     const handleActivate = async () => {
-        const controller = new BothActivationController({
-            setPopup,
-            setIsLoading,
-            setShowSlowMessage,
-            setTurnstileToken,
-            navigate,
-            turnstileRef,
-            loadingTimerRef,
-            turnstileToken
-        }, productKeyMethods, productKeySpecialist);
         await controller.handleActivate();
     };
 
@@ -136,6 +161,7 @@ function ActivateBoth() {
                     type={popup.type}
                     message={popup.message}
                     onClose={() => setPopup(null)}
+                    disableClose={popup.disableClose}
                 />
             )}
         </div>

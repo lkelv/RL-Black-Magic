@@ -20,6 +20,68 @@ export class BaseActivationController {
         this.turnstileRef = context.turnstileRef;
         this.loadingTimerRef = context.loadingTimerRef;
         this.turnstileToken = context.turnstileToken;
+        this.trapRef = context.trapRef;
+        this.windowObj = context.windowObj;
+        this.setIsRedirecting = context.setIsRedirecting;
+    }
+
+    /**
+     * Initializes the history trap to prevent accidental navigation.
+     * @returns {Function} Cleanup function for event listeners.
+     */
+    initHistoryTrap() {
+        if (!this.trapRef.current) {
+            this.windowObj.history.pushState({ trapped: true }, '', this.windowObj.location.href);
+            this.trapRef.current = true;
+        }
+
+        const handlePopState = () => {
+            const userWantsToLeave = this.windowObj.confirm(
+                'Are you sure you want to go back? This might interrupt your activation.'
+            );
+
+            if (userWantsToLeave) {
+                this.windowObj.removeEventListener('popstate', handlePopState);
+                this.navigate('/', { replace: true, state: null });
+            } else {
+                this.windowObj.history.pushState({ trapped: true }, '', this.windowObj.location.href);
+            }
+        };
+
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = '';
+        };
+
+        this.windowObj.addEventListener('popstate', handlePopState);
+        this.windowObj.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            this.windowObj.removeEventListener('popstate', handlePopState);
+            this.windowObj.removeEventListener('beforeunload', handleBeforeUnload);
+
+            // Clear the trapped marker from the current history entry using replaceState
+            // so the History API state is clean, without triggering any navigation.
+            // history.back() was intentionally avoided here because it is asynchronous
+            // and would race with any in-progress programmatic redirect (e.g. to /file-download),
+            // causing an unintended home page flash before the intended destination loads.
+            try {
+                if (this.trapRef && this.trapRef.current) {
+                    const history = this.windowObj.history;
+                    const state = history && history.state;
+
+                    if (state && state.trapped === true) {
+                        history.replaceState(null, '', this.windowObj.location.href);
+                    }
+                }
+            } catch (e) {
+                console.warn('History cleanup failed:', e);
+            } finally {
+                if (this.trapRef) {
+                    this.trapRef.current = false;
+                }
+            }
+        };
     }
 
     /**
@@ -130,7 +192,8 @@ export class MethodsActivationController extends BaseActivationController {
 
     async onSuccess() {
         await markProductKeyAsUsed(this.productKey, null);
-        this.setPopup({ type: 'success', message: 'Validated! Redirecting...' });
+        this.setIsRedirecting(true);
+        this.setPopup({ type: 'success', message: 'Validated! Redirecting...', disableClose: true });
         setTimeout(() => {
             this.navigate('/file-download', { state: { productType: 'methods', productKey: this.productKey } });
         }, 2000);
@@ -164,7 +227,8 @@ export class SpecialistActivationController extends BaseActivationController {
 
     async onSuccess() {
         await markProductKeyAsUsed(this.productKey, null);
-        this.setPopup({ type: 'success', message: 'Product key validated! Redirecting to download...' });
+        this.setIsRedirecting(true);
+        this.setPopup({ type: 'success', message: 'Product key validated! Redirecting to download...', disableClose: true });
         setTimeout(() => {
             this.navigate('/file-download', { state: { productType: 'specialist', productKey: this.productKey } });
         }, 2000);
@@ -217,7 +281,8 @@ export class BothActivationController extends BaseActivationController {
         await markProductKeyAsUsed(this.productKeyMethods, null);
         await markProductKeyAsUsed(this.productKeySpecialist, null);
 
-        this.setPopup({ type: 'success', message: 'Both product keys validated! Redirecting to download...' });
+        this.setIsRedirecting(true);
+        this.setPopup({ type: 'success', message: 'Both product keys validated! Redirecting to download...', disableClose: true });
 
         setTimeout(() => {
             this.navigate('/file-download', {

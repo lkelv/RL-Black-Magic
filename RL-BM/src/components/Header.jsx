@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronRight, AlertTriangle } from 'lucide-react'; // Added AlertTriangle
+import ConfirmNavigationModal from './ConfirmNavigationModal';
 
 /**
  * Controller class managing the Header's navigation state and routing logic.
@@ -16,8 +17,9 @@ class HeaderNavigationController {
      * @param {Function} state.setPendingNav - Setter for pending navigation.
      * @param {string} state.currentPath - Current application URL path.
      * @param {Function} state.navigate - React Router navigate function.
+     * @param {boolean} state.isNavLocked - Whether navigation is locked.
      */
-    constructor({ isMenuOpen, setIsMenuOpen, pendingNav, setPendingNav, currentPath, navigate }) {
+    constructor({ isMenuOpen, setIsMenuOpen, pendingNav, setPendingNav, currentPath, navigate, isNavLocked }) {
         // State mappings
         this.isMenuOpen = isMenuOpen;
         this.setIsMenuOpen = setIsMenuOpen;
@@ -25,6 +27,7 @@ class HeaderNavigationController {
         this.setPendingNav = setPendingNav;
         this.currentPath = currentPath;
         this.navigate = navigate;
+        this.isNavLocked = isNavLocked;
 
         // Abstraction: Hide routing configuration within the class
         this.protectedRoutes = [
@@ -65,7 +68,7 @@ class HeaderNavigationController {
         }
 
         // Encapsulated logic for protected route interception
-        if (this.protectedRoutes.includes(this.currentPath)) {
+        if (this.protectedRoutes.includes(this.currentPath) || this.isNavLocked) {
             this.setPendingNav(targetPath);
             this.setIsMenuOpen(false);
         } else {
@@ -95,8 +98,20 @@ class HeaderNavigationController {
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [pendingNav, setPendingNav] = useState(null);
+  const [isNavLocked, setIsNavLocked] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+      const lock = () => setIsNavLocked(true);
+      const unlock = () => setIsNavLocked(false);
+      window.addEventListener('lock-nav', lock);
+      window.addEventListener('unlock-nav', unlock);
+      return () => {
+          window.removeEventListener('lock-nav', lock);
+          window.removeEventListener('unlock-nav', unlock);
+      };
+  }, []);
 
   // Instantiate the Controller to manage all logic
   const controller = new HeaderNavigationController({
@@ -105,7 +120,8 @@ const Header = () => {
     pendingNav,
     setPendingNav,
     currentPath: location.pathname,
-    navigate
+    navigate,
+    isNavLocked
   });
 
   const navigation = [
@@ -199,35 +215,11 @@ const Header = () => {
       </header>
 
       {/* --- CUSTOM CONFIRMATION MODAL --- */}
-      {pendingNav && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
-          <div className="bg-[#2d3642] border border-gray-600 rounded-2xl p-6 md:p-8 max-w-md w-full shadow-2xl animate-in zoom-in-95 duration-200">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="bg-[#F04D4D]/20 p-3 rounded-full text-[#F04D4D]">
-                <AlertTriangle size={24} />
-              </div>
-              <h3 className="text-xl font-bold text-white">Leave Page?</h3>
-            </div>
-            <p className="text-gray-300 mb-8 leading-relaxed">
-              Are you sure you want to leave? You will not be able to access this page again/see your product key again.
-            </p>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => controller.cancelNavigation()}
-                className="px-5 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-gray-700 transition-colors font-medium cursor-pointer"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => controller.confirmNavigation()}
-                className="px-5 py-2.5 rounded-lg bg-[#F04D4D] hover:bg-[#d94444] text-white font-bold transition-colors shadow-lg cursor-pointer"
-              >
-                Yes, Leave
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmNavigationModal
+        isOpen={!!pendingNav}
+        onConfirm={() => controller.confirmNavigation()}
+        onCancel={() => controller.cancelNavigation()}
+      />
     </>
   );
 };
