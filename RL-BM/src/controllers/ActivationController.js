@@ -60,21 +60,21 @@ export class BaseActivationController {
             this.windowObj.removeEventListener('popstate', handlePopState);
             this.windowObj.removeEventListener('beforeunload', handleBeforeUnload);
 
-            // Reset the trap flag and attempt to undo the synthetic history entry.
-            // Note: history.back() is asynchronous; trapRef.current is reset synchronously
-            // here to prevent any new trap from being armed while navigation completes.
+            // Clear the trapped marker from the current history entry using replaceState
+            // so the History API state is clean, without triggering any navigation.
+            // history.back() was intentionally avoided here because it is asynchronous
+            // and would race with any in-progress programmatic redirect (e.g. to /file-download),
+            // causing an unintended home page flash before the intended destination loads.
             try {
                 if (this.trapRef && this.trapRef.current) {
                     const history = this.windowObj.history;
                     const state = history && history.state;
 
                     if (state && state.trapped === true) {
-                        // Remove the trapped entry from the stack without re-arming the trap
-                        history.back();
+                        history.replaceState(null, '', this.windowObj.location.href);
                     }
                 }
             } catch (e) {
-                // Swallow any history-related errors to avoid breaking cleanup
                 console.warn('History cleanup failed:', e);
             } finally {
                 if (this.trapRef) {
