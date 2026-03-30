@@ -55,7 +55,6 @@ function ActivateSpecialist() {
     return (
         <div className="bg-[#202830] text-white py-12 px-8">
             <div className="max-w-3xl mx-auto">
-                <StepProgress currentStep={1} />
                 
                 {/* Title Section */}
                 <div className="text-center mb-8">
