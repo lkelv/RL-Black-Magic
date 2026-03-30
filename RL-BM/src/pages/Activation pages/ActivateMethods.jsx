@@ -38,12 +38,16 @@ function ActivateMethods() {
 
     useEffect(() => {
         let cleanup = null;
+        let didLock = false;
         if (isLoading) {
             window.dispatchEvent(new Event('lock-nav'));
+            didLock = true;
             cleanup = controller.initHistoryTrap();
         }
         return () => {
-            window.dispatchEvent(new Event('unlock-nav'));
+            if (didLock) {
+                window.dispatchEvent(new Event('unlock-nav'));
+            }
             if (cleanup) cleanup();
         };
     }, [isLoading, controller]);
