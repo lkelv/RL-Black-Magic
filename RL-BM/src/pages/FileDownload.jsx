@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-
+import StepProgress from '../components/StepProgress';
 const productConfig = {
     methods: {
         title: 'Methods',
@@ -240,6 +240,7 @@ function FileDownload() {
     return (
         <div className="bg-[#202830] text-white py-12 px-8 relative min-h-screen">
             <div className="max-w-3xl mx-auto">
+                
                 <div className="text-center mb-8">
                     <h1 className="text-3xl md:text-4xl font-bold mb-3">
                         Download BlackMagic - {config.title}
@@ -249,9 +250,11 @@ function FileDownload() {
                     </p>
                 </div>
 
+                <StepProgress currentStep={2} />
+
                 <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12">
                     <h2 className="text-2xl md:text-3xl font-bold mb-8 text-[#f4a52e] text-center">
-                        2. Transfer to Calculator
+                        Transfer to Calculator
                     </h2>
 
                     <div className="mb-8 text-center">
@@ -276,24 +279,7 @@ function FileDownload() {
                         Continue to CAS ID Verification
                     </button>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="flex items-center gap-3">
-                            <span className="text-[#74be9c] text-xl font-black">1</span>
-                            <span className="text-white">Download file</span>
-                        </div>
-                        <div className="flex items-center gap-3 md:ml-8">
-                            <span className="text-[#74be9c] text-xl font-black">2</span>
-                            <span className="text-white">Transfer to calculator</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <span className="text-[#74be9c] text-xl font-black">3</span>
-                            <span className="text-white">Verify CAS ID</span>
-                        </div>
-                        <div className="flex items-center gap-3 md:ml-8">
-                            <span className="text-[#74be9c] text-xl font-black">4</span>
-                            <span className="text-white">Get activation code</span>
-                        </div>
-                    </div>
+
                 </div>
             </div>
 
