@@ -6,7 +6,7 @@ import Popup from '../components/Popup';
 import { CasIDController } from '../controllers/CasIDController';
 import CASIDlocation from '../assets/CASIDlocation.png';
 import { Loader2 } from 'lucide-react'; // Added import for the loading spinner
-
+import StepProgress from '../components/StepProgress';
 function CasID() {
     const [casId, setCasId] = useState('');
     const [confirmCasId, setConfirmCasId] = useState('');
@@ -49,6 +49,7 @@ function CasID() {
     return (
         <div className="bg-[#202830] text-white py-12 px-8">
             <div className="max-w-3xl mx-auto">
+                
                 <div className="text-center mb-8">
                     <h1 className="text-3xl md:text-4xl font-bold mb-3">
                         CAS ID Verification
@@ -59,6 +60,8 @@ function CasID() {
                     </p>
                 </div>
 
+                <StepProgress currentStep={3} />
+                
                 <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12">
                     <h2 className="text-2xl md:text-3xl font-bold mb-8 text-[#f4a52e] text-center">
                         3. Enter the <u>last 6 characters</u> of the CAS ID

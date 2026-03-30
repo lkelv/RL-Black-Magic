@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle2, Copy } from 'lucide-react';
-
+import StepProgress from '../components/StepProgress';
 /**
  * Controller class for the Installation Complete page.
  * Manages security redirection, history traps, and clipboard interactions.
@@ -104,16 +104,22 @@ function InstallationComplete() {
 
     return (
         <div className="bg-[#202830] text-white py-12 px-8 flex flex-col items-center">
-                {/* Check Icon */}
-                <CheckCircle2 className="text-[#74be9c] w-24 h-24 mb-4 animate-fade-in" />
+
+
+            {/* Check Icon */}
+            <CheckCircle2 className="text-[#74be9c] w-24 h-24 mb-4 animate-fade-in" />
 
             {/* Title */}
             <h1 className="text-3xl md:text-4xl font-bold mb-2 text-center animate-fade-in-down">
                 Installation complete!
             </h1>
 
+            <div className="w-full max-w-3xl mx-auto mt-10">
+                <StepProgress currentStep={4} />
+            </div>
+
             {/* Password Section */}
-            <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12 mt-10 max-w-lg w-full text-center animate-fade-in-up">
+            <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12 mt-5 max-w-lg w-full text-center animate-fade-in-up">
                 <h2 className="text-2xl font-bold text-[#f4a52e] mb-3">
                     Your Activation Password
                 </h2>

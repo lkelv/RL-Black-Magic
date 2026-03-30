@@ -5,7 +5,7 @@ import Popup from '../../components/Popup';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { formatProductKey } from './formatproductkey';
 import { Loader2 } from 'lucide-react'; // For loading feedback
-
+import StepProgress from '../../components/StepProgress';
 function ActivateBoth() {
     const [productKeyMethods, setProductKeyMethods] = useState('');
     const [productKeySpecialist, setProductKeySpecialist] = useState('');
@@ -36,6 +36,7 @@ function ActivateBoth() {
     return (
         <div className="bg-[#202830] text-white py-12 px-8">
             <div className="max-w-3xl mx-auto">
+                
                 <div className="text-center mb-8">
                     <h1 className="text-3xl md:text-4xl font-bold mb-3">
                         Maths Methods and Specialist Maths
@@ -44,10 +45,10 @@ function ActivateBoth() {
                         Activate your premium learning experience
                     </p>
                 </div>
-
+                <StepProgress currentStep={1} />
                 <div className="bg-[#2d5047] rounded-2xl p-8 md:p-12">
                     <h2 className="text-2xl md:text-3xl font-bold mb-8 text-[#f4a52e] text-center">
-                        1. Enter your Product Keys
+                        Enter your Product Keys
                     </h2>
 
                     <div className="mb-6 space-y-8">
