@@ -58,6 +58,25 @@ export class BaseActivationController {
         return () => {
             this.windowObj.removeEventListener('popstate', handlePopState);
             this.windowObj.removeEventListener('beforeunload', handleBeforeUnload);
+
+            // Reset the trap flag and attempt to undo the synthetic history entry
+            try {
+                if (this.trapRef && this.trapRef.current) {
+                    const history = this.windowObj.history;
+                    const state = history && history.state;
+
+                    if (state && state.trapped === true) {
+                        // Remove the trapped entry from the stack without re-arming the trap
+                        history.back();
+                    }
+                }
+            } catch (e) {
+                // Swallow any history-related errors to avoid breaking cleanup
+            } finally {
+                if (this.trapRef) {
+                    this.trapRef.current = false;
+                }
+            }
         };
     }
 
