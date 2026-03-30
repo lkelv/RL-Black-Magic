@@ -1,7 +1,7 @@
 // src/pages/ActivateSpecialist.jsx
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { validateProductKey, markProductKeyAsUsed } from '../../utils/productKeys';
+import { SpecialistActivationController } from '../../controllers/ActivationController';
 import Popup from '../../components/Popup';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { formatProductKey } from './formatproductkey';
@@ -23,62 +23,17 @@ function ActivateSpecialist() {
 
 
     const handleActivate = async () => {
-        if (!productKey.trim()) {
-            setPopup({ type: 'error', message: 'Please enter a valid product key' });
-            return;
-        }
-
-        if (!turnstileToken) {
-            setPopup({ type: 'error', message: 'Please complete the security check.' });
-            return;
-        }
-
-
-        setIsLoading(true); 
-
-        setShowSlowMessage(false); // Reset message state
-
-
-        loadingTimerRef.current = setTimeout(() => {
-            setShowSlowMessage(true);
-        }, 1000);
-
-
-        try {
-            const validation = await validateProductKey(
-                { key: productKey, type: 'specialist' }, 
-                turnstileToken
-            );
-    
-            if (validation.valid) {
-                await markProductKeyAsUsed(productKey, null);
-                setPopup({
-                    type: 'success',
-                    message: 'Product key validated! Redirecting to download...'
-                });
-    
-                setTimeout(() => {
-                    navigate('/file-download', { state: { productType: 'specialist', productKey } });
-                }, 2000);
-
-            } else {
-                setPopup({ type: 'error', message: validation.message });
-                setTurnstileToken(null);
-                turnstileRef.current?.reset();
-            }
-
-        } catch (error) {
-            setPopup({ type: 'error', message: 'Something went wrong. Please try again.' });
-            turnstileRef.current?.reset();
-
-        } finally {
-            // 4. Stop loading regardless of success or failure
-            setIsLoading(false); 
-            clearTimeout(loadingTimerRef.current);
-            setShowSlowMessage(false);
-        }
-
-
+        const controller = new SpecialistActivationController({
+            setPopup,
+            setIsLoading,
+            setShowSlowMessage,
+            setTurnstileToken,
+            navigate,
+            turnstileRef,
+            loadingTimerRef,
+            turnstileToken
+        }, productKey);
+        await controller.handleActivate();
     };
 
     return (

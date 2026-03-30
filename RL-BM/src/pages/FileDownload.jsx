@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const productConfig = {
@@ -19,6 +19,114 @@ const productConfig = {
     }
 };
 
+/**
+ * Controller class for the File Download page.
+ * Encapsulates the auto-download mechanism, intersection observing, and navigation traps.
+ */
+class FileDownloadController {
+    constructor(context) {
+        this.navigate = context.navigate;
+        this.productType = context.productType;
+        this.config = context.config;
+        this.hasDownloaded = context.hasDownloaded;
+        this.trapRef = context.trapRef;
+        this.continueRef = context.continueRef;
+        this.setIsButtonVisible = context.setIsButtonVisible;
+        this.productKey = context.productKey;
+        this.productKeyMethods = context.productKeyMethods;
+        this.productKeySpecialist = context.productKeySpecialist;
+        this.windowObj = context.windowObj;
+        this.documentObj = context.documentObj;
+    }
+
+    initObserver() {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                this.setIsButtonVisible(entry.isIntersecting);
+            },
+            { threshold: 0.1 }
+        );
+
+        if (this.continueRef.current) {
+            observer.observe(this.continueRef.current);
+        }
+
+        return () => observer.disconnect();
+    }
+
+    enforceSecurity() {
+        if (!this.productType || !this.config) {
+            this.navigate('/activate', { replace: true });
+        }
+    }
+
+    initHistoryTrap() {
+        if (!this.trapRef.current) {
+            this.windowObj.history.pushState({ trapped: true }, '', this.windowObj.location.href);
+            this.trapRef.current = true;
+        }
+
+        const handlePopState = () => {
+            const userWantsToLeave = this.windowObj.confirm(
+                'Are you sure you want to go back? This will require you to re-enter your product key.'
+            );
+
+            if (userWantsToLeave) {
+                this.windowObj.removeEventListener('popstate', handlePopState);
+                this.navigate('/activate', { replace: true, state: null });
+            } else {
+                this.windowObj.history.pushState({ trapped: true }, '', this.windowObj.location.href);
+            }
+        };
+
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = '';
+        };
+
+        this.windowObj.addEventListener('popstate', handlePopState);
+        this.windowObj.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            this.windowObj.removeEventListener('popstate', handlePopState);
+            this.windowObj.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }
+
+    triggerAutoDownload() {
+        if (this.config && !this.hasDownloaded.current) {
+            this.hasDownloaded.current = true;
+            this.executeDownload(this.config.filePath, this.config.fileName);
+        }
+    }
+
+    handleManualDownload() {
+        if (!this.config) return;
+        this.executeDownload(this.config.filePath, this.config.fileName);
+    }
+
+    executeDownload(filePath, fileName) {
+        const downloadLink = this.documentObj.createElement('a');
+        downloadLink.href = filePath;
+        downloadLink.download = fileName;
+        this.documentObj.body.appendChild(downloadLink);
+        downloadLink.click();
+        this.documentObj.body.removeChild(downloadLink);
+    }
+
+    handleContinue() {
+        const state = this.productType === 'both'
+            ? { productType: this.productType, productKeyMethods: this.productKeyMethods, productKeySpecialist: this.productKeySpecialist }
+            : { productType: this.productType, productKey: this.productKey };
+
+        this.navigate('/cas-id', { replace: true, state });
+    }
+
+    scrollToContinue() {
+        this.continueRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+
 function FileDownload() {
     const navigate = useNavigate();
     const location = {
@@ -38,98 +146,35 @@ function FileDownload() {
     const [activeGuide, setActiveGuide] = useState('blue');
     const [isButtonVisible, setIsButtonVisible] = useState(false);
 
+    const controller = useMemo(() => new FileDownloadController({
+        navigate, productType, config, hasDownloaded, trapRef, continueRef,
+        setIsButtonVisible, productKey, productKeyMethods, productKeySpecialist,
+        windowObj: window, documentObj: document
+    }), [navigate, productType, config, productKey, productKeyMethods, productKeySpecialist]);
+
     // Intersection Observer to detect when the Continue button is in view
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                setIsButtonVisible(entry.isIntersecting);
-            },
-            { threshold: 0.1 }
-        );
-
-        if (continueRef.current) {
-            observer.observe(continueRef.current);
-        }
-
-        return () => observer.disconnect();
-    }, []);
+        return controller.initObserver();
+    }, [controller]);
 
     // Validation and Redirect
     useEffect(() => {
-        if (!productType || !productConfig[productType]) {
-            navigate('/activate', { replace: true });
-        }
-    }, [productType, navigate]);
+        controller.enforceSecurity();
+    }, [productType, navigate, controller]);
 
     // Back-button Trap Logic
     useEffect(() => {
-        if (!trapRef.current) {
-            window.history.pushState({ trapped: true }, '', window.location.href);
-            trapRef.current = true;
-        }
-
-        const handlePopState = () => {
-            const userWantsToLeave = window.confirm(
-                'Are you sure you want to go back? This will require you to re-enter your product key.'
-            );
-
-            if (userWantsToLeave) {
-                window.removeEventListener('popstate', handlePopState);
-                //window.history.back();
-                navigate('/activate', { replace: true, state: null });
-            } else {
-                window.history.pushState({ trapped: true }, '', window.location.href);
-            }
-        };
-
-        const handleBeforeUnload = (e) => {
-            e.preventDefault();
-            e.returnValue = '';
-        };
-
-        window.addEventListener('popstate', handlePopState);
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener('popstate', handlePopState);
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, []);
+        return controller.initHistoryTrap();
+    }, [controller]);
 
     // Auto-Download Logic
     useEffect(() => {
-        if (config && !hasDownloaded.current) {
-            hasDownloaded.current = true;
-            const downloadLink = document.createElement('a');
-            downloadLink.href = config.filePath;
-            downloadLink.download = config.fileName;
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-        }
-    }, [config]);
+        controller.triggerAutoDownload();
+    }, [config, controller]);
 
-    const handleManualDownload = () => {
-        if (!config) return;
-        const downloadLink = document.createElement('a');
-        downloadLink.href = config.filePath;
-        downloadLink.download = config.fileName;
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-    };
-
-    const handleContinue = () => {
-        const state = productType === 'both'
-            ? { productType, productKeyMethods, productKeySpecialist }
-            : { productType, productKey };
-
-        navigate('/cas-id', { replace: true, state });
-    };
-
-    const scrollToContinue = () => {
-        continueRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    };
+    const handleManualDownload = () => controller.handleManualDownload();
+    const handleContinue = () => controller.handleContinue();
+    const scrollToContinue = () => controller.scrollToContinue();
 
     if (!config) return null;
 

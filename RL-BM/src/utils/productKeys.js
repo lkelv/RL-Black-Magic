@@ -33,7 +33,7 @@ export const validateProductKey = async (itemsInput, token = null) => {
     
     // Fallback for error cases
     return { valid: false, message: data.message || "Validation failed" };
-  } catch (error) {
+  } catch {
     const errorObj = { valid: false, message: "Connection error. Please ensure server is running." };
     return Array.isArray(itemsInput) ? [errorObj, errorObj] : errorObj;
   }

@@ -21,11 +21,42 @@ import Team from './pages/Team.jsx';
 import PrivacyPolicy from './pages/helper pages/PrivacyPolicy.jsx';
 import './App.css';
 
+/**
+ * Controller class for managing application-wide routing behaviors.
+ * Applies the OOP Single Responsibility Principle by encapsulating routing side effects.
+ */
+class AppRouterController {
+    /**
+     * Constructs the AppRouterController.
+     * @param {string} pathname - The current URL path
+     * @param {Window} windowObj - The global window object for manipulation
+     */
+    constructor(pathname, windowObj) {
+        this.pathname = pathname;
+        this.window = windowObj;
+    }
+
+    /**
+     * Handles the side-effect of scrolling to top when the route changes.
+     * Demonstrates encapsulation of side-effect logic.
+     */
+    scrollToTop() {
+        this.window.scrollTo(0, 0);
+    }
+}
+
+/**
+ * Functional component wrapper for AppRouterController.
+ * Bridges React hooks with the OOP controller.
+ */
 function ScrollToTop() {
     const { pathname } = useLocation();
+    
     useEffect(() => {
-        window.scrollTo(0, 0);
+        const controller = new AppRouterController(pathname, window);
+        controller.scrollToTop();
     }, [pathname]);
+    
     return null;
 }
 

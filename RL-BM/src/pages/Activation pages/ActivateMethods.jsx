@@ -1,7 +1,7 @@
 // src/pages/ActivateMethods.jsx
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { validateProductKey, markProductKeyAsUsed } from '../../utils/productKeys';
+import { MethodsActivationController } from '../../controllers/ActivationController';
 import Popup from '../../components/Popup';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { formatProductKey } from './formatproductkey';
@@ -23,56 +23,17 @@ function ActivateMethods() {
 
 
     const handleActivate = async () => {
-        if (!productKey.trim()) {
-            setPopup({ type: 'error', message: 'Please enter a valid product key' });
-            return;
-        }
-        
-        // 3. CHECK TOKEN
-        if (!turnstileToken) {
-            setPopup({ type: 'error', message: 'Please complete the security check.' });
-            return;
-        }
-
-        // 3. Start loading
-        setIsLoading(true); 
-        setShowSlowMessage(false); // Reset message state
-
-
-            // Start a 5-second timer
-        loadingTimerRef.current = setTimeout(() => {
-            setShowSlowMessage(true);
-        }, 1000);
-
-        try {
-            const validation = await validateProductKey(
-                { key: productKey, type: 'methods' }, 
-                turnstileToken
-            );
-
-            if (validation.valid) {
-                await markProductKeyAsUsed(productKey, null);
-                setPopup({ type: 'success', message: 'Validated! Redirecting...' });
-                setTimeout(() => {
-                    navigate('/file-download', { state: { productType: 'methods', productKey } });
-                }, 2000);
-            } else {
-                setPopup({ type: 'error', message: validation.message });
-                setTurnstileToken(null); // Clear the spent token
-                turnstileRef.current?.reset(); // Force widget to get a new token
-            }
-
-        } catch (error) {
-            setPopup({ type: 'error', message: 'Something went wrong. Please try again.' });
-            turnstileRef.current?.reset(); // Force widget to get a new token
-        } finally {
-            // 4. Stop loading regardless of success or failure
-            setIsLoading(false); 
-
-            //reset timer
-            clearTimeout(loadingTimerRef.current);
-            setShowSlowMessage(false);
-        }
+        const controller = new MethodsActivationController({
+            setPopup,
+            setIsLoading,
+            setShowSlowMessage,
+            setTurnstileToken,
+            navigate,
+            turnstileRef,
+            loadingTimerRef,
+            turnstileToken
+        }, productKey);
+        await controller.handleActivate();
     };
 
     return (

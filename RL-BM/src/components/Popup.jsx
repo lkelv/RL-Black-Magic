@@ -1,33 +1,64 @@
 // src/components/Popup.jsx
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { CheckCircle2, XCircle, X } from 'lucide-react';
 
-function Popup({ type = 'success', message, onClose, duration = 3000 }) {
-  useEffect(() => {
-    if (duration > 0) {
-      const timer = setTimeout(() => {
-        onClose();
-      }, duration);
-
-      return () => clearTimeout(timer);
+/**
+ * Controller class managing the Popup component's logic and side effects.
+ * Encapsulates timeout for auto-closing and keyboard event listeners.
+ */
+class PopupController {
+    /**
+     * Constructs the PopupController.
+     * @param {number} duration - Time before auto-close.
+     * @param {Function} onClose - Callback to run on close.
+     */
+    constructor(duration, onClose) {
+        this.duration = duration;
+        this.onClose = onClose;
     }
-  }, [duration, onClose]);
+
+    /**
+     * Initializes the auto-close timer.
+     * @returns {Function} Cleanup function to clear the timeout.
+     */
+    initTimer() {
+        if (this.duration > 0) {
+            const timer = setTimeout(() => {
+                this.onClose();
+            }, this.duration);
+            return () => clearTimeout(timer);
+        }
+        return () => {};
+    }
+
+    /**
+     * Initializes the escape key listener.
+     * @param {Document} doc - Document object to attach listener to.
+     * @returns {Function} Cleanup function to remove event listener.
+     */
+    initKeyListener(doc) {
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') {
+                this.onClose();
+            }
+        };
+        doc.addEventListener('keydown', handleKeyDown);
+        return () => doc.removeEventListener('keydown', handleKeyDown);
+    }
+}
+
+function Popup({ type = 'success', message, onClose, duration = 3000 }) {
+  const controller = useMemo(() => new PopupController(duration, onClose), [duration, onClose]);
+
+  useEffect(() => {
+    return controller.initTimer();
+  }, [controller]);
 
   // Handle ESC key press
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [onClose]);
+    return controller.initKeyListener(document);
+  }, [controller]);
 
   
   const bgColor = type === 'success' ? 'bg-[#2d5047]' : 'bg-[#3d2020]';
