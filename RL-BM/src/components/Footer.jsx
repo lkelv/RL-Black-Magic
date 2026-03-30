@@ -2,8 +2,23 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, Globe, ArrowRight } from 'lucide-react';
 
+/**
+ * Controller class for Footer data logic.
+ * Encapsulates the operations for resolving dynamic footer values.
+ */
+class FooterDataController {
+    /**
+     * Gets the current copyright year.
+     * @returns {number} The current year.
+     */
+    getCurrentYear() {
+        return new Date().getFullYear();
+    }
+}
+
 function Footer() {
-    const currentYear = new Date().getFullYear();
+    const controller = new FooterDataController();
+    const currentYear = controller.getCurrentYear();
 
     // Map service names to their respective routes
     const services = [

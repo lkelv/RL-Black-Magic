@@ -1,56 +1,119 @@
 // src/components/Home.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import student_image from "../assets/studentconcentratedcalculator.jpg";
 import ricky_image from "../assets/rickyteaching.jpg";
+
+/**
+ * Controller class managing the Home page's display logic, animations, and state.
+ * Encapsulates the intersection observer logic and testimonial rotation.
+ */
+class HomeDisplayController {
+    /**
+     * Constructs the HomeDisplayController.
+     * @param {Object} state - Component state hooks and refs.
+     * @param {number} state.currentTestimonial - Index of current testimonial.
+     * @param {Function} state.setCurrentTestimonial - Setter for testimonial index.
+     * @param {Function} state.setVisibleSections - Setter for visible sections set.
+     * @param {React.MutableRefObject} state.sectionRefs - Refs to scroll sections.
+     * @param {Array<string>} state.testimonials - Array of testimonial texts.
+     */
+    constructor({ currentTestimonial, setCurrentTestimonial, setVisibleSections, sectionRefs, testimonials }) {
+        this.currentTestimonial = currentTestimonial;
+        this.setCurrentTestimonial = setCurrentTestimonial;
+        this.setVisibleSections = setVisibleSections;
+        this.sectionRefs = sectionRefs;
+        this.testimonials = testimonials;
+    }
+
+    /**
+     * Advances to the next testimonial.
+     */
+    nextTestimonial() {
+        this.setCurrentTestimonial((prev) => (prev + 1) % this.testimonials.length);
+    }
+
+    /**
+     * Goes back to the previous testimonial.
+     */
+    prevTestimonial() {
+        this.setCurrentTestimonial((prev) => (prev - 1 + this.testimonials.length) % this.testimonials.length);
+    }
+
+    /**
+     * Sets a specific testimonial index.
+     * @param {number} index - Index to set.
+     */
+    setTestimonialIndex(index) {
+        this.setCurrentTestimonial(index);
+    }
+
+    /**
+     * Handles intersection observer logic for scroll animations.
+     * @param {IntersectionObserverEntry[]} entries - Observer entries.
+     */
+    handleIntersection(entries) {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                this.setVisibleSections((prev) => {
+                    const newSet = new Set(prev);
+                    newSet.add(entry.target.dataset.section);
+                    return newSet;
+                });
+            }
+        });
+    }
+
+    /**
+     * Initializes the IntersectionObserver and observes the refs.
+     * @returns {IntersectionObserver} the created observer instance.
+     */
+    initObserver() {
+        const observer = new IntersectionObserver(
+            this.handleIntersection.bind(this),
+            { threshold: 0.1 }
+        );
+
+        this.sectionRefs.current.forEach((ref) => {
+            if (ref) observer.observe(ref);
+        });
+
+        return observer;
+    }
+}
+
+const testimonials = [
+    "I didn’t even realise how slow I was on the calculator until I started using this. In trials I kept running out of time. In the actual exam I finished and had time to check. That never happens for me.",
+    "Lowkey wish I had this earlier in the year. Would’ve saved me so much stress.",
+    "My CAS used to feel clunky. Now I feel like I know what I’m doing.",
+    "It sounds small but saving 20 to 30 seconds on heaps of questions adds up."
+];
 
 function Home() {
     const [currentTestimonial, setCurrentTestimonial] = useState(0);
     const [visibleSections, setVisibleSections] = useState(new Set());
     const sectionRefs = useRef([]);
 
-    const testimonials = [
-        "I didn’t even realise how slow I was on the calculator until I started using this. In trials I kept running out of time. In the actual exam I finished and had time to check. That never happens for me.",
-        "Lowkey wish I had this earlier in the year. Would’ve saved me so much stress.",
-        "My CAS used to feel clunky. Now I feel like I know what I’m doing.",
-        "It sounds small but saving 20 to 30 seconds on heaps of questions adds up."
-        
-    ];
+    const controller = useMemo(() => new HomeDisplayController({
+        currentTestimonial,
+        setCurrentTestimonial,
+        setVisibleSections,
+        sectionRefs,
+        testimonials
+    }), [currentTestimonial, setCurrentTestimonial, setVisibleSections, sectionRefs]);
 
     // Auto-rotate testimonials every 5 seconds
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+            controller.nextTestimonial();
         }, 5000);
         return () => clearInterval(interval);
-    }, [testimonials.length]);
+    }, [controller]);
 
-    // Intersection Observer for scroll animations - animation change
+    // Intersection Observer for scroll animations
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        setVisibleSections((prev) => new Set([...prev, entry.target.dataset.section]));
-                    }
-                });
-            },
-            { threshold: 0.1 }
-        );
-
-        sectionRefs.current.forEach((ref) => {
-            if (ref) observer.observe(ref);
-        });
-
+        const observer = controller.initObserver();
         return () => observer.disconnect();
-    }, []);
-
-    const nextTestimonial = () => {
-        setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-    };
-
-    const prevTestimonial = () => {
-        setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-    };
+    }, [controller]);
 
     return (
         <div className="bg-[#202830] min-h-screen flex flex-col items-center">
@@ -225,7 +288,7 @@ function Home() {
                     <h2 className="text-3xl md:text-4xl font-bold mb-10 md:mb-12 text-center text-white">Real Students' Results</h2>
                     <div className="relative flex items-center justify-center gap-2 md:gap-6">
                         <button
-                            onClick={prevTestimonial}
+                            onClick={() => controller.prevTestimonial()}
                             className="text-[#f4a52e] text-4xl md:text-5xl hover:text-[#e09420] hover:scale-125 transition-all duration-300 flex-shrink-0 w-8 md:w-12 h-8 md:h-12 flex items-center justify-center"
                             aria-label="Previous testimonial"
                         >
@@ -240,7 +303,7 @@ function Home() {
                             </p>
                         </div>
                         <button
-                            onClick={nextTestimonial}
+                            onClick={() => controller.nextTestimonial()}
                             className="text-[#f4a52e] text-4xl md:text-5xl hover:text-[#e09420] hover:scale-125 transition-all duration-300 flex-shrink-0 w-8 md:w-12 h-8 md:h-12 flex items-center justify-center"
                             aria-label="Next testimonial"
                         >
@@ -251,7 +314,7 @@ function Home() {
                         {testimonials.map((_, index) => (
                             <button
                                 key={index}
-                                onClick={() => setCurrentTestimonial(index)}
+                                onClick={() => controller.setTestimonialIndex(index)}
                                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                                     index === currentTestimonial ? 'bg-[#74be9c] scale-150' : 'bg-gray-500 hover:scale-125'
                                 }`}

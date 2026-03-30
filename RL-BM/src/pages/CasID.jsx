@@ -1,9 +1,9 @@
 // Updated CasID.jsx with scroll-to-image and loading functionality
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Popup from '../components/Popup';
-import { validateCasId, generatePassword, markProductKeyAsUsed } from '../utils/productKeys';
+import { CasIDController } from '../controllers/CasIDController';
 import CASIDlocation from '../assets/CASIDlocation.png';
 import { Loader2 } from 'lucide-react'; // Added import for the loading spinner
 
@@ -28,108 +28,23 @@ function CasID() {
         if (!productType) navigate('/activate', { replace: true });
     }, [productType, navigate]);
 
+    const controller = useMemo(() => new CasIDController({
+        casId, confirmCasId, productType, productKey, productKeyMethods, productKeySpecialist,
+        setPopup, navigate, setIsLoading, setShowSlowMessage,
+        trapRef, imageSectionRef, loadingTimerRef, windowObj: window
+    }), [casId, confirmCasId, productType, productKey, productKeyMethods, productKeySpecialist, navigate]);
+
     useEffect(() => {
-        if (!trapRef.current) {
-            window.history.pushState({ trapped: true }, '', window.location.href);
-            trapRef.current = true;
-        }
+        if (!productType) navigate('/activate', { replace: true });
+    }, [productType, navigate]);
 
-        const handlePopState = (e) => {
-            const userWantsToLeave = window.confirm(
-                'Are you sure you want to go back? This will require you to re-enter your product key.'
-            );
+    useEffect(() => {
+        return controller.initHistoryTrap();
+    }, [controller]);
 
-            if (userWantsToLeave) {
-                window.removeEventListener('popstate', handlePopState);
-                navigate('/activate', { replace: true, state: null });
-            } else {
-                window.history.pushState({ trapped: true }, '', window.location.href);
-            }
-        };
+    const scrollToImage = () => controller.scrollToImage();
 
-        const handleBeforeUnload = (e) => {
-            e.preventDefault();
-            e.returnValue = '';
-        };
-
-        window.addEventListener('popstate', handlePopState);
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener('popstate', handlePopState);
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-            clearTimeout(loadingTimerRef.current); // Cleanup timer on unmount
-        };
-    }, []);
-
-    const scrollToImage = () => {
-        imageSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
-
-    const handleVerify = async () => {
-        if (!casId.trim() || !confirmCasId.trim()) {
-            setPopup({ type: 'error', message: 'Please enter valid CAS IDs.' });
-            return;
-        }
-
-        if (casId !== confirmCasId) {
-            setPopup({ type: 'error', message: 'CAS IDs do not match.' });
-            return;
-        }
-
-        const val = validateCasId(casId);
-        if (!val.valid) {
-            setPopup({ type: 'error', message: val.message });
-            return;
-        }
-
-        // Start loading
-        setIsLoading(true);
-        setShowSlowMessage(false);
-
-        // Start a 1-second timer
-        loadingTimerRef.current = setTimeout(() => {
-            setShowSlowMessage(true);
-        }, 1000);
-
-        try {
-            const last6 = casId.slice(-6);
-
-            if (productType === 'both') {
-                if (productKeyMethods) await markProductKeyAsUsed(productKeyMethods, last6);
-                if (productKeySpecialist) await markProductKeyAsUsed(productKeySpecialist, last6);
-            } else {
-                if (productKey) await markProductKeyAsUsed(productKey, last6);
-            }
-
-            const productChar =
-                productType === "methods" ? "M" :
-                    productType === "specialist" ? "S" :
-                        productType === "both" ? "B" : "M";
-
-            const password = generatePassword(last6, productChar);
-
-            setTimeout(() => {
-                navigate('/installation-complete', {
-                    state: {
-                        password,
-                        casId,
-                        productType,
-                    }
-                });
-            }, 1000);
-
-        } catch (error) {
-            setPopup({ type: 'error', message: 'Something went wrong. Please try again.' });
-        } finally {
-            // Stop loading regardless of success or failure
-            setIsLoading(false);
-
-            // Reset timer
-            clearTimeout(loadingTimerRef.current);
-            setShowSlowMessage(false);
-        }
-    };
+    const handleVerify = async () => controller.handleVerify();
 
     return (
         <div className="bg-[#202830] text-white py-12 px-8">

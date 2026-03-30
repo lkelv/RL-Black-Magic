@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'; // Added useRef
 import { useNavigate } from 'react-router-dom';
-import { validateProductKey, markProductKeyAsUsed } from '../../utils/productKeys';
+import { BothActivationController } from '../../controllers/ActivationController';
 import Popup from '../../components/Popup';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { formatProductKey } from './formatproductkey';
@@ -20,80 +20,17 @@ function ActivateBoth() {
     const loadingTimerRef = useRef(null); // To store the timeout ID
 
     const handleActivate = async () => {
-        if (!productKeyMethods.trim() || !productKeySpecialist.trim()) {
-            setPopup({ type: 'error', message: 'Please enter valid product keys for both subjects' });
-            return;
-        }
-
-        if (!turnstileToken) {
-            setPopup({ type: 'error', message: 'Please complete the security check.' });
-            return;
-        }
-
-        setIsLoading(true); // Start loading state
-        setShowSlowMessage(false); // Reset message state
-
-
-        loadingTimerRef.current = setTimeout(() => {
-            setShowSlowMessage(true);
-        }, 1000);
-
-        try {
-            // Batch validation request
-            const results = await validateProductKey(
-                [
-                    { key: productKeyMethods, type: 'methods' },
-                    { key: productKeySpecialist, type: 'specialist' }
-                ],
-                turnstileToken
-            );
-
-            const validationMethods = results[0];
-            const validationSpecialist = results[1];
-
-            // If Methods key is invalid
-            if (!validationMethods.valid) {
-                setPopup({ type: 'error', message: `Methods key: ${validationMethods.message}` });
-                setTurnstileToken(null);
-                turnstileRef.current?.reset(); // Reset spent token
-                return;
-            }
-
-            // If Specialist key is invalid
-            if (!validationSpecialist.valid) {
-                setPopup({ type: 'error', message: `Specialist key: ${validationSpecialist.message}` });
-                setTurnstileToken(null);
-                turnstileRef.current?.reset(); // Reset spent token
-                return;
-            }
-
-            // Both keys valid: Mark as used
-            await markProductKeyAsUsed(productKeyMethods, null);
-            await markProductKeyAsUsed(productKeySpecialist, null);
-
-            setPopup({
-                type: 'success',
-                message: 'Both product keys validated! Redirecting to download...'
-            });
-
-            setTimeout(() => {
-                navigate('/file-download', {
-                    state: {
-                        productType: 'both',
-                        productKeyMethods,
-                        productKeySpecialist
-                    }
-                });
-            }, 2000);
-            
-        } catch (error) {
-            setPopup({ type: 'error', message: 'Connection error. Please try again.' });
-            turnstileRef.current?.reset(); // Reset on network failure
-        } finally {
-            setIsLoading(false); // End loading state
-            clearTimeout(loadingTimerRef.current);
-            setShowSlowMessage(false);
-        }
+        const controller = new BothActivationController({
+            setPopup,
+            setIsLoading,
+            setShowSlowMessage,
+            setTurnstileToken,
+            navigate,
+            turnstileRef,
+            loadingTimerRef,
+            turnstileToken
+        }, productKeyMethods, productKeySpecialist);
+        await controller.handleActivate();
     };
 
     return (

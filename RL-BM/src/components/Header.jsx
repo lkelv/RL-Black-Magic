@@ -2,11 +2,111 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronRight, AlertTriangle } from 'lucide-react'; // Added AlertTriangle
 
+/**
+ * Controller class managing the Header's navigation state and routing logic.
+ * Encapsulates UI state management, protected route logic, and event handling.
+ */
+class HeaderNavigationController {
+    /**
+     * Constructs the HeaderNavigationController.
+     * @param {Object} state - Component state and hooks.
+     * @param {boolean} state.isMenuOpen - Whether the mobile menu is open.
+     * @param {Function} state.setIsMenuOpen - Setter for menu state.
+     * @param {string|null} state.pendingNav - Target path if navigation is pending confirmation.
+     * @param {Function} state.setPendingNav - Setter for pending navigation.
+     * @param {string} state.currentPath - Current application URL path.
+     * @param {Function} state.navigate - React Router navigate function.
+     */
+    constructor({ isMenuOpen, setIsMenuOpen, pendingNav, setPendingNav, currentPath, navigate }) {
+        // State mappings
+        this.isMenuOpen = isMenuOpen;
+        this.setIsMenuOpen = setIsMenuOpen;
+        this.pendingNav = pendingNav;
+        this.setPendingNav = setPendingNav;
+        this.currentPath = currentPath;
+        this.navigate = navigate;
+
+        // Abstraction: Hide routing configuration within the class
+        this.protectedRoutes = [
+            '/file-download', 
+            '/cas-id', 
+            '/installation-complete'
+        ];
+    }
+
+    /**
+     * Toggles the mobile menu.
+     */
+    toggleMenu() {
+        this.setIsMenuOpen(!this.isMenuOpen);
+    }
+
+    /**
+     * Checks if a given path is currently active.
+     * @param {string} path - The path to check.
+     * @returns {boolean} True if active.
+     */
+    isActive(path) {
+        return this.currentPath === path;
+    }
+
+    /**
+     * Handles navigation events, including modal interception for protected routes.
+     * @param {Event} e - React synthetic event.
+     * @param {string} targetPath - Route to navigate to.
+     */
+    handleNavigation(e, targetPath) {
+        e.preventDefault();
+
+        // Prevent navigation if already on the requested page
+        if (this.currentPath === targetPath) {
+            this.setIsMenuOpen(false);
+            return;
+        }
+
+        // Encapsulated logic for protected route interception
+        if (this.protectedRoutes.includes(this.currentPath)) {
+            this.setPendingNav(targetPath);
+            this.setIsMenuOpen(false);
+        } else {
+            this.setIsMenuOpen(false);
+            this.navigate(targetPath);
+        }
+    }
+
+    /**
+     * Confirms the pending navigation and triggers the route change.
+     */
+    confirmNavigation() {
+        if (this.pendingNav) {
+            this.navigate(this.pendingNav);
+            this.setPendingNav(null);
+        }
+    }
+
+    /**
+     * Cancels pending navigation.
+     */
+    cancelNavigation() {
+        this.setPendingNav(null);
+    }
+}
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [pendingNav, setPendingNav] = useState(null); // Tracks the path if a user needs confirming
+  const [pendingNav, setPendingNav] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Instantiate the Controller to manage all logic
+  const controller = new HeaderNavigationController({
+    isMenuOpen,
+    setIsMenuOpen,
+    pendingNav,
+    setPendingNav,
+    currentPath: location.pathname,
+    navigate
+  });
 
   const navigation = [
     { name: 'Home', path: '/' },
@@ -14,45 +114,6 @@ const Header = () => {
     { name: 'Installation Guide', path: '/installation-guide' },
     { name: 'Contact Us', path: '/contact-us' },
   ];
-
-  const isActive = (path) => location.pathname === path;
-
-  const protectedRoutes = [
-    '/file-download', 
-    '/cas-id', 
-    '/installation-complete'
-  ];
-
-  const handleNavigation = (e, targetPath) => {
-    e.preventDefault(); // Always stop auto-navigation
-
-    // Do nothing if clicking the link for the page we are already on
-    if (location.pathname === targetPath) {
-      setIsMenuOpen(false);
-      return;
-    }
-
-    // If on a protected route, open the custom React modal instead of window.confirm
-    if (protectedRoutes.includes(location.pathname)) {
-      setPendingNav(targetPath);
-      setIsMenuOpen(false);
-    } else {
-      // Navigate normally
-      setIsMenuOpen(false);
-      navigate(targetPath);
-    }
-  };
-
-  const confirmNavigation = () => {
-    if (pendingNav) {
-      navigate(pendingNav);
-      setPendingNav(null); // Reset state
-    }
-  };
-
-  const cancelNavigation = () => {
-    setPendingNav(null); // Close modal
-  };
 
   return (
     <>
@@ -64,7 +125,7 @@ const Header = () => {
             <div className="flex-shrink-0 flex items-center">
               <Link 
                 to="/" 
-                onClick={(e) => handleNavigation(e, '/')} 
+                onClick={(e) => controller.handleNavigation(e, '/')} 
                 className="flex items-center gap-3 group cursor-pointer"
               >
                 <div className="p-1 rounded-lg transition-transform">
@@ -86,9 +147,9 @@ const Header = () => {
                 <Link
                   key={item.name}
                   to={item.path}
-                  onClick={(e) => handleNavigation(e, item.path)}
+                  onClick={(e) => controller.handleNavigation(e, item.path)}
                   className={`text-sm font-medium transition-colors hover:text-[#74be9c] cursor-pointer ${
-                    isActive(item.path) ? 'text-[#74be9c]' : 'text-gray-300'
+                    controller.isActive(item.path) ? 'text-[#74be9c]' : 'text-gray-300'
                   }`}
                 >
                   {item.name}
@@ -96,7 +157,7 @@ const Header = () => {
               ))}
               <Link
                 to="/activate"
-                onClick={(e) => handleNavigation(e, '/activate')}
+                onClick={(e) => controller.handleNavigation(e, '/activate')}
                 className="ml-4 inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-bold rounded-full text-[#202830] bg-[#74be9c] hover:bg-[#62a888] transition-all transform hover:-translate-y-0.5 cursor-pointer"
               >
                 Get Started
@@ -106,7 +167,7 @@ const Header = () => {
             {/* Mobile Menu Button */}
             <div className="md:hidden flex items-center">
               <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                onClick={() => controller.toggleMenu()}
                 className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none cursor-pointer"
               >
                 {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -123,9 +184,9 @@ const Header = () => {
                 <Link
                   key={item.name}
                   to={item.path}
-                  onClick={(e) => handleNavigation(e, item.path)}
+                  onClick={(e) => controller.handleNavigation(e, item.path)}
                   className={`block px-3 py-4 rounded-md text-base font-medium flex justify-between items-center cursor-pointer ${
-                    isActive(item.path) ? 'bg-gray-800 text-[#74be9c]' : 'text-gray-300 hover:bg-gray-800'
+                    controller.isActive(item.path) ? 'bg-gray-800 text-[#74be9c]' : 'text-gray-300 hover:bg-gray-800'
                   }`}
                 >
                   {item.name}
@@ -152,13 +213,13 @@ const Header = () => {
             </p>
             <div className="flex justify-end gap-3">
               <button
-                onClick={cancelNavigation}
+                onClick={() => controller.cancelNavigation()}
                 className="px-5 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-gray-700 transition-colors font-medium cursor-pointer"
               >
                 Cancel
               </button>
               <button
-                onClick={confirmNavigation}
+                onClick={() => controller.confirmNavigation()}
                 className="px-5 py-2.5 rounded-lg bg-[#F04D4D] hover:bg-[#d94444] text-white font-bold transition-colors shadow-lg cursor-pointer"
               >
                 Yes, Leave

@@ -1,44 +1,56 @@
 // src/pages/InstallationComplete.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle2, Copy } from 'lucide-react';
 
-function InstallationComplete() {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const { password: generatedPassword, casId } = location.state || {};
+/**
+ * Controller class for the Installation Complete page.
+ * Manages security redirection, history traps, and clipboard interactions.
+ */
+class InstallationCompleteController {
+    /**
+     * Constructs the controller with dependencies.
+     * @param {Object} context
+     */
+    constructor(context) {
+        this.navigate = context.navigate;
+        this.generatedPassword = context.generatedPassword;
+        this.casId = context.casId;
+        this.trapRef = context.trapRef;
+        this.setCopied = context.setCopied;
+        this.windowObj = context.windowObj;
+        this.navigatorObj = context.navigatorObj;
+    }
 
-    // REF TO PREVENT DOUBLE TRAP IN STRICT MODE
-    const trapRef = useRef(false);
-
-    // Security: Redirect if user tries to access this page directly without completing verification
-    useEffect(() => {
-        if (!generatedPassword || !casId) {
-            navigate('/activate', { replace: true });
+    /**
+     * Enforces the security policy that users must have valid state.
+     */
+    enforceSecurity() {
+        if (!this.generatedPassword || !this.casId) {
+            this.navigate('/activate', { replace: true });
         }
-    }, [generatedPassword, casId, navigate]);
+    }
 
-    // --- FIX: ROBUST BACK BUTTON TRAP ---
-    useEffect(() => {
-        // Only push the trap state IF we haven't done it yet
-        if (!trapRef.current) {
-            window.history.pushState({ trapped: true }, '', window.location.href);
-            trapRef.current = true;
+    /**
+     * Installs a history trap to prevent accidental back navigation.
+     * @returns {Function} Cleanup function
+     */
+    initHistoryTrap() {
+        if (!this.trapRef.current) {
+            this.windowObj.history.pushState({ trapped: true }, '', this.windowObj.location.href);
+            this.trapRef.current = true;
         }
 
-        const handlePopState = (e) => {
-            // Prevent the user from leaving immediately
-            const userWantsToLeave = window.confirm(
+        const handlePopState = () => {
+            const userWantsToLeave = this.windowObj.confirm(
                 'Are you sure you want to go back? This will require you to re-enter your activation details.'
             );
 
             if (userWantsToLeave) {
-                // User clicked OK -> Clean up and leave
-                window.removeEventListener('popstate', handlePopState);
-                window.history.back();
+                this.windowObj.removeEventListener('popstate', handlePopState);
+                this.windowObj.history.back();
             } else {
-                // User clicked Cancel -> Stay on page -> Restore the trap
-                window.history.pushState({ trapped: true }, '', window.location.href);
+                this.windowObj.history.pushState({ trapped: true }, '', this.windowObj.location.href);
             }
         };
 
@@ -47,26 +59,48 @@ function InstallationComplete() {
             e.returnValue = '';
         };
 
-        window.addEventListener('popstate', handlePopState);
-        window.addEventListener('beforeunload', handleBeforeUnload);
+        this.windowObj.addEventListener('popstate', handlePopState);
+        this.windowObj.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
-            window.removeEventListener('popstate', handlePopState);
-            window.removeEventListener('beforeunload', handleBeforeUnload);
+            this.windowObj.removeEventListener('popstate', handlePopState);
+            this.windowObj.removeEventListener('beforeunload', handleBeforeUnload);
         };
-    }, []);
-    // -------------------------------------
+    }
 
-    // Use generated password or placeholder
-    const password = generatedPassword || 'XXXXXXXX';
+    /**
+     * Copies the password to the clipboard and handles success states.
+     * @param {string} password 
+     */
+    handleCopy(password) {
+        this.navigatorObj.clipboard.writeText(password);
+        this.setCopied(true);
+        setTimeout(() => this.setCopied(false), 2000);
+    }
+}
 
+function InstallationComplete() {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { password: generatedPassword, casId } = location.state || {};
+    const trapRef = useRef(false);
     const [copied, setCopied] = useState(false);
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(password);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
+    const controller = useMemo(() => new InstallationCompleteController({
+        navigate, generatedPassword, casId, trapRef, 
+        setCopied, windowObj: window, navigatorObj: navigator
+    }), [navigate, generatedPassword, casId]);
+
+    useEffect(() => {
+        controller.enforceSecurity();
+    }, [generatedPassword, casId, navigate, controller]);
+
+    useEffect(() => {
+        return controller.initHistoryTrap();
+    }, [controller]);
+
+    const password = generatedPassword || 'XXXXXXXX';
+    const handleCopy = () => controller.handleCopy(password);
 
     return (
         <div className="bg-[#202830] text-white py-12 px-8 flex flex-col items-center">
