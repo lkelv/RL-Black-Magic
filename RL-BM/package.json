@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@marsidev/react-turnstile": "^1.4.2",
+    "@supabase/supabase-js": "^2.103.0",
     "@vercel/analytics": "^1.6.1",
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",

@@ -1,26 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ChevronRight, AlertTriangle } from 'lucide-react'; // Added AlertTriangle
+import { Menu, X, Clock, ShieldCheck } from 'lucide-react';
 import ConfirmNavigationModal from './ConfirmNavigationModal';
 
-/**
- * Controller class managing the Header's navigation state and routing logic.
- * Encapsulates UI state management, protected route logic, and event handling.
- */
 class HeaderNavigationController {
-    /**
-     * Constructs the HeaderNavigationController.
-     * @param {Object} state - Component state and hooks.
-     * @param {boolean} state.isMenuOpen - Whether the mobile menu is open.
-     * @param {Function} state.setIsMenuOpen - Setter for menu state.
-     * @param {string|null} state.pendingNav - Target path if navigation is pending confirmation.
-     * @param {Function} state.setPendingNav - Setter for pending navigation.
-     * @param {string} state.currentPath - Current application URL path.
-     * @param {Function} state.navigate - React Router navigate function.
-     * @param {boolean} state.isNavLocked - Whether navigation is locked.
-     */
     constructor({ isMenuOpen, setIsMenuOpen, pendingNav, setPendingNav, currentPath, navigate, isNavLocked }) {
-        // State mappings
         this.isMenuOpen = isMenuOpen;
         this.setIsMenuOpen = setIsMenuOpen;
         this.pendingNav = pendingNav;
@@ -28,46 +12,19 @@ class HeaderNavigationController {
         this.currentPath = currentPath;
         this.navigate = navigate;
         this.isNavLocked = isNavLocked;
-
-        // Abstraction: Hide routing configuration within the class
-        this.protectedRoutes = [
-            '/file-download', 
-            '/cas-id', 
-            '/installation-complete'
-        ];
+        this.protectedRoutes = ['/file-download', '/cas-id', '/installation-complete'];
     }
 
-    /**
-     * Toggles the mobile menu.
-     */
-    toggleMenu() {
-        this.setIsMenuOpen(!this.isMenuOpen);
-    }
+    toggleMenu() { this.setIsMenuOpen(!this.isMenuOpen); }
+    isActive(path) { return this.currentPath === path; }
 
-    /**
-     * Checks if a given path is currently active.
-     * @param {string} path - The path to check.
-     * @returns {boolean} True if active.
-     */
-    isActive(path) {
-        return this.currentPath === path;
-    }
-
-    /**
-     * Handles navigation events, including modal interception for protected routes.
-     * @param {Event} e - React synthetic event.
-     * @param {string} targetPath - Route to navigate to.
-     */
     handleNavigation(e, targetPath) {
         e.preventDefault();
-
-        // Prevent navigation if already on the requested page
         if (this.currentPath === targetPath) {
             this.setIsMenuOpen(false);
             return;
         }
 
-        // Encapsulated logic for protected route interception
         if (this.protectedRoutes.includes(this.currentPath) || this.isNavLocked) {
             this.setPendingNav(targetPath);
             this.setIsMenuOpen(false);
@@ -77,9 +34,6 @@ class HeaderNavigationController {
         }
     }
 
-    /**
-     * Confirms the pending navigation and triggers the route change.
-     */
     confirmNavigation() {
         if (this.pendingNav) {
             this.navigate(this.pendingNav);
@@ -87,141 +41,134 @@ class HeaderNavigationController {
         }
     }
 
-    /**
-     * Cancels pending navigation.
-     */
-    cancelNavigation() {
-        this.setPendingNav(null);
-    }
+    cancelNavigation() { this.setPendingNav(null); }
 }
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [pendingNav, setPendingNav] = useState(null);
-  const [isNavLocked, setIsNavLocked] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [pendingNav, setPendingNav] = useState(null);
+    const [isNavLocked, setIsNavLocked] = useState(false);
+    const location = useLocation();
+    const navigate = useNavigate();
 
-  React.useEffect(() => {
-      const lock = () => setIsNavLocked(true);
-      const unlock = () => setIsNavLocked(false);
-      window.addEventListener('lock-nav', lock);
-      window.addEventListener('unlock-nav', unlock);
-      return () => {
-          window.removeEventListener('lock-nav', lock);
-          window.removeEventListener('unlock-nav', unlock);
-      };
-  }, []);
+    const controller = new HeaderNavigationController({
+        isMenuOpen, setIsMenuOpen, pendingNav, setPendingNav,
+        currentPath: location.pathname, navigate, isNavLocked
+    });
 
-  // Instantiate the Controller to manage all logic
-  const controller = new HeaderNavigationController({
-    isMenuOpen,
-    setIsMenuOpen,
-    pendingNav,
-    setPendingNav,
-    currentPath: location.pathname,
-    navigate,
-    isNavLocked
-  });
+    const navigation = [
+        { name: 'Home', path: '/' },
+        { name: 'Learning Portal', path: '/learning-portal' },
+        { name: 'Activate', path: '/activate' },
+        { name: 'Installation Guide', path: '/installation-guide' },
+        { name: 'Contact Us', path: '/contact-us' },
+    ];
 
-  const navigation = [
-    { name: 'Home', path: '/' },
-    { name: 'Activate', path: '/activate' },
-    { name: 'Installation Guide', path: '/installation-guide' },
-    { name: 'Contact Us', path: '/contact-us' },
-  ];
+    return (
+        <>
+            <header className="sticky top-0 z-50 shadow-2xl">
+                {/* MAIN NAVIGATION HEADER */}
+                <div className="bg-[#202830] border-b border-gray-800">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between items-center h-20">
 
-  return (
-    <>
-      <header className="bg-[#202830] border-b border-gray-700 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            
-            {/* Logo Section */}
-            <div className="flex-shrink-0 flex items-center">
-              <Link 
-                to="/" 
-                onClick={(e) => controller.handleNavigation(e, '/')} 
-                className="flex items-center gap-3 group cursor-pointer"
-              >
-                <div className="p-1 rounded-lg transition-transform">
-                  <img 
-                    className="h-10 w-auto" 
-                    src="/transparent RL Logo.png" 
-                    alt="RL Logo" 
-                  />
+                            {/* LOGO */}
+                            <div className="flex-shrink-0 flex items-center">
+                                <Link
+                                    to="/"
+                                    onClick={(e) => controller.handleNavigation(e, '/')}
+                                    className="flex items-center gap-3 transition-transform active:scale-95"
+                                >
+                                    <img className="h-10 w-auto" src="/transparent RL Logo.png" alt="RL Logo" />
+                                    <span className="text-white font-black text-xl tracking-tight">
+                      Black<span className="text-[#74be9c]">Magic</span>
+                  </span>
+                                </Link>
+                            </div>
+
+                            {/* DESKTOP NAVIGATION */}
+                            <nav className="hidden md:flex items-center space-x-8">
+                                {navigation.map((item) => (
+                                    <Link
+                                        key={item.name}
+                                        to={item.path}
+                                        onClick={(e) => controller.handleNavigation(e, item.path)}
+                                        className={`text-xs font-black uppercase tracking-[0.2em] transition-all hover:text-[#74be9c] ${
+                                            controller.isActive(item.path) ? 'text-[#74be9c]' : 'text-gray-400'
+                                        }`}
+                                    >
+                                        {item.name}
+                                    </Link>
+                                ))}
+
+                                <Link
+                                    to="/activate"
+                                    onClick={(e) => controller.handleNavigation(e, '/activate')}
+                                    className="ml-4 px-8 py-3 text-xs font-black uppercase tracking-widest rounded-full text-[#202830] bg-[#74be9c] hover:bg-[#86cfad] transition-all transform hover:-translate-y-0.5 shadow-lg shadow-[#74be9c]/10"
+                                >
+                                    Get Started
+                                </Link>
+                            </nav>
+
+                            {/* MOBILE MENU BUTTON */}
+                            <div className="md:hidden flex items-center">
+                                <button
+                                    onClick={() => controller.toggleMenu()}
+                                    className="text-gray-400 hover:text-white p-2"
+                                >
+                                    {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <span className="text-white font-bold text-xl tracking-tight">
-                  Black<span className="text-[#74be9c]">Magic</span>
+
+                {/* STUDENT ACCESS HEADING (Now Underneath) */}
+                <div className="bg-[#1a1f26] border-b border-white/5 py-2.5 px-6">
+                    <div className="max-w-7xl mx-auto flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                            <ShieldCheck size={14} className="text-[#74be9c]" />
+                            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">
+                    Authenticated Student Access
                 </span>
-              </Link>
-            </div>
+                        </div>
+                        <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest">
+                            <span className="text-gray-500">License Ends:</span>
+                            <span className="flex items-center gap-1.5 text-[#f59e0b]">
+                <Clock size={12} /> Dec 31, 2026
+              </span>
+                        </div>
+                    </div>
+                </div>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  onClick={(e) => controller.handleNavigation(e, item.path)}
-                  className={`text-sm font-medium transition-colors hover:text-[#74be9c] cursor-pointer ${
-                    controller.isActive(item.path) ? 'text-[#74be9c]' : 'text-gray-300'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
-              <Link
-                to="/activate"
-                onClick={(e) => controller.handleNavigation(e, '/activate')}
-                className="ml-4 inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-bold rounded-full text-[#202830] bg-[#74be9c] hover:bg-[#62a888] transition-all transform hover:-translate-y-0.5 cursor-pointer"
-              >
-                Get Started
-              </Link>
-            </nav>
+                {/* MOBILE NAVIGATION DRAWER */}
+                {isMenuOpen && (
+                    <div className="md:hidden bg-[#202830] border-t border-gray-800 animate-in slide-in-from-top duration-300">
+                        <div className="px-4 pt-4 pb-8 space-y-2">
+                            {navigation.map((item) => (
+                                <Link
+                                    key={item.name}
+                                    to={item.path}
+                                    onClick={(e) => controller.handleNavigation(e, item.path)}
+                                    className={`block px-4 py-4 rounded-xl text-sm font-bold uppercase tracking-widest ${
+                                        controller.isActive(item.path) ? 'bg-[#74be9c]/10 text-[#74be9c]' : 'text-gray-300 hover:bg-white/5'
+                                    }`}
+                                >
+                                    {item.name}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </header>
 
-            {/* Mobile Menu Button */}
-            <div className="md:hidden flex items-center">
-              <button
-                onClick={() => controller.toggleMenu()}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none cursor-pointer"
-              >
-                {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Navigation Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-[#202830] border-b border-gray-700 animate-in slide-in-from-top duration-300">
-            <div className="px-4 pt-2 pb-6 space-y-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  onClick={(e) => controller.handleNavigation(e, item.path)}
-                  className={`block px-3 py-4 rounded-md text-base font-medium flex justify-between items-center cursor-pointer ${
-                    controller.isActive(item.path) ? 'bg-gray-800 text-[#74be9c]' : 'text-gray-300 hover:bg-gray-800'
-                  }`}
-                >
-                  {item.name}
-                  <ChevronRight size={18} />
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-      </header>
-
-      {/* --- CUSTOM CONFIRMATION MODAL --- */}
-      <ConfirmNavigationModal
-        isOpen={!!pendingNav}
-        onConfirm={() => controller.confirmNavigation()}
-        onCancel={() => controller.cancelNavigation()}
-      />
-    </>
-  );
+            <ConfirmNavigationModal
+                isOpen={!!pendingNav}
+                onConfirm={() => controller.confirmNavigation()}
+                onCancel={() => controller.cancelNavigation()}
+            />
+        </>
+    );
 };
 
 export default Header;
