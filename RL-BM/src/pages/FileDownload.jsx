@@ -4,18 +4,18 @@ import StepProgress from '../components/StepProgress';
 const productConfig = {
     methods: {
         title: 'Methods',
-        fileName: 'rlBM26.3.tns',
-        filePath: '/rlBM26.3.tns'
+        fileName: 'rlBM26.4.tns',
+        filePath: '/rlBM26.4.tns'
     },
     specialist: {
         title: 'Specialist',
-        fileName: 'rlBM26.3.tns',
-        filePath: '/rlBM26.3.tns'
+        fileName: 'rlBM26.4.tns',
+        filePath: '/rlBM26.4.tns'
     },
     both: {
         title: 'Methods & Specialist',
-        fileName: 'rlBM26.3.tns',
-        filePath: '/rlBM26.3.tns'
+        fileName: 'rlBM26.4.tns',
+        filePath: '/rlBM26.4.tns'
     }
 };
 
